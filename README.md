@@ -6,8 +6,8 @@ LoginLib is a php library that provides the background mechanics of a registrati
 
 ## Installation
 
-The installation is very easy! Just <require> (<require_once>) or <include> LoginLib.php and call the static functions.
+The installation is very easy! Just <code>require</code> (<code>require_once</code>) or	<code>include</code> LoginLib.php and call the static functions.
 
 ## Usage
 
-//Follows
+<i>Follows</i>
