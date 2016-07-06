@@ -87,74 +87,9 @@ if (isset($_POST['method'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>LoginLib Tests</title>
-<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
-<style type="text/css">
-* {
-	box-sizing: border-box;
-}
-
-body {
-	max-width: 700px;
-	margin: 0 auto 25px;
-	padding: 20px 25px;
-	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.45);
-	font-family: sans-serif;
-}
-
-p, form {
-	margin-top: 20px;
-	margin-bottom: 0;
-}
-
-h1, h3 {
-	padding-bottom: 15px;
-	margin: 0;
-}
-
-form>div, button {
-	margin-top: 15px;
-}
-
-label {
-	padding: 7.5px 5px;
-}
-
-input, label {
-	display: block;
-	width: 100%;
-}
-
-input, button {
-	padding: 7.5px 10px;
-	border: solid 1px #888;
-}
-
-pre, .pre-header {
-	background: #666;
-	color: #fefefe;
-	padding: 20px;
-	margin: 0;
-	border-radius: 10px;
-	display: block;
-	width: 100%;
-	box-shadow: 0 0 20px rgba(0,0,0,0.45) inset;
-	overflow-x: auto;
-}
-
-.pre-header {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-	border-bottom: solid 1px #fefefe;
-	margin-top: 20px;
-}
-
-.pre-header ~ pre {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-	margin-bottom: 20px;
-}
-</style>
+	<title>LoginLib Tests</title>
+	<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
+	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
 	<h1>LoginLib Test Page</h1>
