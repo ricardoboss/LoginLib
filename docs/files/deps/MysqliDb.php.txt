@@ -118,13 +118,38 @@ class MysqliDb
 
     /**
      * Database credentials
-     * @var string
+     * @var string host
      */
     protected $host;
+
+    /**
+     * Database credentials
+     * @var string username
+     */
     protected $username;
+
+    /**
+     * Database credentials
+     * @var string password
+     */
     protected $password;
+
+    /**
+     * Database credentials
+     * @var string database name
+     */
     protected $db;
+
+    /**
+     * Database credentials
+     * @var int port
+     */
     protected $port;
+
+    /**
+     * Database credentials
+     * @var string charset
+     */
     protected $charset;
 
     /**
@@ -186,8 +211,20 @@ class MysqliDb
      * Variables for query execution tracing
      */
     protected $traceStartQ;
+    /**
+     * Variables for query execution tracing
+     * @var bool
+     */
     protected $traceEnabled;
+    /**
+     * Variables for query execution tracing
+     * @var string
+     */
     protected $traceStripPrefix;
+    /**
+     * Variables for query execution tracing
+     * @var array
+     */
     public $trace = array();
 
     /**
@@ -205,6 +242,8 @@ class MysqliDb
     public $totalPages = 0;
 
     /**
+     * Constructor for MysqliDb
+     * 
      * @param string $host
      * @param string $username
      * @param string $password
