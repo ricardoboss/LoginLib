@@ -1,4 +1,12 @@
-<?php
+<?php	
+switch (@$_GET['ref']) {
+	case 'login':
+		$message = "Please log in to view this page!";
+	
+	default:
+		$message = null;
+}
+
 if (isset($_POST['method'])) {
 	/* for production
 	// load deps
@@ -15,8 +23,6 @@ if (isset($_POST['method'])) {
 	// create a login lib instance with the config (defined in config.php)
 	$loginlib = new LoginLib\LoginLib($config);
 	
-	$message = "";
-	
 	// determine the used method
 	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
@@ -32,13 +38,13 @@ if (isset($_POST['method'])) {
 						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
-							case LoginLib\LoginResult::SUCCESS :
+							case LoginLib\Results\LoginResult::SUCCESS :
 								$message = "Login successfull!";
 								break;
-							case LoginLib\LoginResult::PASSWORD_WRONG :
+							case LoginLib\Results\LoginResult::PASSWORD_WRONG :
 								$message = "The given password is wrong!";
 								break;
-							case LoginLib\LoginResult::USERNAME_NOT_FOUND :
+							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND :
 								$message = "The username or email you provided is not registered!";
 								break;
 							
@@ -59,15 +65,15 @@ if (isset($_POST['method'])) {
 					global $message;
 					
 					switch ($result->getResult()) {
-						case LoginLib\RegisterResult::SUCCESS:
+						case LoginLib\Results\RegisterResult::SUCCESS:
 							$message = "Registration successfull! You can now log in!";
 							break;
 						case LoginLib\RegisterResult::USERNAME_GIVEN:
 							$message = "That username is already in use! Dang it!";
-						case LoginLib\RegisterResult::EMAIL_GIVEN:
+						case LoginLib\Results\RegisterResult::EMAIL_GIVEN:
 							$message = "That email address is already in use! Sorry!";
 							break;
-						case LoginLib\RegisterResult::PASSWORD_MISMATCH:
+						case LoginLib\Results\RegisterResult::PASSWORD_MISMATCH:
 							$message = "The passwords you entered didn't match! Please try again!";
 							break;
 							

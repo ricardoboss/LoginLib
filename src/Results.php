@@ -4,7 +4,7 @@
  * 
  * MethodResults get return from the methods of LoginLib
  */
-namespace LoginLib;
+namespace LoginLib\Results;
 
 /**
  * An abstract class that is used to provide results of methods
