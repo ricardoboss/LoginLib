@@ -1,47 +1,46 @@
 <?php
-if (isset($_POST['method'])) {
+if (isset ( $_POST ['method'] )) {
 	// automatically load all required files
-	require('load.php');
+	require ('load.php');
 	
 	// create a login lib instance with the config (defined in config.php under /src)
-	$loginlib = new LoginLib\LoginLib($config);
-
+	$loginlib = new LoginLib\LoginLib ( $config );
+	
 	// determine the used method
-	switch ($_POST['method']) {
+	switch ($_POST ['method']) {
 		// in case we got a login submitted, let LoginLib process it
-		case 'login':
+		case 'login' :
 			// call the login method
-			$loginlib->login(
-				// provide username and password from the user
-				$_POST['lg-username'],
-				$_POST['lg-password'],
-
-				// defina a callback function with the result (type: MethodResult) as a parameter
-				function($result) {
-					// get the result from the MethodResult object (in this case it is a LoginResult)
-					switch ($result->getResult()) {
-						case LoginLib\LoginResult::SUCCESS:
-							$message = "Login successfull!";
-							break;
-						case LoginLib\LoginResult::PASSWORD_WRONG:
-							$message = "The given password is wrong!";
-							break;
-						case LoginLib\LoginResult::USERNAME_NOT_FOUND:
-							$message = "The username or email you provided is not registered!";
-							break;
-
-						default:
-							$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: ".$result;
-							break;
-				}
-			});
+			$loginlib->login ( 
+					// provide username and password from the user
+					$_POST ['lg-username'], $_POST ['lg-password'], 
+					
+					// defina a callback function with the result (type: MethodResult) as a parameter
+					function ($result) {
+						// get the result from the MethodResult object (in this case it is a LoginResult)
+						switch ($result->getResult ()) {
+							case LoginLib\LoginResult::SUCCESS :
+								$message = "Login successfull!";
+								break;
+							case LoginLib\LoginResult::PASSWORD_WRONG :
+								$message = "The given password is wrong!";
+								break;
+							case LoginLib\LoginResult::USERNAME_NOT_FOUND :
+								$message = "The username or email you provided is not registered!";
+								break;
+							
+							default :
+								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: " . $result;
+								break;
+						}
+					} );
 			break;
-		case 'register':
-			$loginlib->register();
+		case 'register' :
+			$loginlib->register ();
 			break;
-
-		default:
-			$message = "Oh no! Wrong or unregistered method was submitted: ".$_POST['method'];
+		
+		default :
+			$message = "Oh no! Wrong or unregistered method was submitted: " . $_POST ['method'];
 			break;
 	}
 }
@@ -49,72 +48,72 @@ if (isset($_POST['method'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>LoginLib Tests</title>
-	<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
-	<style type="text/css">
-		* {
-			box-sizing: border-box;
-		}
+<title>LoginLib Tests</title>
+<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
+<style type="text/css">
+* {
+	box-sizing: border-box;
+}
 
-		body {
-			max-width: 600px;
-			margin: 0 auto 25px;
-			padding: 20px 25px;
-			box-shadow: 0 5px 25px rgba(0,0,0,0.45);
-			font-family: sans-serif;
-		}
+body {
+	max-width: 600px;
+	margin: 0 auto 25px;
+	padding: 20px 25px;
+	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.45);
+	font-family: sans-serif;
+}
 
-		p, form {
-			margin-top: 20px;
-			margin-bottom: 0;
-		}
+p, form {
+	margin-top: 20px;
+	margin-bottom: 0;
+}
 
-		h1, h3 {
-			padding-bottom: 15px;
-			margin: 0;
-		}
+h1, h3 {
+	padding-bottom: 15px;
+	margin: 0;
+}
 
-		form > div, button {
-			margin-top: 15px;
-		}
+form>div, button {
+	margin-top: 15px;
+}
 
-		label {
-			padding: 7.5px 5px;
-		}
+label {
+	padding: 7.5px 5px;
+}
 
-		input, label {
-			display: block;
-			width: 100%;
-		}
+input, label {
+	display: block;
+	width: 100%;
+}
 
-		input, button {
-			padding: 7.5px 10px;
-			border: solid 1px #888;
-		}
+input, button {
+	padding: 7.5px 10px;
+	border: solid 1px #888;
+}
 
-		pre, .pre-header {
-			background: #666;
-			color: #fefefe;
-			padding: 20px;
-			margin: 0;
-			border-radius: 10px;
-			display: block;
-			width: 100%;
-		}
+pre, .pre-header {
+	background: #666;
+	color: #fefefe;
+	padding: 20px;
+	margin: 0;
+	border-radius: 10px;
+	display: block;
+	width: 100%;
+}
 
-		.pre-header {
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
-			border-bottom: solid 1px #fefefe;
-			margin-top: 20px;
-		}
+.pre-header {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-bottom: solid 1px #fefefe;
+	margin-top: 20px;
+}
 
-		.pre-header ~ pre {
-			border-top-left-radius: 0;
-			border-top-right-radius: 0;
-			margin-bottom: 20px;
-		}
-	</style>
+.pre-header ~ pre {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	margin-bottom: 20px;
+}
+</style>
 </head>
 <body>
 	<h1>LoginLib Test Page</h1>
@@ -122,12 +121,12 @@ if (isset($_POST['method'])) {
 	<form method="post" action="">
 		<h2>Login</h2>
 		<div>
-			<label for="lg-username">Username:</label>
-			<input type="text" name="lg-username" id="lg-username" placeholder="Username" required>
+			<label for="lg-username">Username:</label> <input type="text"
+				name="lg-username" id="lg-username" placeholder="Username" required>
 		</div>
 		<div>
-			<label for="lg-password">Password:</label>
-			<input type="password" name="lg-password" id="lg-password" placeholder="Password" required>
+			<label for="lg-password">Password:</label> <input type="password"
+				name="lg-password" id="lg-password" placeholder="Password" required>
 		</div>
 		<button type="submit">Login</button>
 		<input type="hidden" name="method" value="login">
@@ -136,20 +135,20 @@ if (isset($_POST['method'])) {
 	<form method="post" action="">
 		<h2>Register</h2>
 		<div>
-			<label for="rg-username">Username</label>
-			<input type="text" name="rg-username" id="rg-username" placeholder="Username" required>
+			<label for="rg-username">Username</label> <input type="text"
+				name="rg-username" id="rg-username" placeholder="Username" required>
 		</div>
 		<div>
-			<label for="rg-email">Email-Address</label>
-			<input type="email" name="rg-email" id="rg-email" placeholder="Email-Address" required>
+			<label for="rg-email">Email-Address</label> <input type="email"
+				name="rg-email" id="rg-email" placeholder="Email-Address" required>
 		</div>
 		<div>
-			<label for="rg-password">Password</label>
-			<input type="password" name="rg-password" id="rg-password" placeholder="Password" required>
+			<label for="rg-password">Password</label> <input type="password"
+				name="rg-password" id="rg-password" placeholder="Password" required>
 		</div>
 		<div>
-			<label for="rg-confirm">Confirm</label>
-			<input type="password" name="rg-confirm" id="rg-confirm" placeholder="Confirm" required>
+			<label for="rg-confirm">Confirm</label> <input type="password"
+				name="rg-confirm" id="rg-confirm" placeholder="Confirm" required>
 		</div>
 		<button type="submit">Register</button>
 		<input type="hidden" name="method" value="register">
