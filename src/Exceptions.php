@@ -13,7 +13,7 @@ class ClassNotFoundException extends \Exception {
 	 *
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
-	 * @param Exception $previous The previous exception
+	 * @param \Exception $previous The previous exception
 	 * 
 	 * @return ClassNotFoundException
 	 */
