@@ -834,10 +834,10 @@ class MysqliDb
      * @param string $havingProp  The name of the database field.
      * @param mixed  $havingValue The value of the database field.
      * @param string $operator Comparison operator. Default is =
-     *
+     * @param string $cond The conditional operator which is used. Default is AND
+     * 
      * @return MysqliDb
      */
-
     public function having($havingProp, $havingValue = 'DBNULL', $operator = '=', $cond = 'AND')
     {
         // forkaround for an old operation api
