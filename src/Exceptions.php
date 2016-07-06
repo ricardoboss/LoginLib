@@ -2,6 +2,7 @@
 /**
  * This file contains all exception classes that may be thrown by method of the LoginLib class
  */
+namespace LoginLib;
 
 /**
  * Exception class for LoginLib methods

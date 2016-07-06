@@ -4,6 +4,7 @@
  * 
  * MethodResults get return from the methods of LoginLib
  */
+namespace LoginLib;
 
 /**
  * An abstract class that is used to provide results of methods
@@ -21,7 +22,7 @@ abstract class MethodResult {
 	 * 
 	 * @return LoginResult
 	 */
-	public function __construct(int $result) {
+	public function __construct($result) {
 		$this->result = $result;
 	}
 
@@ -31,7 +32,7 @@ abstract class MethodResult {
 	 * @return int
 	 */
 	public function getResult() {
-		return $this->$result;
+		return $this->result;
 	}
 }
 
