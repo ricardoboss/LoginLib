@@ -1,7 +1,7 @@
 <?php
 $root = dirname(__DIR__).DIRECTORY_SEPARATOR;
 
-for ($i = 0; $i < 1; $i++) {
+for ($i = 0; $i <= 1; $i++) {
 	if ($i == 0)
 		$path = $root.'deps';
 	else
@@ -19,4 +19,4 @@ for ($i = 0; $i < 1; $i++) {
 	}
 }
 
-$db = new MysqliDb('localhost', 'loginlib', 'CmH93W4k', 'LoginLib');
+unset($root, $i, $path, $h, $file);
