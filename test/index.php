@@ -1,10 +1,16 @@
 <?php
 if (isset ( $_POST ['method'] )) {
-	// automatically load all required files
-	require ('load.php');
+	// load deps
+	require('../dist/MysqliDb.php');
 	
-	// create a login lib instance with the config (defined in config.php under /src)
-	$loginlib = new LoginLib\LoginLib ( $config );
+	// load the release version
+	require('../dist/LoginLib.php');
+	
+	// get the default config (obviously not included in the LoginLib.php)
+	require('../dist/config.php');
+	
+	// create a login lib instance with the config (defined in config.php)
+	$loginlib = new LoginLib\LoginLib($config);
 	
 	// determine the used method
 	switch ($_POST ['method']) {
@@ -13,12 +19,12 @@ if (isset ( $_POST ['method'] )) {
 			// call the login method
 			$loginlib->login ( 
 					// provide username and password from the user
-					$_POST ['lg-username'], $_POST ['lg-password'], 
+					$_POST['lg-username'], $_POST['lg-password'], 
 					
 					// define a callback function with the result (type: MethodResult) as a parameter
 					function ($result) {
 						// get the result from the MethodResult object (in this case it is a LoginResult)
-						switch ($result->getResult ()) {
+						switch ($result->getResult()) {
 							case LoginLib\LoginResult::SUCCESS :
 								$message = "Login successfull!";
 								break;
@@ -33,10 +39,34 @@ if (isset ( $_POST ['method'] )) {
 								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: " . $result;
 								break;
 						}
-					} );
+					});
 			break;
 		case 'register' :
-			$loginlib->register ();
+			// call the register method
+			$loginlib->register(
+				// provide the fields from the formular
+				$_POST['rg-username'], $_POST['rg-email'], $_POST['rg-password'], $_POST['rg-confirm'],
+				
+				// define a callback function to parse the RegisterResult
+				function($result) {
+					switch ($result->getResult()) {
+						case LoginLib\RegisterResult::SUCCESS:
+							$message = "Registration successfull! You can now log in!";
+							break;
+						case LoginLib\RegisterResult::USERNAME_GIVEN:
+							$message = "That username is already in use! Dang it!";
+						case LoginLib\RegisterResult::EMAIL_GIVEN:
+							$message = "That email address is already in use! Sorry!";
+							break;
+						case LoginLib\RegisterResult::PASSWORD_MISMATCH:
+							$message = "The passwords you entered didn't match! Please try again!";
+							break;
+							
+						default:
+							$message = "What's this? Unknown or unregistered RegisterResult: " . $result;
+					}
+				}
+			);
 			break;
 		
 		default :
