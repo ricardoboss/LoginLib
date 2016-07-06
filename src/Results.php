@@ -58,10 +58,10 @@ class LoginResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS :
+			case SUCCESS:
 				return true;
 			
-			default :
+			default:
 				return false;
 		}
 	}
@@ -73,7 +73,7 @@ class LoginResult extends MethodResult {
 class RegisterResult extends MethodResult {
 	const USERNAME_GIVEN = 0;
 	const EMAIL_GIVEN = 1;
-	const PASSWORD_MITMATCH = 2;
+	const PASSWORD_MISMATCH = 2;
 	const SUCCESS = 3;
 	
 	/**
@@ -83,10 +83,10 @@ class RegisterResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS :
+			case SUCCESS:
 				return true;
 			
-			default :
+			default:
 				return false;
 		}
 	}
