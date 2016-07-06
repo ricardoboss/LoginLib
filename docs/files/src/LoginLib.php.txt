@@ -5,6 +5,7 @@
  * The LoginLib class contains all the logic and mechanisms for it to work properly
  */
 namespace LoginLib;
+use MysqliDb\MysqliDb as MysqliDb;
 
 /**
  * A class that provides the background mechanics for login and registration forms
@@ -22,6 +23,9 @@ namespace LoginLib;
 class LoginLib {
 	/** @var array Used to store the configuration array of LoginLib */
 	private $config;
+	
+	/** @var MysqliDb The database class object used to communitcate with the database */
+	private $db;
 
 	/**
 	 * The constructor of LoginLib.
@@ -32,6 +36,8 @@ class LoginLib {
 	 */
 	public function __construct($config) {
 		$this->config = $config;
+		
+		$this->db = new MysqliDb($config['database']);
 	}
 
 	/**
