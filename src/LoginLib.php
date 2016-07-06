@@ -30,12 +30,19 @@ class LoginLib {
 	
 	/**
 	 * The constructor of LoginLib.
+	 * 
+	 * @throws ClassNotFoundException if the required MysqliDb class cannot be found or autoloaded
 	 *
 	 * @param array $config The configuration array of LoginLib
 	 *        	
 	 * @return LoginLib
 	 */
 	public function __construct($config) {
+		if (!class_exists("MysqliDb")) {
+			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!");
+			exit;
+		}
+		
 		$this->config = $config;
 		
 		$this->db = new MysqliDb ( $config ['database'] );
