@@ -1648,7 +1648,7 @@ class MysqliDb {
 		if (! $stmt = $this->mysqli ()->prepare ( $this->_query )) {
 			$msg = $this->mysqli ()->error . " query: " . $this->_query;
 			$this->reset ();
-			throw new Exception ( $msg );
+			throw new \Exception ( $msg );
 		}
 		
 		if ($this->traceEnabled) {

@@ -84,10 +84,18 @@ class LoginLib {
 				if (!$account) {
 					// seems like the passwords match, the username and the email address are not in use, sooo register the user
 					
-					$db->insert(
+					// create password hash
+					$passhash = crypt($password, sprintf("$2a$%02d$", 10) . strtr(base64_encode(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM)), '+', '.'));
+					
+					// insert new user into database and obtain id
+					$id = $this->db->insert(
 						$this->getProp('table', 'accounts', 'name'),
 						array(
-							
+							$this->getProp('table', 'accounts', 'col_username') => $username,
+							$this->getProp('table', 'accounts', 'col_email') => $email,
+							$this->getProp('table', 'accounts', 'col_password_hash') => $passhash,
+							$this->getProp('table', 'accounts', 'col_updated_at') => $this->db->now(),
+							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now(),
 						)
 					);
 					
@@ -113,6 +121,8 @@ class LoginLib {
 	/**
 	 * Call this method to authenticate a registered user
 	 * 
+	 * @throws ConfigurationException
+	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
 	 * @param \function $callback A callback function that gets called when the function finished processing
@@ -122,9 +132,23 @@ class LoginLib {
 	public function login($username, $password, $callback = null) {
 		// check the db, just in case a script runs very long
 		$this->checkDb();
-		
-		// add where selector
-		$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
+
+		// add where selector based on authentication type
+		switch ($this->getProp('authentication', 'type')) {
+			case 'username':
+				$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
+				break;
+			case 'email':
+				$this->db->where($this->getProp('table', 'accounts', 'col_email'), $username);
+				break;
+			case 'both':
+				$this->db->orWhere($this->getProp('table', 'accounts', 'col_username'), $username);
+				$this->db->orWhere($this->getProp('table', 'accounts', 'col_email'), $username);
+				break;
+			
+			default:
+				throw new ConfigurationException("You misconfigured your configuration! Check your 'authentication' => 'type' value!");
+		}
 		
 		// get one row only
 		$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
@@ -132,13 +156,7 @@ class LoginLib {
 		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
 		if (isset($account)) {
 			// check if the password hashs are equal
-			if (hash_equals(
-				$account[$this->getProp('table', 'accounts', 'col_password_hash')], 
-				crypt(
-					$password, 
-					$account[$this->getProp('table', 'accounts', 'col_password_hash')]
-				)
-			)) {
+			if (hash_equals($account[$this->getProp('table', 'accounts', 'col_password_hash')], crypt($password, $account[$this->getProp('table', 'accounts', 'col_password_hash')]))) {
 				// if they are, the user is logged in
 				
 				// convert table row into a user object
@@ -200,13 +218,8 @@ class LoginLib {
 		if (isset($login_token) && isset($token_id)) {
 			$db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
 			$db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
-			$token = $db->getOne($this->getProp('table', 'login_tokens', 'name'));
 			
-			if ($token) {
-				return true;
-			} else {
-				return false;
-			}
+			return $db->getOne($this->getProp('table', 'login_tokens', 'name')) ? true : false;
 		} else {
 			return false;
 		}

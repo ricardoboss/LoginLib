@@ -9,6 +9,9 @@ namespace LoginLib;
  * @var The configuration of LoginLib
  */
 $config = array(
+	'authentication' => array(
+		'type' => "both" // username, email or both
+	),
 	'database' => array(
 		'host' => "localhost",
 		'username' => "loginlib",
