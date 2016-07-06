@@ -1,19 +1,24 @@
 <?php
-if (isset ( $_POST ['method'] )) {
+if (isset($_POST['method'])) {
+	/* for production
 	// load deps
 	require('../dist/MysqliDb.php');
 	
 	// load the release version
 	require('../dist/LoginLib.php');
+	*/
 	
 	// get the default config (obviously not included in the LoginLib.php)
 	require('../dist/config.php');
+	require('load.php');
 	
 	// create a login lib instance with the config (defined in config.php)
 	$loginlib = new LoginLib\LoginLib($config);
 	
+	$message = "";
+	
 	// determine the used method
-	switch ($_POST ['method']) {
+	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
 		case 'login' :
 			// call the login method
@@ -23,6 +28,8 @@ if (isset ( $_POST ['method'] )) {
 					
 					// define a callback function with the result (type: MethodResult) as a parameter
 					function ($result) {
+						global $message;
+						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
 							case LoginLib\LoginResult::SUCCESS :
@@ -49,6 +56,8 @@ if (isset ( $_POST ['method'] )) {
 				
 				// define a callback function to parse the RegisterResult
 				function($result) {
+					global $message;
+					
 					switch ($result->getResult()) {
 						case LoginLib\RegisterResult::SUCCESS:
 							$message = "Registration successfull! You can now log in!";
@@ -86,7 +95,7 @@ if (isset ( $_POST ['method'] )) {
 }
 
 body {
-	max-width: 600px;
+	max-width: 700px;
 	margin: 0 auto 25px;
 	padding: 20px 25px;
 	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.45);
@@ -129,6 +138,8 @@ pre, .pre-header {
 	border-radius: 10px;
 	display: block;
 	width: 100%;
+	box-shadow: 0 0 20px rgba(0,0,0,0.45) inset;
+	overflow-x: auto;
 }
 
 .pre-header {
