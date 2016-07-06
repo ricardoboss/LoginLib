@@ -1,3 +1,12 @@
+<?php
+require('../dist/config.php');
+require('load.php');
+
+$loginlib = new LoginLib\LoginLib($config);
+
+if (!$loginlib->isLoggedIn())
+	header("Location: ./?ref=login");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
