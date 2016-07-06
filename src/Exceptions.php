@@ -5,11 +5,11 @@
 namespace LoginLib;
 
 /**
- * Exception class for LoginLib methods
+ * Exception class for the case that a class was not found
  */
-class MethodException extends \Exception {
+class ClassNotFoundException extends \Exception {
 	/**
-	 * The constrcutor of MethodExceptions just use the default exception class atm
+	 * The constrcutor of ClassNotFoundExceptions just use the default exception class atm
 	 *
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
