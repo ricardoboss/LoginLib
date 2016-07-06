@@ -51,12 +51,36 @@ class LoginLib {
 	 * @return LoginResult
 	 */
 	public function login($username, $password, $callback = null) {
-		// TODO do database and logic things
-		$result = new LoginResult(LoginResult::SUCCESS);
+		// check the db, just in case a script runs very long
+		checkDb();
+		
+		// add where selector
+		$db->where($this->config['table']['accounts']['col_username'], $username);
+		
+		// get one row only
+		$account = $db->getOne($this->config['table']['accounts']['name']);
+		
+		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
+		if (isset($account)) {
+			// check if the password hashs are equal
+			if (hash_equals($account[$config['table']['accounts']['col_password_hash']], crypt($password, $account[$config['table']['accounts']['col_password_hash']]))) {
+				// if they are, the user is logged in
+				
+				// TODO: cookie and session stuff for login checks and so on 
+				
+				$result = new LoginResult(LoginResult::SUCCESS);
+			} else {
+				$result = new LoginResult(LoginResult::PASSWORD_WRONG);
+			}
+		} else {
+			$result = new LoginResult(LoginResult::USERNAME_NOT_FOUND);
+		}
 
+		// call the callback in case one was specified
 		if ($callback !== null)
 			$callback($result);
-
+	
+		// return the result anyway
 		return $result;
 	}
 
@@ -72,12 +96,33 @@ class LoginLib {
 	 * @return RegisterResult
 	 */
 	public function register($username, $email, $password, $confirm, $callback = null) {
-		// TODO do database and logic things
+		// TODO: do database and logic things
 		$result = new RegisterResult(RegisterResult::SUCCESS);
 
 		if ($callback !== null)
 			$callback($result);
 
 		return $result;
+	}
+	
+	/**
+	 * This static function return true if the browser is logged in or false if not
+	 * 
+	 * @return bool
+	 */
+	public static function isLoggedIn() {
+		// TODO: do cookie and session and database checks and so on to authenticate the user
+		return false;
+	}
+	
+	
+	/**
+	 * Check the database connection, ping it or reconnect if neccessary
+	 * 
+	 * @return void
+	 */
+	private function checkDb() {
+		if (!$this->db->ping)
+			$this->db->connect();
 	}
 }

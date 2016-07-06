@@ -31,7 +31,7 @@ if (isset($_POST['method'])) {
 							break;
 
 						default:
-							$message = "Ups! This shouldn't have happened! Unknown or unregistered LoginResult: ".$result;
+							$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: ".$result;
 							break;
 				}
 			});
