@@ -1,8 +1,8 @@
 <?php
 /**
- * This file contains the LoginLib class
+ * This file contains all classes for LoginLib.
  * 
- * The LoginLib class contains all the logic and mechanisms for it to work properly
+ * Dont't forget the dependency on MysqliDb!
  */
 namespace LoginLib;
 
@@ -131,5 +131,111 @@ class LoginLib {
 	private function checkDb() {
 		if (! $this->db->ping)
 			$this->db->connect ();
+	}
+}
+
+
+/**
+ * An abstract class that is used to provide results of methods
+ */
+abstract class MethodResult {
+	const UNDEFINED = - 1;
+	
+	/** @var int Contains the method result */
+	private $result = MethodResult::UNDEFINED;
+	
+	/**
+	 * A constructor for LoginResults
+	 *
+	 * @param int $result The result of one of the methods
+	 *
+	 * @return LoginResult
+	 */
+	public function __construct($result) {
+		$this->result = $result;
+	}
+	
+	/**
+	 * Returns the result of this LoginResult
+	 *
+	 * @return int
+	 */
+	public function getResult() {
+		return $this->result;
+	}
+	
+	/**
+	 * Returns a simple result in form of a boolean value
+	 *
+	 * @return bool
+	 */
+	public abstract function getSimpleResult();
+}
+
+/**
+ * This class is for results of the login method
+ */
+class LoginResult extends MethodResult {
+	const USERNAME_NOT_FOUND = 0;
+	const PASSWORD_WRONG = 1;
+	const SUCCESS = 2;
+	
+	/**
+	 * Returns a simple result in form of a boolean value
+	 *
+	 * @return bool
+	 */
+	public function getSimpleResult() {
+		switch ($this->result) {
+			case SUCCESS :
+				return true;
+			
+			default :
+				return false;
+		}
+	}
+}
+
+/**
+ * This class is for results of the register method
+ */
+class RegisterResult extends MethodResult {
+	const USERNAME_GIVEN = 0;
+	const EMAIL_GIVEN = 1;
+	const PASSWORD_MITMATCH = 2;
+	const SUCCESS = 3;
+	
+	/**
+	 * Returns a simple result in form of a boolean value
+	 *
+	 * @return bool
+	 */
+	public function getSimpleResult() {
+		switch ($this->result) {
+			case SUCCESS :
+				return true;
+			
+			default :
+				return false;
+		}
+	}
+}
+
+
+/**
+ * Exception class for LoginLib methods
+ */
+class MethodException extends \Exception {
+	/**
+	 * The constrcutor of MethodExceptions just use the default exception class atm
+	 *
+	 * @param string $message The message of the exception
+	 * @param int $code The code of the exception
+	 * @param Exception $previous The previous exception
+	 * 
+	 * @return MethodException
+	 */
+	public function __construct($message = "", $code = 0, $previous = null) {
+		parent::__construct ( $message, $code, $previous );
 	}
 }
