@@ -18,7 +18,7 @@ abstract class MethodResult {
 	/**
 	 * A constructor for LoginResults
 	 *
-	 * @param int $result The result of the login function, has to be one of the constants of this class
+	 * @param int $result The result of one of the methods
 	 *
 	 * @return LoginResult
 	 */
