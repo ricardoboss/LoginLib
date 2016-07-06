@@ -1,0 +1,6 @@
+# eclipse project
+.project
+.buildpath
+
+# website security
+.htaccess
