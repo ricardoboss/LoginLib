@@ -50,15 +50,18 @@ if (isset($_POST['method'])) {
 <html lang="en">
 <head>
 	<title>LoginLib Tests</title>
-	<!-- apply a bit of style; we don't want to let it look to shabby, do we? -->
+	<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
 	<style type="text/css">
 		* {
 			box-sizing: border-box;
 		}
 
 		body {
-			max-width: 500px;
-			margin: 0 auto;
+			max-width: 600px;
+			margin: 0 auto 25px;
+			padding: 20px 25px;
+			box-shadow: 0 5px 25px rgba(0,0,0,0.45);
+			font-family: sans-serif;
 		}
 
 		p, form {

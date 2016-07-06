@@ -38,6 +38,7 @@ class LoginLib {
 		$this->config = $config;
 		
 		$this->db = new MysqliDb($config['database']);
+		// TODO: check if tables exist, if not => create them
 	}
 
 	/**
