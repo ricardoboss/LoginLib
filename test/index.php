@@ -2,7 +2,7 @@
 if (isset($_POST['method'])) {
 	// automatically load all required files
 	require('load.php');
-
+	
 	// create a login lib instance with the config (defined in config.php under /src)
 	$loginlib = new LoginLib\LoginLib($config);
 
@@ -20,13 +20,13 @@ if (isset($_POST['method'])) {
 				function($result) {
 					// get the result from the MethodResult object (in this case it is a LoginResult)
 					switch ($result->getResult()) {
-						case LoginResult::SUCCESS:
+						case LoginLib\LoginResult::SUCCESS:
 							$message = "Login successfull!";
 							break;
-						case LoginResult::PASSWORD_WRONG:
+						case LoginLib\LoginResult::PASSWORD_WRONG:
 							$message = "The given password is wrong!";
 							break;
-						case LoginResult::USERNAME_NOT_FOUND:
+						case LoginLib\LoginResult::USERNAME_NOT_FOUND:
 							$message = "The username or email you provided is not registered!";
 							break;
 
