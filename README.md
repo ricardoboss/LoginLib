@@ -10,4 +10,4 @@ The installation is very easy! Just <code>require</code> (<code>require_once</co
 
 ## Usage
 
-<i>Follows</i>
+<a href="https://mcmainiac.github.io/LoginLib/">Use the offical API</a>
