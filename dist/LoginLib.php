@@ -50,54 +50,6 @@ class LoginLib {
 	}
 	
 	/**
-	 * Call this method to authenticate a registered user
-	 * 
-	 * @param string $username The username or email-address of the user
-	 * @param string $password The password or key the user provides
-	 * @param \function $callback A callback function that gets called when the function finished processing
-	 * 
-	 * @return LoginResult
-	 */
-	public function login($username, $password, $callback = null) {
-		// check the db, just in case a script runs very long
-		$this->checkDb();
-		
-		// add where selector
-		$this->db->where($this->config['table']['accounts']['col_username'], $username);
-		
-		// get one row only
-		$account = $this->db->getOne($this->config['table']['accounts']['name']);
-		
-		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
-		if (isset($account)) {
-			// check if the password hashs are equal
-			if (hash_equals($account[$this->config['table']['accounts']['col_password_hash']], crypt($password, $account[$this->config['table']['accounts']['col_password_hash']]))) {
-				// if they are, the user is logged in
-				
-				if (!$_SESSION)
-					\session_start();
-				
-				\setcookie($this->config['cookie']['']);
-				
-				$code = LoginResult::SUCCESS;
-			} else {
-				$code = LoginResult::PASSWORD_WRONG;
-			}
-		} else {
-			$code = LoginResult::USERNAME_NOT_FOUND;
-		}
-		
-		$result = new LoginResult($code);
-		
-		// call the callback in case one was specified
-		if ($callback !== null)
-			$callback($result);
-			
-			// return the result anyway
-		return $result;
-	}
-	
-	/**
 	 * This method is used to register a new user
 	 * 
 	 * @param string $username The username
@@ -151,6 +103,69 @@ class LoginLib {
 	}
 	
 	/**
+	 * Call this method to authenticate a registered user
+	 * 
+	 * @param string $username The username or email-address of the user
+	 * @param string $password The password or key the user provides
+	 * @param \function $callback A callback function that gets called when the function finished processing
+	 * 
+	 * @return LoginResult
+	 */
+	public function login($username, $password, $callback = null) {
+		// check the db, just in case a script runs very long
+		$this->checkDb();
+		
+		// add where selector
+		$this->db->where($this->config['table']['accounts']['col_username'], $username);
+		
+		// get one row only
+		$account = $this->db->getOne($this->config['table']['accounts']['name']);
+		
+		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
+		if (isset($account)) {
+			// check if the password hashs are equal
+			if (hash_equals($account[$this->config['table']['accounts']['col_password_hash']], crypt($password, $account[$this->config['table']['accounts']['col_password_hash']]))) {
+				// if they are, the user is logged in
+				
+				// convert table row into a user object
+				$user = new User($account, $this->config['table']['accounts']);
+				
+				// generate a secure random string as a login token
+				$login_token = bin2hex(openssl_random_pseudo_bytes(32));
+				
+				// store login token in database
+				$id = $db->insert(
+					$this->config['table']['login_tokens']['name'],
+					array(
+						$this->config['table']['login_tokens']['col_account_id'] => $user->getId(),
+						$this->config['table']['login_tokens']['col_created_at'] => $db->now(),
+						$this->config['table']['login_tokens']['col_token'] => $login_token
+					)
+				);
+				
+				// store login token and token id in cookie
+				$this->setCookie('login_token', $login_token);
+				$this->setCookie('token_id', $id);
+				
+				$code = LoginResult::SUCCESS;
+			} else {
+				$code = LoginResult::PASSWORD_WRONG;
+			}
+		} else {
+			$code = LoginResult::USERNAME_NOT_FOUND;
+		}
+		
+		$result = new LoginResult($code);
+		
+		// call the callback in case one was specified
+		if ($callback !== null)
+			$callback($result);
+			
+			// return the result anyway
+		return $result;
+	}
+	
+	/**
 	 * This method is used to log users out
 	 * 
 	 * @return void
@@ -165,8 +180,22 @@ class LoginLib {
 	 * @return bool
 	 */
 	public function isLoggedIn() {
-		// TODO: do cookie and session and database checks and so on to authenticate the user
-		return false;
+		$login_token = @$_COOKIE[$this->config['cookie']['login_token']['name']];
+		$token_id = @$_COOKIE[$this->config['cookie']['token_id']['name']];
+		
+		if (isset($login_token) && isset($token_id)) {
+			$db->where($this->config['table']['login_tokens']['col_id'], $token_id);
+			$db->where($this->config['table']['login_tokens']['col_token'], $login_token);
+			$token = $db->getOne($this->config['table']['login_tokens']['name']);
+			
+			if ($token) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -176,7 +205,20 @@ class LoginLib {
 	 */
 	private function checkDb() {
 		if (! $this->db->ping())
-			$this->db->connect ();
+			$this->db->connect();
+	}
+	
+	/**
+	 * Sets a cookie
+	 * 
+	 * @param string $name The name of the cookie
+	 * @param mixed $value The value of the cookie
+	 * @param int $expires The lifetime of the cookie
+	 * 
+	 * @return bool
+	 */
+	private function setCookie($id, $value) {
+		return \setcookie($this->config['cookie'][$id]['name'], $value, $this->config['cookie'][$id]['expires'], $this->config['cookie']['path'], $this->config['cookie']['domain'], false, false);
 	}
 }
 
@@ -233,10 +275,10 @@ class LoginResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS :
+			case SUCCESS:
 				return true;
 			
-			default :
+			default:
 				return false;
 		}
 	}
@@ -258,15 +300,113 @@ class RegisterResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS :
+			case SUCCESS:
 				return true;
 			
-			default :
+			default:
 				return false;
 		}
 	}
 }
 
+
+/**
+ * The user class is used to hold data secure and easy to access (for LoginLib). 
+ */
+class User {
+	/** @var int The id of the user */
+	private $id;
+	
+	/** @var string The username of this user */
+	private $username;
+	
+	/** @var string The email address of the user */
+	private $email;
+	
+	/** @var int When the user was last updated (UNIX timestamp) */
+	private $updated_at;
+	
+	/** @var int The time when the user created their account (UNIX timestamp) */
+	private $registered_at;
+	
+	/**
+	 * The constructor of the User class 
+	 * 
+	 * @param array $account_row          The corresponding account row for this user from the accounts table
+	 * @param array $account_table_config The config array holding the column names for the account table
+	 * 
+	 * @return User
+	 */
+	public function __construct($account_row, $account_table_config) {
+		$this->id = $account_table_config['col_id'];
+		$this->username = $account_table_config['col_username'];
+		$this->email = $account_table_config['col_email'];
+		$this->updated_at = strtotime($account_table_config['col_updated_at']);
+		$this->registered_at = strtotime($account_table_config['col_registered_at']);
+	}
+	
+	/**
+	 * This function returns the id of the account associated with this user
+	 * 
+	 * @return int
+	 */
+	public function getId() {
+		return $this->id;
+	}
+	
+	/**
+	 * Returns the username of this user
+	 * 
+	 * @return string
+	 */
+	public function getUsername() {
+		return $this->username;
+	}
+	
+	/**
+	 * Returns the email address of this user
+	 * 
+	 * @return string
+	 */
+	public function getEmail() {
+		return $this->email;
+	}
+	
+	
+	/**
+	 * The timestamp of the last time this user has been updated in the database
+	 * 
+	 * @return int
+	 */
+	public function getUpdated() {
+		return $this->updated_at;
+	}
+	
+	/**
+	 * The time when the user created their account
+	 * 
+	 * @return int
+	 */
+	public function getRegistered() {
+		return $this->registered_at;
+	}
+	
+	
+	/**
+	 * Returns this user as an array
+	 * 
+	 * @return array
+	 */
+	public function getAsArray() {
+		return array(
+			'id' => $this->id,
+			'username' => $this->username,
+			'email' => $this->email,
+			'updated_at' => $this->updated_at,
+			'registered_at' => $this->registered_at
+		);
+	}
+}
 
 /**
  * Exception class for the case that a class was not found
