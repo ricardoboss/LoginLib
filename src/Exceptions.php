@@ -15,7 +15,7 @@ class ClassNotFoundException extends \Exception {
 	 * @param int $code The code of the exception
 	 * @param Exception $previous The previous exception
 	 * 
-	 * @return MethodException
+	 * @return ClassNotFoundException
 	 */
 	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ( $message, $code, $previous );
