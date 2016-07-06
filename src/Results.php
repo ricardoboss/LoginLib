@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file defines the MethodResults
  * 
@@ -19,9 +18,8 @@ abstract class MethodResult {
 	/**
 	 * A constructor for LoginResults
 	 *
-	 * @param int $result
-	 *        	The result of the login function, has to be one of the constants of this class
-	 *        	
+	 * @param int $result The result of the login function, has to be one of the constants of this class
+	 *
 	 * @return LoginResult
 	 */
 	public function __construct($result) {
@@ -53,8 +51,11 @@ class LoginResult extends MethodResult {
 	const PASSWORD_WRONG = 1;
 	const SUCCESS = 2;
 	
-	// a small test if the phpdocumentor the description from the superclass uses or an error throws :)
-	// so, no description for this method
+	/**
+	 * Returns a simple result in form of a boolean value
+	 *
+	 * @return bool
+	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
 			case SUCCESS :
