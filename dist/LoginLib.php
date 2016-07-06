@@ -38,14 +38,14 @@ class LoginLib {
 	 * @return LoginLib
 	 */
 	public function __construct($config) {
-		if (!class_exists("MysqliDb")) {
+		if (!class_exists("MysqliDb\MysqliDb")) {
 			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!", 1);
 			exit;
 		}
 		
 		$this->config = $config;
 		
-		$this->db = new MysqliDb ( $config ['database'] );
+		$this->db = new MysqliDb ($config['database']);
 		// TODO: check if tables exist, if not => create them
 	}
 	
@@ -54,27 +54,30 @@ class LoginLib {
 	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
-	 * @param function $callback A callback function that gets called when the function finished processing
+	 * @param \function $callback A callback function that gets called when the function finished processing
 	 * 
 	 * @return LoginResult
 	 */
 	public function login($username, $password, $callback = null) {
 		// check the db, just in case a script runs very long
-		checkDb ();
+		$this->checkDb();
 		
 		// add where selector
-		$db->where($this->config['table']['accounts']['col_username'], $username);
+		$this->db->where($this->config['table']['accounts']['col_username'], $username);
 		
 		// get one row only
-		$account = $db->getOne($this->config['table']['accounts']['name']);
+		$account = $this->db->getOne($this->config['table']['accounts']['name']);
 		
 		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
 		if (isset($account)) {
 			// check if the password hashs are equal
-			if (hash_equals($account[$config['table']['accounts']['col_password_hash']], crypt($password, $account[$config['table']['accounts']['col_password_hash']]))) {
+			if (hash_equals($account[$this->config['table']['accounts']['col_password_hash']], crypt($password, $account[$this->config['table']['accounts']['col_password_hash']]))) {
 				// if they are, the user is logged in
 				
-				// TODO: cookie and session stuff for login checks and so on
+				if (!$_SESSION)
+					\session_start();
+				
+				\setcookie($this->config['cookie']['']);
 				
 				$code = LoginResult::SUCCESS;
 			} else {
@@ -101,35 +104,27 @@ class LoginLib {
 	 * @param string $email The email address
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
-	 * @param function $callback A callback function that gets called when the function finished processing
+	 * @param \function $callback A callback function that gets called when the function finished processing
 	 * 
 	 * @return RegisterResult
 	 */
 	public function register($username, $email, $password, $confirm, $callback = null) {
 		// first of all, check the db
-		checkDb();
+		$this->checkDb();
 		
 		// first of all check if the passwords are equal
-		$equal = true;
-		for ($i = 0; $i = length($password); $i++) {
-			if ($password[$i] !== $confirm[$i]) {
-				$equal = false;
-				break;
-			}
-		}
-		
-		if ($equal) {
+		if ($password === $confirm) {
 			// check if the username is given
-			$db->where($this->config['table']['accounts']['col_username'], $username);
-			$account = $db->getOne($this->config['table']['accounts']['name']);
+			$this->db->where($this->config['table']['accounts']['col_username'], $username);
+			$account = $this->db->getOne($this->config['table']['accounts']['name']);
 			
 			// check if this is NOT an account
 			if (!$account) {
 				// next check if the email exists
 				// We need to check the username and the email address seperately (although they 
 				// both can be used as the username) to tell the user what he has to change.
-				$db->where($this->config['table']['accounts']['col_email'], $email);
-				$account = $db->getOne($this->config['table']['accounts']['name']);
+				$this->db->where($this->config['table']['accounts']['col_email'], $email);
+				$account = $this->db->getOne($this->config['table']['accounts']['name']);
 				
 				// again, check if this is NOT an account
 				if (!$account) {
@@ -180,7 +175,7 @@ class LoginLib {
 	 * @return void
 	 */
 	private function checkDb() {
-		if (! $this->db->ping)
+		if (! $this->db->ping())
 			$this->db->connect ();
 	}
 }
@@ -253,7 +248,7 @@ class LoginResult extends MethodResult {
 class RegisterResult extends MethodResult {
 	const USERNAME_GIVEN = 0;
 	const EMAIL_GIVEN = 1;
-	const PASSWORD_MITMATCH = 2;
+	const PASSWORD_MISMATCH = 2;
 	const SUCCESS = 3;
 	
 	/**
@@ -282,9 +277,9 @@ class ClassNotFoundException extends \Exception {
 	 *
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
-	 * @param Exception $previous The previous exception
+	 * @param \Exception $previous The previous exception
 	 * 
-	 * @return MethodException
+	 * @return ClassNotFoundException
 	 */
 	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ( $message, $code, $previous );
