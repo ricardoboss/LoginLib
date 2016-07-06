@@ -7,7 +7,7 @@ namespace LoginLib;
 /**
  * Exception class for LoginLib methods
  */
-class MethodException extends Exception {
+class MethodException extends \Exception {
 	/**
 	 * The constrcutor of MethodExceptions just use the default exception class atm
 	 * 

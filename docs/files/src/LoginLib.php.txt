@@ -27,7 +27,6 @@ class LoginLib {
 	 * The constructor of LoginLib.
 	 * 
 	 * @param array $config The configuration array of LoginLib
-	 * @customtag constructor
 	 * 
 	 * @return LoginLib
 	 */

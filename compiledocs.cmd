@@ -1,3 +1,3 @@
 @echo off
-php phpDocumentor.phar -d src -t docs -f deps/MysqliDb.php
+php phpDocumentor.phar -d "E:\XAMPP\htdocs\projects\LoginLib\src" -t "E:\XAMPP\htdocs\projects\LoginLib\docs" -f "E:\XAMPP\htdocs\projects\LoginLib\deps\MysqliDb.php"
 pause
