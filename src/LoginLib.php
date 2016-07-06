@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file contains the LoginLib class
  * 
@@ -32,8 +31,7 @@ class LoginLib {
 	/**
 	 * The constructor of LoginLib.
 	 *
-	 * @param array $config
-	 *        	The configuration array of LoginLib
+	 * @param array $config The configuration array of LoginLib
 	 *        	
 	 * @return LoginLib
 	 */
@@ -47,12 +45,9 @@ class LoginLib {
 	/**
 	 * Call this method to authenticate a registered user
 	 *
-	 * @param string $username
-	 *        	The username or email-address of the user
-	 * @param string $password
-	 *        	The password or key the user provides
-	 * @param function $callback
-	 *        	A callback function that gets called when the function finished processing
+	 * @param string $username The username or email-address of the user
+	 * @param string $password The password or key the user provides
+	 * @param function $callback A callback function that gets called when the function finished processing
 	 *        	
 	 * @return LoginResult
 	 */
@@ -93,16 +88,11 @@ class LoginLib {
 	/**
 	 * This method is used to register a new user
 	 *
-	 * @param string $username
-	 *        	The username
-	 * @param string $email
-	 *        	The email address
-	 * @param string $password
-	 *        	The password
-	 * @param string $confirm
-	 *        	The password confirmation
-	 * @param function $callback
-	 *        	A callback function that gets called when the function finished processing
+	 * @param string $username The username
+	 * @param string $email The email address
+	 * @param string $password The password
+	 * @param string $confirm The password confirmation
+	 * @param function $callback A callback function that gets called when the function finished processing
 	 *        	
 	 * @return RegisterResult
 	 */

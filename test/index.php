@@ -15,7 +15,7 @@ if (isset ( $_POST ['method'] )) {
 					// provide username and password from the user
 					$_POST ['lg-username'], $_POST ['lg-password'], 
 					
-					// defina a callback function with the result (type: MethodResult) as a parameter
+					// define a callback function with the result (type: MethodResult) as a parameter
 					function ($result) {
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult ()) {
