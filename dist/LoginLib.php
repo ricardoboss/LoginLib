@@ -7,7 +7,6 @@
 namespace LoginLib;
 
 use MysqliDb\MysqliDb;
-use LoginLib\Results\MethodResult;
 use LoginLib\Results\LoginResult;
 use LoginLib\Results\RegisterResult;
 use LoginLib\Users\User;
@@ -328,19 +327,19 @@ namespace LoginLib\Users;
  */
 class User {
 	/** @var int The id of the user */
-	private $id;
+	protected $id;
 	
 	/** @var string The username of this user */
-	private $username;
+	protected $username;
 	
 	/** @var string The email address of the user */
-	private $email;
+	protected $email;
 	
 	/** @var int When the user was last updated (UNIX timestamp) */
-	private $updated_at;
+	protected $updated_at;
 	
 	/** @var int The time when the user created their account (UNIX timestamp) */
-	private $registered_at;
+	protected $registered_at;
 	
 	/**
 	 * The constructor of the User class 
