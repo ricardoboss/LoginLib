@@ -69,21 +69,27 @@ class LoginLib {
 		// first of all check if the passwords are equal
 		if ($password === $confirm) {
 			// check if the username is given
-			$this->db->where($this->config['table']['accounts']['col_username'], $username);
-			$account = $this->db->getOne($this->config['table']['accounts']['name']);
+			$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
+			$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 			
 			// check if this is NOT an account
 			if (!$account) {
 				// next check if the email exists
 				// We need to check the username and the email address seperately (although they 
 				// both can be used as the username) to tell the user what he has to change.
-				$this->db->where($this->config['table']['accounts']['col_email'], $email);
-				$account = $this->db->getOne($this->config['table']['accounts']['name']);
+				$this->db->where($this->getProp('table', 'accounts', 'col_email'), $email);
+				$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 				
 				// again, check if this is NOT an account
 				if (!$account) {
 					// seems like the passwords match, the username and the email address are not in use, sooo register the user
-					// TODO: database stuff to register the user
+					
+					$db->insert(
+						$this->getProp('table', 'accounts', 'name'),
+						array(
+							
+						)
+					);
 					
 					$code = RegisterResult::SUCCESS;
 				} else {
@@ -118,30 +124,36 @@ class LoginLib {
 		$this->checkDb();
 		
 		// add where selector
-		$this->db->where($this->config['table']['accounts']['col_username'], $username);
+		$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
 		
 		// get one row only
-		$account = $this->db->getOne($this->config['table']['accounts']['name']);
+		$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 		
 		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
 		if (isset($account)) {
 			// check if the password hashs are equal
-			if (hash_equals($account[$this->config['table']['accounts']['col_password_hash']], crypt($password, $account[$this->config['table']['accounts']['col_password_hash']]))) {
+			if (hash_equals(
+				$account[$this->getProp('table', 'accounts', 'col_password_hash')], 
+				crypt(
+					$password, 
+					$account[$this->getProp('table', 'accounts', 'col_password_hash')]
+				)
+			)) {
 				// if they are, the user is logged in
 				
 				// convert table row into a user object
-				$user = new User($account, $this->config['table']['accounts']);
+				$user = new User($account, $this->getProp('table', 'accounts'));
 				
 				// generate a secure random string as a login token
 				$login_token = bin2hex(openssl_random_pseudo_bytes(32));
 				
 				// store login token in database
 				$id = $db->insert(
-					$this->config['table']['login_tokens']['name'],
+					$this->getProp('table', 'login_tokens', 'name'),
 					array(
-						$this->config['table']['login_tokens']['col_account_id'] => $user->getId(),
-						$this->config['table']['login_tokens']['col_created_at'] => $db->now(),
-						$this->config['table']['login_tokens']['col_token'] => $login_token
+						$this->getProp('table', 'login_tokens', 'col_account_id') => $user->getId(),
+						$this->getProp('table', 'login_tokens', 'col_created_at') => $db->now(),
+						$this->getProp('table', 'login_tokens', 'col_token') => $login_token
 					)
 				);
 				
@@ -182,13 +194,13 @@ class LoginLib {
 	 * @return bool
 	 */
 	public function isLoggedIn() {
-		$login_token = @$_COOKIE[$this->config['cookie']['login_token']['name']];
-		$token_id = @$_COOKIE[$this->config['cookie']['token_id']['name']];
+		$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
+		$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
 		
 		if (isset($login_token) && isset($token_id)) {
-			$db->where($this->config['table']['login_tokens']['col_id'], $token_id);
-			$db->where($this->config['table']['login_tokens']['col_token'], $login_token);
-			$token = $db->getOne($this->config['table']['login_tokens']['name']);
+			$db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
+			$db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
+			$token = $db->getOne($this->getProp('table', 'login_tokens', 'name'));
 			
 			if ($token) {
 				return true;
@@ -213,13 +225,36 @@ class LoginLib {
 	/**
 	 * Sets a cookie
 	 * 
-	 * @param string $name The name of the cookie
+	 * @param string $id The name of the cookie
 	 * @param mixed $value The value of the cookie
-	 * @param int $expires The lifetime of the cookie
 	 * 
 	 * @return bool
 	 */
 	private function setCookie($id, $value) {
-		return \setcookie($this->config['cookie'][$id]['name'], $value, $this->config['cookie'][$id]['expires'], $this->config['cookie']['path'], $this->config['cookie']['domain'], false, false);
+		return \setcookie(
+			$this->getProp('cookie', $id, 'name'), 
+			$value, 
+			$this->getProp('cookie', $id, 'expires'), 
+			$this->getProp('cookie', 'path'), 
+			$this->getProp('cookie', 'domain'), 
+			false, 
+			false
+		);
+	}
+		
+	/**
+	 * Get a specific config property
+	 * 
+	 * @param string $type Either 'table', 'cookie' or 'database'
+	 * @param string $id The id of the (parent) prop in the config
+	 * @param string|null $prop The id of the prop itself
+	 * 
+	 * @return string
+	 */
+	private function getProp($type, $id, $prop = null) {
+		if ($prop !== null)
+			return $this->config[$type][$id][$prop];
+		else
+			return $this->config[$type][$id];
 	}
 }
