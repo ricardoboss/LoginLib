@@ -50,9 +50,13 @@ class LoginResult extends MethodResult {
 	const USERNAME_NOT_FOUND =	0;
 	const PASSWORD_WRONG =		1;
 	const SUCCESS =				2;
-	
-	// a small test if the phpdocumentor the description from the superclass uses or an error throws :)
-	// so, no description for this method
+
+
+	/**
+	 * Returns a simple result in form of a boolean value
+	 *
+	 * @return bool
+	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
 			case SUCCESS:
