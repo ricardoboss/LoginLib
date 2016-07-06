@@ -32,14 +32,14 @@ class LoginLib {
 	 * The constructor of LoginLib.
 	 * 
 	 * @throws ClassNotFoundException if the required MysqliDb class cannot be found or autoloaded
-	 *
+	 * 
 	 * @param array $config The configuration array of LoginLib
-	 *        	
+	 * 
 	 * @return LoginLib
 	 */
 	public function __construct($config) {
 		if (!class_exists("MysqliDb")) {
-			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!");
+			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!", 1);
 			exit;
 		}
 		
@@ -51,11 +51,11 @@ class LoginLib {
 	
 	/**
 	 * Call this method to authenticate a registered user
-	 *
+	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
 	 * @param function $callback A callback function that gets called when the function finished processing
-	 *        	
+	 * 
 	 * @return LoginResult
 	 */
 	public function login($username, $password, $callback = null) {
@@ -96,13 +96,13 @@ class LoginLib {
 	
 	/**
 	 * This method is used to register a new user
-	 *
+	 * 
 	 * @param string $username The username
 	 * @param string $email The email address
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
 	 * @param function $callback A callback function that gets called when the function finished processing
-	 *        	
+	 * 
 	 * @return RegisterResult
 	 */
 	public function register($username, $email, $password, $confirm, $callback = null) {
@@ -166,7 +166,7 @@ class LoginLib {
 	
 	/**
 	 * This function returns true if the browser is logged in or false if not
-	 *
+	 * 
 	 * @return bool
 	 */
 	public function isLoggedIn() {
@@ -176,7 +176,7 @@ class LoginLib {
 	
 	/**
 	 * Check the database connection, ping it or reconnect if neccessary
-	 *
+	 * 
 	 * @return void
 	 */
 	private function checkDb() {
