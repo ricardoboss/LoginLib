@@ -10,9 +10,9 @@ namespace LoginLib;
 $config = array(
 	'database' => array(
 		'host' => "localhost",
-		'user' => "loginlib",
-		'pass' => "CmH93W4k",
-		'name' => "LoginLib",
+		'username' => "loginlib",
+		'password' => "CmH93W4k",
+		'db' => "LoginLib",
 		'tables' => array(
 			'accounts' => "accounts",
 			'login-tokens' => "login_tokens"
