@@ -1,19 +1,30 @@
-<?php
-if (isset ( $_POST ['method'] )) {
+<?php	
+switch (@$_GET['ref']) {
+	case 'login':
+		$message = "Please log in to view this page!";
+	
+	default:
+		$message = null;
+}
+
+if (isset($_POST['method'])) {
+	/* for production
 	// load deps
 	require('../dist/MysqliDb.php');
 	
 	// load the release version
 	require('../dist/LoginLib.php');
+	*/
 	
 	// get the default config (obviously not included in the LoginLib.php)
 	require('../dist/config.php');
+	require('load.php');
 	
 	// create a login lib instance with the config (defined in config.php)
 	$loginlib = new LoginLib\LoginLib($config);
 	
 	// determine the used method
-	switch ($_POST ['method']) {
+	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
 		case 'login' :
 			// call the login method
@@ -23,15 +34,17 @@ if (isset ( $_POST ['method'] )) {
 					
 					// define a callback function with the result (type: MethodResult) as a parameter
 					function ($result) {
+						global $message;
+						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
-							case LoginLib\LoginResult::SUCCESS :
+							case LoginLib\Results\LoginResult::SUCCESS :
 								$message = "Login successfull!";
 								break;
-							case LoginLib\LoginResult::PASSWORD_WRONG :
+							case LoginLib\Results\LoginResult::PASSWORD_WRONG :
 								$message = "The given password is wrong!";
 								break;
-							case LoginLib\LoginResult::USERNAME_NOT_FOUND :
+							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND :
 								$message = "The username or email you provided is not registered!";
 								break;
 							
@@ -49,16 +62,18 @@ if (isset ( $_POST ['method'] )) {
 				
 				// define a callback function to parse the RegisterResult
 				function($result) {
+					global $message;
+					
 					switch ($result->getResult()) {
-						case LoginLib\RegisterResult::SUCCESS:
+						case LoginLib\Results\RegisterResult::SUCCESS:
 							$message = "Registration successfull! You can now log in!";
 							break;
 						case LoginLib\RegisterResult::USERNAME_GIVEN:
 							$message = "That username is already in use! Dang it!";
-						case LoginLib\RegisterResult::EMAIL_GIVEN:
+						case LoginLib\Results\RegisterResult::EMAIL_GIVEN:
 							$message = "That email address is already in use! Sorry!";
 							break;
-						case LoginLib\RegisterResult::PASSWORD_MISMATCH:
+						case LoginLib\Results\RegisterResult::PASSWORD_MISMATCH:
 							$message = "The passwords you entered didn't match! Please try again!";
 							break;
 							
@@ -78,72 +93,9 @@ if (isset ( $_POST ['method'] )) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>LoginLib Tests</title>
-<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
-<style type="text/css">
-* {
-	box-sizing: border-box;
-}
-
-body {
-	max-width: 600px;
-	margin: 0 auto 25px;
-	padding: 20px 25px;
-	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.45);
-	font-family: sans-serif;
-}
-
-p, form {
-	margin-top: 20px;
-	margin-bottom: 0;
-}
-
-h1, h3 {
-	padding-bottom: 15px;
-	margin: 0;
-}
-
-form>div, button {
-	margin-top: 15px;
-}
-
-label {
-	padding: 7.5px 5px;
-}
-
-input, label {
-	display: block;
-	width: 100%;
-}
-
-input, button {
-	padding: 7.5px 10px;
-	border: solid 1px #888;
-}
-
-pre, .pre-header {
-	background: #666;
-	color: #fefefe;
-	padding: 20px;
-	margin: 0;
-	border-radius: 10px;
-	display: block;
-	width: 100%;
-}
-
-.pre-header {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
-	border-bottom: solid 1px #fefefe;
-	margin-top: 20px;
-}
-
-.pre-header ~ pre {
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
-	margin-bottom: 20px;
-}
-</style>
+	<title>LoginLib Tests</title>
+	<!-- apply a bit of style; we don't want to let it look too shabby, do we? -->
+	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
 	<h1>LoginLib Test Page</h1>

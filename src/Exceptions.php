@@ -2,7 +2,7 @@
 /**
  * This file contains all exception classes that may be thrown by method of the LoginLib class
  */
-namespace LoginLib;
+namespace LoginLib\Exceptions;
 
 /**
  * Exception class for the case that a class was not found
@@ -13,7 +13,7 @@ class ClassNotFoundException extends \Exception {
 	 *
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
-	 * @param Exception $previous The previous exception
+	 * @param \Exception $previous The previous exception
 	 * 
 	 * @return ClassNotFoundException
 	 */
