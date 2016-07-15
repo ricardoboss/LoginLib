@@ -1,9 +1,7 @@
 <?php
-
 /**
  * The file where the MysqliDb class is defined
  */
-namespace MysqliDb;
 
 /**
  * MysqliDb Class
@@ -335,7 +333,7 @@ class MysqliDb {
 			throw new Exception ( 'MySQL host is not set' );
 		}
 		
-		$this->_mysqli = new \mysqli ( $this->host, $this->username, $this->password, $this->db, $this->port );
+		$this->_mysqli = new mysqli ( $this->host, $this->username, $this->password, $this->db, $this->port );
 		
 		if ($this->_mysqli->connect_error) {
 			throw new \Exception ( 'Connect Error ' . $this->_mysqli->connect_errno . ': ' . $this->_mysqli->connect_error );
@@ -1280,7 +1278,7 @@ class MysqliDb {
 	 *        	
 	 * @return array The results of the SQL fetch.
 	 */
-	protected function _dynamicBindResults( \mysqli_stmt $stmt) {
+	protected function _dynamicBindResults( mysqli_stmt $stmt) {
 		$parameters = array ();
 		$results = array ();
 		/**
@@ -1330,10 +1328,10 @@ class MysqliDb {
 		
 		while ( $stmt->fetch () ) {
 			if ($this->returnType == 'object') {
-				$result = new \stdClass ();
+				$result = new stdClass ();
 				foreach ( $row as $key => $val ) {
 					if (is_array ( $val )) {
-						$result->$key = new \stdClass ();
+						$result->$key = new stdClass ();
 						foreach ( $val as $k => $v ) {
 							$result->$key->$k = $v;
 						}
@@ -1648,7 +1646,7 @@ class MysqliDb {
 		if (! $stmt = $this->mysqli ()->prepare ( $this->_query )) {
 			$msg = $this->mysqli ()->error . " query: " . $this->_query;
 			$this->reset ();
-			throw new \Exception ( $msg );
+			throw new Exception ( $msg );
 		}
 		
 		if ($this->traceEnabled) {

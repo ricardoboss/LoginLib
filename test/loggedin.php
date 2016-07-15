@@ -4,8 +4,7 @@ require('load.php');
 
 $loginlib = new LoginLib\LoginLib($config);
 
-if (!$loginlib->isLoggedIn())
-	header("Location: ./?ref=login");
+var_dump($loginlib->isLoggedIn());
 ?>
 <!DOCTYPE html>
 <html lang="en">

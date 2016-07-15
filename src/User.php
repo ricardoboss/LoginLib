@@ -2,7 +2,7 @@
 /**
  * This file provides the user class
  */
-namespace LoginLib\Users;
+namespace LoginLib;
 
 /**
  * The user class is used to hold data secure and easy to access (for LoginLib). 

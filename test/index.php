@@ -38,18 +38,18 @@ if (isset($_POST['method'])) {
 						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
-							case LoginLib\Results\LoginResult::SUCCESS :
-								$message = "Login successfull!";
+							case LoginLib\Results\LoginResult::SUCCESS:
+								header("Location: ./loggedin.php");
 								break;
-							case LoginLib\Results\LoginResult::PASSWORD_WRONG :
+							case LoginLib\Results\LoginResult::PASSWORD_WRONG:
 								$message = "The given password is wrong!";
 								break;
-							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND :
+							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND:
 								$message = "The username or email you provided is not registered!";
 								break;
 							
 							default :
-								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: " . $result;
+								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: \r\n".print_r($result);
 								break;
 						}
 					});
@@ -78,7 +78,7 @@ if (isset($_POST['method'])) {
 							break;
 							
 						default:
-							$message = "What's this? Unknown or unregistered RegisterResult: " . $result;
+							$message = "What's this? Unknown or unregistered RegisterResult:\r\n".print_r($result);
 					}
 				}
 			);
@@ -136,19 +136,9 @@ if (isset($_POST['method'])) {
 		<input type="hidden" name="method" value="register">
 	</form>
 	<br>
-	<?php if (isset($db)) { ?>
-	<div>
-		<span class="pre-header">Last DB query:</span>
-		<pre><?php echo $db->getLastQuery(); ?></pre>
-	</div>
-	<div>
-		<span class="pre-header">Last DB error:</span>
-		<pre><?php echo $db->getLastError(); ?></pre>
-	</div>
-	<?php } ?>
 	<div>
 		<span class="pre-header">GLOBALS:</span>
-		<pre><?php unset($GLOBALS['_SERVER']); unset($GLOBALS['db']); var_dump($GLOBALS); ?></pre>
+		<pre><?php unset($GLOBALS['_SERVER']); var_dump($GLOBALS); ?></pre>
 	</div>
 </body>
 </html>

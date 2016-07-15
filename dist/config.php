@@ -1,13 +1,4 @@
 <?php
-/**
- * This file contains the default configuration of LoginLib
- */
-namespace LoginLib;
-
-/**
- *
- * @var The configuration of LoginLib
- */
 $config = array(
 	'authentication' => array(
 		'type' => "both" // username, email or both
@@ -31,6 +22,7 @@ $config = array(
 		'login_tokens' => array(
 			'name' => "login_tokens",
 			'col_id' => "id",
+			'col_token' => "token",
 			'col_account_id' => "account_id",
 			'col_created_at' => "created_at",
 			'col_logged_out' => "logged_out"
