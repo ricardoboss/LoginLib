@@ -251,11 +251,11 @@ class LoginLib {
 	/**
 	 * Sets a cookie with custom expire time
 	 * 
-	 * @paran string $id The id of the cookie
-	 * @param string $value The value of the cookie
+	 * @param string $id The id of the cookie
+	 * @param mixed $value The value of the cookie
 	 * @param int|null $expires The expiration time of the cookie
 	 * 
-	 * @return bool
+	 * @return bool True if the cookie has been set
 	 */
 	private function setCookie($id, $value, $expires = null) {
 		if ($expires == null)
@@ -281,7 +281,7 @@ class LoginLib {
 	 * @param string $id The id of the (parent) prop in the config
 	 * @param string|null $prop The id of the prop itself
 	 * 
-	 * @return string|null
+	 * @return string|null The requested property of the config
 	 */
 	private function getProp($type, $id, $prop = null) {
 		$t = $this->config->get($type);
