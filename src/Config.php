@@ -1,6 +1,8 @@
 <?php
 /**
  * This file defines the config class for LoginLib
+ * 
+ * This is a helper class that manages the configuration of LoginLib
  */
 namespace LoginLib;
 
