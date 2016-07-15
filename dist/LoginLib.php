@@ -6,25 +6,27 @@
  */
 namespace LoginLib;
 
-use MysqliDb\MysqliDb;
 use LoginLib\Results\LoginResult;
 use LoginLib\Results\RegisterResult;
-use LoginLib\Users\User;
+use LoginLib\User;
+use LoginLib\Config;
 use LoginLib\Exceptions\ClassNotFoundException;
+use LoginLib\Exceptions\ConfigurationException;
 
 /**
  * A class that provides the background mechanics for login and registration forms
  *
- * Use this class to authenticate your users on your website. Design a corresponding login/registration page on your website and this class will do the logic behind it.
+ * Use this class to authenticate your users on your website. Design a corresponding
+ * login/registration page on your website and this class will do the logic behind it.
  *
  * @author Ricardo (MCMainiac) Boss <ricardo.boss@web.de>
- * @copyright &copy; 2016
+ * @copyright &copy; 2016 Ricardo Boss
  * @license https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
  * @link https://github.com/MCMainiac/LoginLib
- * @version 0.1.0
+ * @version 1.0.0
  */
 class LoginLib {
-	/** @var array Used to store the configuration array of LoginLib */
+	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
 	/** @var MysqliDb The database class object used to communitcate with the database */
@@ -34,21 +36,27 @@ class LoginLib {
 	 * The constructor of LoginLib.
 	 * 
 	 * @throws ClassNotFoundException if the required MysqliDb class cannot be found or autoloaded
+	 * @throws ConfigurationException if there is a problem with the provided config array
 	 * 
 	 * @param array $config The configuration array of LoginLib
 	 * 
 	 * @return LoginLib
 	 */
 	public function __construct($config) {
-		if (!class_exists("MysqliDb\MysqliDb")) {
-			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!", 1);
+		$this->config = new Config($config);
+		
+		if (!class_exists("MysqliDb")) {
+			throw new ClassNotFoundException("MysqliDb", "LoginLib requires MysqliDb to communicate with your database!");
 			exit;
 		}
 		
-		$this->config = $config;
+		$this->db = new \MysqliDb($this->config->get('database'));
 		
-		$this->db = new MysqliDb($config['database']);
-		// TODO: check if tables exist, if not => create them
+		foreach($this->config->get('table') as $table)
+			if (!$this->db->tableExists($table['name'])) {
+				throw new ConfigurationException("[table] => [".$table['name']."]", "Table does not exist: ".$table['name']);
+				exit;
+			}
 	}
 	
 	/**
@@ -60,7 +68,7 @@ class LoginLib {
 	 * @param string $confirm The password confirmation
 	 * @param \function $callback A callback function that gets called when the function finished processing
 	 * 
-	 * @return R\RegisterResult
+	 * @return RegisterResult
 	 */
 	public function register($username, $email, $password, $confirm, $callback = null) {
 		// first of all, check the db
@@ -69,21 +77,35 @@ class LoginLib {
 		// first of all check if the passwords are equal
 		if ($password === $confirm) {
 			// check if the username is given
-			$this->db->where($this->config['table']['accounts']['col_username'], $username);
-			$account = $this->db->getOne($this->config['table']['accounts']['name']);
+			$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
+			$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 			
 			// check if this is NOT an account
 			if (!$account) {
 				// next check if the email exists
 				// We need to check the username and the email address seperately (although they 
 				// both can be used as the username) to tell the user what he has to change.
-				$this->db->where($this->config['table']['accounts']['col_email'], $email);
-				$account = $this->db->getOne($this->config['table']['accounts']['name']);
+				$this->db->where($this->getProp('table', 'accounts', 'col_email'), $email);
+				$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 				
 				// again, check if this is NOT an account
 				if (!$account) {
 					// seems like the passwords match, the username and the email address are not in use, sooo register the user
-					// TODO: database stuff to register the user
+					
+					// create password hash
+					$passhash = crypt($password, sprintf("$2a$%02d$", 10) . strtr(base64_encode(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM)), '+', '.'));
+					
+					// insert new user into database and obtain id
+					$id = $this->db->insert(
+						$this->getProp('table', 'accounts', 'name'),
+						array(
+							$this->getProp('table', 'accounts', 'col_username') => $username,
+							$this->getProp('table', 'accounts', 'col_email') => $email,
+							$this->getProp('table', 'accounts', 'col_password_hash') => $passhash,
+							$this->getProp('table', 'accounts', 'col_updated_at') => $this->db->now(),
+							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now(),
+						)
+					);
 					
 					$code = RegisterResult::SUCCESS;
 				} else {
@@ -107,6 +129,8 @@ class LoginLib {
 	/**
 	 * Call this method to authenticate a registered user
 	 * 
+	 * @throws ConfigurationException when the user misconfigured his config.php
+	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
 	 * @param \function $callback A callback function that gets called when the function finished processing
@@ -116,32 +140,46 @@ class LoginLib {
 	public function login($username, $password, $callback = null) {
 		// check the db, just in case a script runs very long
 		$this->checkDb();
-		
-		// add where selector
-		$this->db->where($this->config['table']['accounts']['col_username'], $username);
+
+		// add where selector based on authentication type
+		switch ($this->getProp('authentication', 'type')) {
+			case 'username':
+				$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
+				break;
+			case 'email':
+				$this->db->where($this->getProp('table', 'accounts', 'col_email'), $username);
+				break;
+			case 'both':
+				$this->db->orWhere($this->getProp('table', 'accounts', 'col_username'), $username);
+				$this->db->orWhere($this->getProp('table', 'accounts', 'col_email'), $username);
+				break;
+			
+			default:
+				throw new ConfigurationException("[authentication] => [type]", "Invalid authentication type: ".$this->getProp('authentication', 'type'));
+		}
 		
 		// get one row only
-		$account = $this->db->getOne($this->config['table']['accounts']['name']);
+		$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
 		
 		// if the result is an account, proceed, otherweise return that no account is associated with that username/email address
 		if (isset($account)) {
 			// check if the password hashs are equal
-			if (hash_equals($account[$this->config['table']['accounts']['col_password_hash']], crypt($password, $account[$this->config['table']['accounts']['col_password_hash']]))) {
+			if (hash_equals($account[$this->getProp('table', 'accounts', 'col_password_hash')], crypt($password, $account[$this->getProp('table', 'accounts', 'col_password_hash')]))) {
 				// if they are, the user is logged in
 				
 				// convert table row into a user object
-				$user = new User($account, $this->config['table']['accounts']);
+				$user = new User($account, $this->getProp('table', 'accounts'));
 				
 				// generate a secure random string as a login token
 				$login_token = bin2hex(openssl_random_pseudo_bytes(32));
 				
 				// store login token in database
-				$id = $db->insert(
-					$this->config['table']['login_tokens']['name'],
+				$id = $this->db->insert(
+					$this->getProp('table', 'login_tokens', 'name'),
 					array(
-						$this->config['table']['login_tokens']['col_account_id'] => $user->getId(),
-						$this->config['table']['login_tokens']['col_created_at'] => $db->now(),
-						$this->config['table']['login_tokens']['col_token'] => $login_token
+						$this->getProp('table', 'login_tokens', 'col_account_id') => $account[$this->getProp('table', 'accounts', 'col_id')],
+						$this->getProp('table', 'login_tokens', 'col_created_at') => $this->db->now(),
+						$this->getProp('table', 'login_tokens', 'col_token') => $login_token
 					)
 				);
 				
@@ -163,17 +201,22 @@ class LoginLib {
 		if ($callback !== null)
 			$callback($result);
 			
-			// return the result anyway
+		// return the result anyway
 		return $result;
 	}
 	
 	/**
 	 * This method is used to log users out
 	 * 
-	 * @return void
+	 * @return bool
 	 */
 	public function logout() {
-		// TODO: remove cookies, sessions, do database shit and ya
+		if ($this->isLoggedIn()) {
+			$this->setCookie('login_token', null, -1);
+			$this->setCookie('token_id', null, -1);
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -182,19 +225,14 @@ class LoginLib {
 	 * @return bool
 	 */
 	public function isLoggedIn() {
-		$login_token = @$_COOKIE[$this->config['cookie']['login_token']['name']];
-		$token_id = @$_COOKIE[$this->config['cookie']['token_id']['name']];
+		$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
+		$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
 		
 		if (isset($login_token) && isset($token_id)) {
-			$db->where($this->config['table']['login_tokens']['col_id'], $token_id);
-			$db->where($this->config['table']['login_tokens']['col_token'], $login_token);
-			$token = $db->getOne($this->config['table']['login_tokens']['name']);
-			
-			if ($token) {
-				return true;
-			} else {
-				return false;
-			}
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
+			$r = $this->db->getOne($this->getProp('table', 'login_tokens', 'name'));
+			return $r ? true : false;
 		} else {
 			return false;
 		}
@@ -211,16 +249,55 @@ class LoginLib {
 	}
 	
 	/**
-	 * Sets a cookie
+	 * Sets a cookie with custom expire time
 	 * 
-	 * @param string $name The name of the cookie
+	 * @paran string $id The id of the cookie
 	 * @param mixed $value The value of the cookie
-	 * @param int $expires The lifetime of the cookie
+	 * @param int $expires The expiration time of the cookie
 	 * 
 	 * @return bool
 	 */
-	private function setCookie($id, $value) {
-		return \setcookie($this->config['cookie'][$id]['name'], $value, $this->config['cookie'][$id]['expires'], $this->config['cookie']['path'], $this->config['cookie']['domain'], false, false);
+	private function setCookie($id, $value, $expires = null) {
+		if ($expires == null)
+			$expires = time() + $this->getProp('cookie', $id, 'expire');
+
+		return \setcookie(
+			$this->getProp('cookie', $id, 'name'), 
+			$value, 
+			$expires, 
+			$this->getProp('cookie', 'path'), 
+			$this->getProp('cookie', 'domain'), 
+			false, 
+			false
+		);
+	}
+	
+	/**
+	 * Get a specific config property
+	 * 
+	 * @throws ConfigurationException if the requested property is not set
+	 *  
+	 * @param string $type Either 'table', 'cookie' or 'database'
+	 * @param string $id The id of the (parent) prop in the config
+	 * @param string|null $prop The id of the prop itself
+	 * 
+	 * @return string|null
+	 */
+	private function getProp($type, $id, $prop = null) {
+		$t = $this->config->get($type);
+		if ($prop !== null) {
+			$p = @$t[$id][$prop];
+			if (!isset($p)) {
+				throw new ConfigurationException("[".$type."] => [".$id."] => [".$prop."]", "The requested property could not be found!");
+			}
+			return $p;
+		} else {
+			$p = $t[$id];
+			if (!isset($p)) {
+				throw new ConfigurationException("[".$type."] => [".$id."]", "The requested config id could not be found!");
+			}
+			return $p;
+		}
 	}
 }
 <?php
@@ -316,11 +393,7 @@ class RegisterResult extends MethodResult {
 		}
 	}
 }
-<?php
-/**
- * This file provides the user class
- */
-namespace LoginLib\Users;
+
 
 /**
  * The user class is used to hold data secure and easy to access (for LoginLib). 
@@ -420,7 +493,7 @@ class User {
 	}
 }<?php
 /**
- * This file contains all exception classes that may be thrown by method of the LoginLib class
+ * This file contains all exception classes that may be thrown by methods of the LoginLib class
  */
 namespace LoginLib\Exceptions;
 
@@ -428,16 +501,64 @@ namespace LoginLib\Exceptions;
  * Exception class for the case that a class was not found
  */
 class ClassNotFoundException extends \Exception {
+	/** @var string The classname that wasn't found */
+	private $classname;
+
 	/**
-	 * The constrcutor of ClassNotFoundExceptions just use the default exception class atm
+	 * The constrcutor of ClassNotFoundExceptions
 	 *
+	 * @param string $class The searched classname
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
 	 * @param \Exception $previous The previous exception
 	 * 
 	 * @return ClassNotFoundException
 	 */
-	public function __construct($message = "", $code = 0, $previous = null) {
-		parent::__construct ( $message, $code, $previous );
+	public function __construct($classname, $message = "", $code = 0, $previous = null) {
+		parent::__construct ($message, $code, $previous);
+		
+		$this->classname = $classname;
+	}
+	
+	/**
+	 * Returns the missing classname
+	 * 
+	 * @return string
+	 */
+	public function getClassname() {
+		return $this->classname;
+	}
+}
+
+/**
+ * Ecxeption that gets thrown if the user miconfigured their config
+ */
+class ConfigurationException extends \Exception {
+	/** @var string the misconfigured property */
+	private $prop;
+
+	/**
+	 * The constrcutor of ConfigurationExceptions
+	 *
+	 * @param string $prop The misconfigured property; format: [key] => [prop]
+	 * @param string $message The message of the exception
+	 * @param int $code The code of the exception
+	 * @param \Exception $previous The previous exception
+	 * 
+	 * @return ConfigurationException
+	 */
+	public function __construct($prop, $message = "", $code = 0, $previous = null) {
+		parent::__construct ($message, $code, $previous);
+		
+		$this->prop = $prop;
+	}
+	
+	/**
+	 * A method to return the misconfigured property
+	 * 
+	 * @return string
+	 */
+	public function getProp() {
+		return $this->prop;
 	}
 }
