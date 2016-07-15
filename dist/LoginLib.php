@@ -244,11 +244,11 @@ class LoginLib {
 	/**
 	 * Sets a cookie with custom expire time
 	 * 
-	 * @paran string $id The id of the cookie
+	 * @param string $id The id of the cookie
 	 * @param mixed $value The value of the cookie
-	 * @param int $expires The expiration time of the cookie
+	 * @param int|null $expires The expiration time of the cookie
 	 * 
-	 * @return bool
+	 * @return bool True if the cookie has been set
 	 */
 	private function setCookie($id, $value, $expires = null) {
 		if ($expires == null)
@@ -274,7 +274,7 @@ class LoginLib {
 	 * @param string $id The id of the (parent) prop in the config
 	 * @param string|null $prop The id of the prop itself
 	 * 
-	 * @return string|null
+	 * @return string|null The requested property of the config
 	 */
 	private function getProp($type, $id, $prop = null) {
 		$t = $this->config->get($type);
@@ -337,11 +337,11 @@ class Config {
 			'domain' => "",//$_SERVER['HTTP_HOST'],
 			'login_token' => array(
 				'name' => "ll_lt",
-				'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
+				'expire' => 2419200 // 1 month
 			),
 			'token_id' => array(
 				'name' => "ll_ti",
-				'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
+				'expire' => 2419200 // 1 month
 			)
 		)
 	);
@@ -364,7 +364,7 @@ class Config {
 	 * 
 	 * @throws ConfigurationException if the requested type could not be found
 	 * 
-	 * @param string The section of the config array
+	 * @param string $type The section of the config array
 	 * 
 	 * @return array
 	 */
