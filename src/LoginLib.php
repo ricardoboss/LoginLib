@@ -252,8 +252,8 @@ class LoginLib {
 	 * Sets a cookie with custom expire time
 	 * 
 	 * @paran string $id The id of the cookie
-	 * @param mixed $value The value of the cookie
-	 * @param int $expires The expiration time of the cookie
+	 * @param string $value The value of the cookie
+	 * @param int|null $expires The expiration time of the cookie
 	 * 
 	 * @return bool
 	 */
