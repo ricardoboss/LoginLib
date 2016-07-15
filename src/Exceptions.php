@@ -30,7 +30,7 @@ class ClassNotFoundException extends \Exception {
 	/**
 	 * Returns the missing classname
 	 * 
-	 * @return string
+	 * @return string The required class name
 	 */
 	public function getClassname() {
 		return $this->classname;
@@ -63,7 +63,7 @@ class ConfigurationException extends \Exception {
 	/**
 	 * A method to return the misconfigured property
 	 * 
-	 * @return string
+	 * @return string The misconfigured config property
 	 */
 	public function getProp() {
 		return $this->prop;
