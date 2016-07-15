@@ -617,7 +617,7 @@ class ClassNotFoundException extends \Exception {
 }
 
 /**
- * Ecxeption that gets thrown if the user miconfigured their config
+ * Exception that gets thrown if the user miconfigured their config
  */
 class ConfigurationException extends \Exception {
 	/** @var string the misconfigured property */
