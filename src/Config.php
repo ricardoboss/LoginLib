@@ -50,11 +50,11 @@ class Config {
 			'domain' => "",//$_SERVER['HTTP_HOST'],
 			'login_token' => array(
 				'name' => "ll_lt",
-				'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
+				'expire' => 2419200 // 1 month
 			),
 			'token_id' => array(
 				'name' => "ll_ti",
-				'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
+				'expire' => 2419200 // 1 month
 			)
 		)
 	);
@@ -77,7 +77,7 @@ class Config {
 	 * 
 	 * @throws ConfigurationException if the requested type could not be found
 	 * 
-	 * @param string The section of the config array
+	 * @param string $type The section of the config array
 	 * 
 	 * @return array
 	 */
