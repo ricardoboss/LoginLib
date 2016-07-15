@@ -70,7 +70,7 @@ if (isset($_POST['method'])) {
 						case LoginLib\Results\RegisterResult::SUCCESS:
 							$message = "Registration successfull! You can now log in!";
 							break;
-						case LoginLib\RegisterResult::USERNAME_GIVEN:
+						case LoginLib\Results\RegisterResult::USERNAME_GIVEN:
 							$message = "That username is already in use! Dang it!";
 						case LoginLib\Results\RegisterResult::EMAIL_GIVEN:
 							$message = "That email address is already in use! Sorry!";
