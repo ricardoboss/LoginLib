@@ -2,6 +2,8 @@
 switch (@$_GET['ref']) {
 	case 'login':
 		$message = "Please log in to view this page!";
+	case 'imacoder':
+		$message = "Glad you're taking a look at the code :)";
 	
 	default:
 		$message = null;
