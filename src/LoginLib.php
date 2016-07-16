@@ -29,6 +29,7 @@ class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
+	// TODO: create abstract class with required database functions to get away from the MysqliDb dependencie
 	/** @var \MysqliDb The database class object used to communitcate with the database */
 	private $db;
 	
