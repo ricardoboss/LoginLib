@@ -429,7 +429,7 @@ abstract class MethodResult {
 	 *
 	 * @param int $result The result of one of the methods
 	 *
-	 * @return LoginResult
+	 * @return MethodResult
 	 */
 	public function __construct($result) {
 		$this->result = $result;
