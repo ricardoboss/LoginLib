@@ -29,7 +29,7 @@ class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
-	/** @var MysqliDb The database class object used to communitcate with the database */
+	/** @var \MysqliDb The database class object used to communitcate with the database */
 	private $db;
 	
 	/**
