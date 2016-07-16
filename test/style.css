@@ -63,3 +63,11 @@ pre, .pre-header {
 	border-top-right-radius: 0;
 	margin-bottom: 20px;
 }
+
+.text-success {
+	color: #3a6;
+}
+
+.text-danger {
+	color: #920;
+}

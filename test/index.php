@@ -28,7 +28,7 @@ if (isset($_POST['method'])) {
 	// determine the used method
 	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
-		case 'login' :
+		case 'login':
 			// call the login method
 			$loginlib->login ( 
 					// provide username and password from the user
@@ -56,7 +56,7 @@ if (isset($_POST['method'])) {
 						}
 					});
 			break;
-		case 'register' :
+		case 'register':
 			// call the register method
 			$loginlib->register(
 				// provide the fields from the formular
@@ -84,6 +84,17 @@ if (isset($_POST['method'])) {
 					}
 				}
 			);
+			break;
+		
+		case 'logout':
+			if ($loginlib->logout())
+				$message = "You have been logged out!";
+			else
+				$message = "Logout failed!";
+			break;
+		
+		case 'redir':
+			$message = "Please log in below:";
 			break;
 		
 		default :

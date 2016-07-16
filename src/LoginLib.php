@@ -211,12 +211,16 @@ class LoginLib {
 	 * @return bool
 	 */
 	public function logout() {
-		if ($this->isLoggedIn()) {
-			$this->setCookie('login_token', null, -1);
-			$this->setCookie('token_id', null, -1);
-		}
-		
-		return true;
+		if ($this->isLoggedIn())
+			if ($this->setCookie('login_token', null, -1))
+				if ($this->setCookie('token_id', null, -1))
+					return true;
+				else
+					return false;
+			else
+				return false;
+		else
+			return true;
 	}
 	
 	/**
