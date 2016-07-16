@@ -205,11 +205,28 @@ class LoginLib {
 	 */
 	public function logout() {
 		if ($this->isLoggedIn()) {
-			$this->setCookie('login_token', null, -1);
-			$this->setCookie('token_id', null, -1);
-		}
-		
-		return true;
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $_COOKIE[$this->getProp('cookie', 'token_id', 'name')]);
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $_COOKIE[$this->getProp('cookie', 'login_token', 'name')]);
+			
+			$r = $this->db->update(
+				$this->getProp('table', 'login_tokens', 'name'),
+				array(
+					'logged_out' => $this->db->now()
+				)
+			);
+			
+			if (!$r)
+				return false;
+			
+			if ($this->setCookie('login_token', null, -1))
+				if ($this->setCookie('token_id', null, -1))
+					return true;
+				else
+					return false;
+			else
+				return false;
+		} else
+			return true;
 	}
 	
 	/**
