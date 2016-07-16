@@ -6,25 +6,27 @@
  */
 namespace LoginLib;
 
-use MysqliDb\MysqliDb;
 use LoginLib\Results\LoginResult;
 use LoginLib\Results\RegisterResult;
-use LoginLib\Users\User;
+use LoginLib\User;
+use LoginLib\Config;
 use LoginLib\Exceptions\ClassNotFoundException;
+use LoginLib\Exceptions\ConfigurationException;
 
 /**
  * A class that provides the background mechanics for login and registration forms
  *
- * Use this class to authenticate your users on your website. Design a corresponding login/registration page on your website and this class will do the logic behind it.
+ * Use this class to authenticate your users on your website. Design a corresponding
+ * login/registration page on your website and this class will do the logic behind it.
  *
  * @author Ricardo (MCMainiac) Boss <ricardo.boss@web.de>
- * @copyright &copy; 2016
+ * @copyright &copy; 2016 Ricardo Boss
  * @license https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
  * @link https://github.com/MCMainiac/LoginLib
- * @version 0.1.0
+ * @version 1.0.0
  */
 class LoginLib {
-	/** @var array Used to store the configuration array of LoginLib */
+	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
 	/** @var MysqliDb The database class object used to communitcate with the database */
@@ -34,21 +36,27 @@ class LoginLib {
 	 * The constructor of LoginLib.
 	 * 
 	 * @throws ClassNotFoundException if the required MysqliDb class cannot be found or autoloaded
+	 * @throws ConfigurationException if there is a problem with the provided config array
 	 * 
 	 * @param array $config The configuration array of LoginLib
 	 * 
 	 * @return LoginLib
 	 */
 	public function __construct($config) {
-		if (!class_exists("MysqliDb\MysqliDb")) {
-			throw new ClassNotFoundException("LoginLib requires MysqliDb to run!", 1);
+		$this->config = new Config($config);
+		
+		if (!class_exists("MysqliDb")) {
+			throw new ClassNotFoundException("MysqliDb", "LoginLib requires MysqliDb to communicate with your database!");
 			exit;
 		}
 		
-		$this->config = $config;
+		$this->db = new \MysqliDb($this->config->get('database'));
 		
-		$this->db = new MysqliDb($config['database']);
-		// TODO: check if tables exist, if not => create them
+		foreach($this->config->get('table') as $table)
+			if (!$this->db->tableExists($table['name'])) {
+				throw new ConfigurationException("[table] => [".$table['name']."]", "Table does not exist: ".$table['name']);
+				exit;
+			}
 	}
 	
 	/**
@@ -60,7 +68,7 @@ class LoginLib {
 	 * @param string $confirm The password confirmation
 	 * @param \function $callback A callback function that gets called when the function finished processing
 	 * 
-	 * @return R\RegisterResult
+	 * @return RegisterResult
 	 */
 	public function register($username, $email, $password, $confirm, $callback = null) {
 		// first of all, check the db
@@ -121,7 +129,7 @@ class LoginLib {
 	/**
 	 * Call this method to authenticate a registered user
 	 * 
-	 * @throws ConfigurationException
+	 * @throws ConfigurationException when the user misconfigured his config.php
 	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
@@ -147,7 +155,7 @@ class LoginLib {
 				break;
 			
 			default:
-				throw new ConfigurationException("You misconfigured your configuration! Check your 'authentication' => 'type' value!");
+				throw new ConfigurationException("[authentication] => [type]", "Invalid authentication type: ".$this->getProp('authentication', 'type'));
 		}
 		
 		// get one row only
@@ -166,11 +174,11 @@ class LoginLib {
 				$login_token = bin2hex(openssl_random_pseudo_bytes(32));
 				
 				// store login token in database
-				$id = $db->insert(
+				$id = $this->db->insert(
 					$this->getProp('table', 'login_tokens', 'name'),
 					array(
-						$this->getProp('table', 'login_tokens', 'col_account_id') => $user->getId(),
-						$this->getProp('table', 'login_tokens', 'col_created_at') => $db->now(),
+						$this->getProp('table', 'login_tokens', 'col_account_id') => $account[$this->getProp('table', 'accounts', 'col_id')],
+						$this->getProp('table', 'login_tokens', 'col_created_at') => $this->db->now(),
 						$this->getProp('table', 'login_tokens', 'col_token') => $login_token
 					)
 				);
@@ -193,17 +201,39 @@ class LoginLib {
 		if ($callback !== null)
 			$callback($result);
 			
-			// return the result anyway
+		// return the result anyway
 		return $result;
 	}
 	
 	/**
 	 * This method is used to log users out
 	 * 
-	 * @return void
+	 * @return bool
 	 */
 	public function logout() {
-		// TODO: remove cookies, sessions, do database shit and ya
+		if ($this->isLoggedIn()) {
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $_COOKIE[$this->getProp('cookie', 'token_id', 'name')]);
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $_COOKIE[$this->getProp('cookie', 'login_token', 'name')]);
+			
+			$r = $this->db->update(
+				$this->getProp('table', 'login_tokens', 'name'),
+				array(
+					'logged_out' => $this->db->now()
+				)
+			);
+			
+			if (!$r)
+				return false;
+			
+			if ($this->setCookie('login_token', null, -1))
+				if ($this->setCookie('token_id', null, -1))
+					return true;
+				else
+					return false;
+			else
+				return false;
+		} else
+			return true;
 	}
 	
 	/**
@@ -216,10 +246,10 @@ class LoginLib {
 		$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
 		
 		if (isset($login_token) && isset($token_id)) {
-			$db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
-			$db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
-			
-			return $db->getOne($this->getProp('table', 'login_tokens', 'name')) ? true : false;
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
+			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
+			$r = $this->db->getOne($this->getProp('table', 'login_tokens', 'name'));
+			return $r ? true : false;
 		} else {
 			return false;
 		}
@@ -236,38 +266,54 @@ class LoginLib {
 	}
 	
 	/**
-	 * Sets a cookie
+	 * Sets a cookie with custom expire time
 	 * 
-	 * @param string $id The name of the cookie
+	 * @param string $id The id of the cookie
 	 * @param mixed $value The value of the cookie
+	 * @param int|null $expires The expiration time of the cookie
 	 * 
-	 * @return bool
+	 * @return bool True if the cookie has been set
 	 */
-	private function setCookie($id, $value) {
+	private function setCookie($id, $value, $expires = null) {
+		if ($expires == null)
+			$expires = time() + $this->getProp('cookie', $id, 'expire');
+
 		return \setcookie(
 			$this->getProp('cookie', $id, 'name'), 
 			$value, 
-			$this->getProp('cookie', $id, 'expires'), 
+			$expires, 
 			$this->getProp('cookie', 'path'), 
 			$this->getProp('cookie', 'domain'), 
 			false, 
 			false
 		);
 	}
-		
+	
 	/**
 	 * Get a specific config property
 	 * 
+	 * @throws ConfigurationException if the requested property is not set
+	 *  
 	 * @param string $type Either 'table', 'cookie' or 'database'
 	 * @param string $id The id of the (parent) prop in the config
 	 * @param string|null $prop The id of the prop itself
 	 * 
-	 * @return string
+	 * @return string|null The requested property of the config
 	 */
 	private function getProp($type, $id, $prop = null) {
-		if ($prop !== null)
-			return $this->config[$type][$id][$prop];
-		else
-			return $this->config[$type][$id];
+		$t = $this->config->get($type);
+		if ($prop !== null) {
+			$p = @$t[$id][$prop];
+			if (!isset($p)) {
+				throw new ConfigurationException("[".$type."] => [".$id."] => [".$prop."]", "The requested property could not be found!");
+			}
+			return $p;
+		} else {
+			$p = $t[$id];
+			if (!isset($p)) {
+				throw new ConfigurationException("[".$type."] => [".$id."]", "The requested config id could not be found!");
+			}
+			return $p;
+		}
 	}
 }

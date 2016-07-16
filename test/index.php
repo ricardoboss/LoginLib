@@ -2,6 +2,8 @@
 switch (@$_GET['ref']) {
 	case 'login':
 		$message = "Please log in to view this page!";
+	case 'imacoder':
+		$message = "Glad you're taking a look at the code :)";
 	
 	default:
 		$message = null;
@@ -26,7 +28,7 @@ if (isset($_POST['method'])) {
 	// determine the used method
 	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
-		case 'login' :
+		case 'login':
 			// call the login method
 			$loginlib->login ( 
 					// provide username and password from the user
@@ -38,23 +40,23 @@ if (isset($_POST['method'])) {
 						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
-							case LoginLib\Results\LoginResult::SUCCESS :
-								$message = "Login successfull!";
+							case LoginLib\Results\LoginResult::SUCCESS:
+								header("Location: ./loggedin.php");
 								break;
-							case LoginLib\Results\LoginResult::PASSWORD_WRONG :
+							case LoginLib\Results\LoginResult::PASSWORD_WRONG:
 								$message = "The given password is wrong!";
 								break;
-							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND :
+							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND:
 								$message = "The username or email you provided is not registered!";
 								break;
 							
 							default :
-								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: " . $result;
+								$message = "Oops! This shouldn't have happened! Unknown or unregistered LoginResult: \r\n".print_r($result);
 								break;
 						}
 					});
 			break;
-		case 'register' :
+		case 'register':
 			// call the register method
 			$loginlib->register(
 				// provide the fields from the formular
@@ -68,7 +70,7 @@ if (isset($_POST['method'])) {
 						case LoginLib\Results\RegisterResult::SUCCESS:
 							$message = "Registration successfull! You can now log in!";
 							break;
-						case LoginLib\RegisterResult::USERNAME_GIVEN:
+						case LoginLib\Results\RegisterResult::USERNAME_GIVEN:
 							$message = "That username is already in use! Dang it!";
 						case LoginLib\Results\RegisterResult::EMAIL_GIVEN:
 							$message = "That email address is already in use! Sorry!";
@@ -78,10 +80,21 @@ if (isset($_POST['method'])) {
 							break;
 							
 						default:
-							$message = "What's this? Unknown or unregistered RegisterResult: " . $result;
+							$message = "What's this? Unknown or unregistered RegisterResult:\r\n".print_r($result);
 					}
 				}
 			);
+			break;
+		
+		case 'logout':
+			if ($loginlib->logout())
+				$message = "You have been logged out!";
+			else
+				$message = "Logout failed!";
+			break;
+		
+		case 'redir':
+			$message = "Please log in below:";
 			break;
 		
 		default :
@@ -136,19 +149,9 @@ if (isset($_POST['method'])) {
 		<input type="hidden" name="method" value="register">
 	</form>
 	<br>
-	<?php if (isset($db)) { ?>
-	<div>
-		<span class="pre-header">Last DB query:</span>
-		<pre><?php echo $db->getLastQuery(); ?></pre>
-	</div>
-	<div>
-		<span class="pre-header">Last DB error:</span>
-		<pre><?php echo $db->getLastError(); ?></pre>
-	</div>
-	<?php } ?>
 	<div>
 		<span class="pre-header">GLOBALS:</span>
-		<pre><?php unset($GLOBALS['_SERVER']); unset($GLOBALS['db']); var_dump($GLOBALS); ?></pre>
+		<pre><?php unset($GLOBALS['_SERVER']); var_dump($GLOBALS); ?></pre>
 	</div>
 </body>
 </html>
