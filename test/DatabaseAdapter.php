@@ -14,6 +14,8 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 		}
 		
 		$this->mysqlidb = new MysqliDb($config);
+		
+		return $this->mysqlidb;
 	}
 	
 	public function tableExists($tableName) {
@@ -46,5 +48,13 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 	
 	public function connect() {
 		return $this->mysqlidb->connect();
+	}
+	
+	public function now() {
+		return $this->mysqlidb->now();
+	}
+	
+	public function getLastQuery() {
+		return $this->mysqlidb->getLastQuery();
 	}
 }
