@@ -24,7 +24,7 @@ use LoginLib\Exceptions\ConfigurationException;
  * @copyright &copy; 2016 Ricardo Boss
  * @license https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
  * @link https://github.com/MCMainiac/LoginLib
- * @version 1.0.0
+ * @version 1.0.1
  */
 class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
