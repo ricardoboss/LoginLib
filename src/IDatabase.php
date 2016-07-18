@@ -17,4 +17,5 @@ interface IDatabase {
 	function update($tableName, $data);
 	function ping();
 	function connect();
+	function now();
 }
