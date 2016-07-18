@@ -4,6 +4,7 @@
 
 ### Navigation:
 1.   [Installation](#installation)
+2.   [Database](#database)
 
 ## Installation <small>[top](#loginlib)</small>
 
@@ -15,3 +16,9 @@ The installation is easy, the implementation can be difficult:
 	* Look [here](https://github.com/MCMainiac/LoginLib/blob/master/test/load.php) to see how to implement the config.
 4. Create an instance of your `IDatabase` implementation and pass it as the second parameter in the constructor. More on that topic [later on](#database).
 5. Use [the official API](https://mcmainiac.github.io/LoginLib/namespaces/LoginLib.html) to get the information you want from LoginLib.
+
+## Database <small>[top](#loginlib)</small>
+
+To communicate with your database, LoginLib uses the `IDatabase` interface.
+
+To create your own implementation, I made [an example](https://github.com/MCMainiac/LoginLib/blob/master/test/DatabaseAdapter.php) `DatabaseAdapter` that is using the `MysqliDb` class from [here](https://github.com/joshcam/PHP-MySQLi-Database-Class).
