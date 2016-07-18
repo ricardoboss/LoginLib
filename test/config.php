@@ -3,12 +3,6 @@ $config = array(
 	'authentication' => array(
 		'type' => "both" // username, email or both
 	),
-	'database' => array(
-		'host' => "localhost",
-		'username' => "loginlib",
-		'password' => "CmH93W4k",
-		'db' => "LoginLib"
-	),
 	'table' => array(
 		'accounts' => array(
 			'name' => "accounts",
@@ -40,4 +34,11 @@ $config = array(
 			'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
 		)
 	)
+);
+
+$databaseConfig = array(
+	'host' => "localhost",
+	'username' => "loginlib",
+	'password' => "CmH93W4k",
+	'db' => "LoginLib"
 );

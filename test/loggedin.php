@@ -1,8 +1,5 @@
 <?php
-require('../dist/config.php');
 require('load.php');
-
-$loginlib = new LoginLib\LoginLib($config);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +8,7 @@ $loginlib = new LoginLib\LoginLib($config);
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
+	<h1>LoginLib Test Page</h1>
 	<div>
 		<p>
 			<form action="index.php" method="post">
@@ -20,7 +18,7 @@ $loginlib = new LoginLib\LoginLib($config);
 			</form>
 		</p>
 		<br>
-		<pre><?php var_dump($GLOBALS); ?></pre>
+		<pre><?php unset($_SERVER); var_dump($GLOBALS); ?></pre>
 	</div>
 </body>
 </html>

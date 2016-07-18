@@ -1,30 +1,22 @@
-<?php	
+<?php
+require('load.php');
+
 switch (@$_GET['ref']) {
 	case 'login':
 		$message = "Please log in to view this page!";
+		break;
 	case 'imacoder':
 		$message = "Glad you're taking a look at the code :)";
+		break;
 	
 	default:
-		$message = null;
+		if ($loginlib->isLoggedIn())
+			$message = 'You are already logged in. <a href="./loggedin.php">Switch to loggedin page</a>?';
+		else
+			$message = null;
 }
 
 if (isset($_POST['method'])) {
-	/* for production
-	// load deps
-	require('../dist/MysqliDb.php');
-	
-	// load the release version
-	require('../dist/LoginLib.php');
-	*/
-	
-	// get the default config (obviously not included in the LoginLib.php)
-	require('../dist/config.php');
-	require('load.php');
-	
-	// create a login lib instance with the config (defined in config.php)
-	$loginlib = new LoginLib\LoginLib($config);
-	
 	// determine the used method
 	switch ($_POST['method']) {
 		// in case we got a login submitted, let LoginLib process it
@@ -36,7 +28,7 @@ if (isset($_POST['method'])) {
 					
 					// define a callback function with the result (type: MethodResult) as a parameter
 					function ($result) {
-						global $message;
+						global $message, $config;
 						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
 						switch ($result->getResult()) {
@@ -47,7 +39,14 @@ if (isset($_POST['method'])) {
 								$message = "The given password is wrong!";
 								break;
 							case LoginLib\Results\LoginResult::USERNAME_NOT_FOUND:
-								$message = "The username or email you provided is not registered!";
+								$message = "The ";
+								if ($config['authentication']['type'] == "both")
+									$message .= "username or email";
+								else if ($config['authentication']['type'] == "email")
+									$message .= "email";
+								else if ($config['authentication']['type'] == "username")
+									$message .= "username";
+								$message .=  " you provided is not registered!";
 								break;
 							
 							default :

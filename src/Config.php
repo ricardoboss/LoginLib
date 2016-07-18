@@ -20,12 +20,6 @@ class Config {
 		'authentication' => array(
 			'type' => "both"
 		),
-		'database' => array(
-			'host' => "localhost",
-			'username' => "root",
-			'password' => "",
-			'db' => "LoginLib"
-		),
 		'table' => array(
 			'accounts' => array(
 				'name' => "accounts",
