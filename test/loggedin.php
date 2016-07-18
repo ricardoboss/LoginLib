@@ -8,6 +8,7 @@ require('load.php');
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
+	<h1>LoginLib Test Page</h1>
 	<div>
 		<p>
 			<form action="index.php" method="post">
@@ -17,7 +18,7 @@ require('load.php');
 			</form>
 		</p>
 		<br>
-		<pre><?php var_dump($GLOBALS); ?></pre>
+		<pre><?php unset($_SERVER); var_dump($GLOBALS); ?></pre>
 	</div>
 </body>
 </html>
