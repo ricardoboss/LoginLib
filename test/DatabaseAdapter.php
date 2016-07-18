@@ -2,7 +2,7 @@
 class DatabaseAdapter implements LoginLib\IDatabase {
 	private $mysqlidb;
 	
-	public function __construct($config = null) {
+	public function __construct(array $config = null) {
 		if ($config == null) {
 			throw new Exception("Config cannot be null!");
 			exit;
@@ -34,11 +34,11 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 		return $this->mysqlidb->getOne($tableName);
 	}
 	
-	public function insert($tableName, $data) {
+	public function insert($tableName, array $data) {
 		return $this->mysqlidb->insert($tableName, $data);
 	}
 	
-	public function update($tableName, $data) {
+	public function update($tableName, array $data) {
 		return $this->mysqlidb->update($tableName, $data);
 	}
 	

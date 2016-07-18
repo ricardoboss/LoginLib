@@ -27,7 +27,7 @@ interface IDatabase {
 	function tableExists($tableName);
 	
 	/**
-	 * Add an <code>" AND "</code> to your where query.
+	 * Add an " AND " to your where query.
 	 * Example:
 	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
 	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>AND</u> col2 = 2"</code>
