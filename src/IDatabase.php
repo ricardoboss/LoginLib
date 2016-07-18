@@ -8,7 +8,7 @@ namespace LoginLib;
  * This is the interface used to communicate with your database
  */
 interface IDatabase {
-	function __constructor();
+	function __construct($config);
 	function tableExists($tableName);
 	function where($column, $andValue);
 	function orWhere($column, $orValue);

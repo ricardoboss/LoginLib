@@ -19,11 +19,7 @@ if (isset($_POST['method'])) {
 	*/
 	
 	// get the default config (obviously not included in the LoginLib.php)
-	require('../dist/config.php');
 	require('load.php');
-	
-	// create a login lib instance with the config (defined in config.php)
-	$loginlib = new LoginLib\LoginLib($config);
 	
 	// determine the used method
 	switch ($_POST['method']) {

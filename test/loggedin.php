@@ -1,8 +1,5 @@
 <?php
-require('../dist/config.php');
 require('load.php');
-
-$loginlib = new LoginLib\LoginLib($config);
 ?>
 <!DOCTYPE html>
 <html lang="en">
