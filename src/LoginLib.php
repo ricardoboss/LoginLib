@@ -10,7 +10,6 @@ use LoginLib\Results\LoginResult;
 use LoginLib\Results\RegisterResult;
 use LoginLib\User;
 use LoginLib\Config;
-use LoginLib\IDatabase;
 use LoginLib\Exceptions\ClassNotFoundException;
 use LoginLib\Exceptions\ConfigurationException;
 
@@ -30,7 +29,8 @@ class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
-	/** @var IDatabase The database class object used to communitcate with the database */
+	// TODO: create abstract class with required database functions to get away from the MysqliDb dependencie
+	/** @var \MysqliDb The database class object used to communitcate with the database */
 	private $db;
 	
 	/**
@@ -40,14 +40,18 @@ class LoginLib {
 	 * @throws ConfigurationException if there is a problem with the provided config array
 	 * 
 	 * @param array $config The configuration array of LoginLib
-	 * @param IDatabase $database Your database implementation of the IDatabase interface
 	 * 
 	 * @return LoginLib
 	 */
-	public function __construct(array $config, IDatabase &$database) {
+	public function __construct(array $config) {
 		$this->config = new Config($config);
 		
-		$this->db = &$database;
+		if (!class_exists("MysqliDb")) {
+			throw new ClassNotFoundException("MysqliDb", "LoginLib requires MysqliDb to communicate with your database!");
+			exit;
+		}
+		
+		$this->db = new \MysqliDb($this->config->get('database'));
 		
 		foreach($this->config->get('table') as $table)
 			if (!$this->db->tableExists($table['name'])) {
@@ -99,8 +103,8 @@ class LoginLib {
 							$this->getProp('table', 'accounts', 'col_username') => $username,
 							$this->getProp('table', 'accounts', 'col_email') => $email,
 							$this->getProp('table', 'accounts', 'col_password_hash') => $passhash,
-							$this->getProp('table', 'accounts', 'col_updated_at') => "NOW()",
-							$this->getProp('table', 'accounts', 'col_registered_at') => "NOW()"
+							$this->getProp('table', 'accounts', 'col_updated_at') => $this->db->now(),
+							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now(),
 						)
 					);
 					
@@ -175,7 +179,7 @@ class LoginLib {
 					$this->getProp('table', 'login_tokens', 'name'),
 					array(
 						$this->getProp('table', 'login_tokens', 'col_account_id') => $account[$this->getProp('table', 'accounts', 'col_id')],
-						$this->getProp('table', 'login_tokens', 'col_created_at') => "NOW()",
+						$this->getProp('table', 'login_tokens', 'col_created_at') => $this->db->now(),
 						$this->getProp('table', 'login_tokens', 'col_token') => $login_token
 					)
 				);
@@ -215,7 +219,7 @@ class LoginLib {
 			$r = $this->db->update(
 				$this->getProp('table', 'login_tokens', 'name'),
 				array(
-					'logged_out' => "NOW()"
+					'logged_out' => $this->db->now()
 				)
 			);
 			
