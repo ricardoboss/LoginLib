@@ -44,7 +44,7 @@ class LoginLib {
 	 * 
 	 * @return LoginLib
 	 */
-	public function __construct($config, &$database) {
+	public function __construct(array $config, IDatabase &$database) {
 		$this->config = new Config($config);
 		
 		$this->db = &$database;
@@ -67,7 +67,7 @@ class LoginLib {
 	 * 
 	 * @return RegisterResult
 	 */
-	public function register($username, $email, $password, $confirm, $callback = null) {
+	public function register($username, $email, $password, $confirm, callable $callback = null) {
 		// first of all, check the db
 		$this->checkDb();
 		
@@ -134,7 +134,7 @@ class LoginLib {
 	 * 
 	 * @return LoginResult
 	 */
-	public function login($username, $password, $callback = null) {
+	public function login($username, $password, callable $callback = null) {
 		// check the db, just in case a script runs very long
 		$this->checkDb();
 
