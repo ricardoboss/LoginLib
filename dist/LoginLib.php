@@ -1,8 +1,6 @@
 <?php
 /**
  * This file contains all classes for LoginLib.
- * 
- * Dont't forget the dependency on MysqliDb!
  */
 namespace LoginLib;
 
