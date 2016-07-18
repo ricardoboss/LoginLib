@@ -2,12 +2,10 @@
 
 **LoginLib** is a php library that provides the background mechanics for registering new users and logging them in.
 
----
-
-#### Navigation:
+### Navigation:
 1.   [Installation](#installation)
 
-### Installation <small>[top](#loginlib)</small>
+## Installation <small>[top](#loginlib)</small>
 
 The installation is easy, the implementation can be difficult:
 
