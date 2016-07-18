@@ -2,6 +2,7 @@
 /**
  * This file defines the IDatabase interface
  */
+namespace LoginLib;
 
 /**
  * This is the interface used to communicate with your database
