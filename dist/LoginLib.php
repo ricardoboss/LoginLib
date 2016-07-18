@@ -22,7 +22,7 @@ class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
 	private $config;
 	
-	/** @var MysqliDb The database class object used to communitcate with the database */
+	/** @var IDatabase The database class object used to communitcate with the database */
 	private $db;
 	
 	/**
@@ -32,18 +32,14 @@ class LoginLib {
 	 * @throws ConfigurationException if there is a problem with the provided config array
 	 * 
 	 * @param array $config The configuration array of LoginLib
+	 * @param IDatabase $database Your database implementation of the IDatabase interface
 	 * 
 	 * @return LoginLib
 	 */
-	public function __construct($config) {
+	public function __construct(array $config, IDatabase &$database) {
 		$this->config = new Config($config);
 		
-		if (!class_exists("MysqliDb")) {
-			throw new ClassNotFoundException("MysqliDb", "LoginLib requires MysqliDb to communicate with your database!");
-			exit;
-		}
-		
-		$this->db = new \MysqliDb($this->config->get('database'));
+		$this->db = &$database;
 		
 		foreach($this->config->get('table') as $table)
 			if (!$this->db->tableExists($table['name'])) {
@@ -63,7 +59,7 @@ class LoginLib {
 	 * 
 	 * @return RegisterResult
 	 */
-	public function register($username, $email, $password, $confirm, $callback = null) {
+	public function register($username, $email, $password, $confirm, callable $callback = null) {
 		// first of all, check the db
 		$this->checkDb();
 		
@@ -96,7 +92,7 @@ class LoginLib {
 							$this->getProp('table', 'accounts', 'col_email') => $email,
 							$this->getProp('table', 'accounts', 'col_password_hash') => $passhash,
 							$this->getProp('table', 'accounts', 'col_updated_at') => $this->db->now(),
-							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now(),
+							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now()
 						)
 					);
 					
@@ -130,7 +126,7 @@ class LoginLib {
 	 * 
 	 * @return LoginResult
 	 */
-	public function login($username, $password, $callback = null) {
+	public function login($username, $password, callable $callback = null) {
 		// check the db, just in case a script runs very long
 		$this->checkDb();
 
@@ -324,12 +320,6 @@ class Config {
 		'authentication' => array(
 			'type' => "both"
 		),
-		'database' => array(
-			'host' => "localhost",
-			'username' => "root",
-			'password' => "",
-			'db' => "LoginLib"
-		),
 		'table' => array(
 			'accounts' => array(
 				'name' => "accounts",
@@ -501,6 +491,22 @@ class RegisterResult extends MethodResult {
 	}
 }
 
+
+/**
+ * This is the interface used to communicate with your database
+ */
+interface IDatabase {
+	function __construct($config);
+	function tableExists($tableName);
+	function where($column, $andValue);
+	function orWhere($column, $orValue);
+	function getOne($tableName);
+	function insert($tableName, $data);
+	function update($tableName, $data);
+	function ping();
+	function connect();
+	function now();
+}
 
 /**
  * The user class is used to hold data secure and easy to access (for LoginLib). 
