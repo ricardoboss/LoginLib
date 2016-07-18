@@ -99,8 +99,8 @@ class LoginLib {
 							$this->getProp('table', 'accounts', 'col_username') => $username,
 							$this->getProp('table', 'accounts', 'col_email') => $email,
 							$this->getProp('table', 'accounts', 'col_password_hash') => $passhash,
-							$this->getProp('table', 'accounts', 'col_updated_at') => "CURRENT_TIMESTAMP",
-							$this->getProp('table', 'accounts', 'col_registered_at') => "CURRENT_TIMESTAMP"
+							$this->getProp('table', 'accounts', 'col_updated_at') => $this->db->now(),
+							$this->getProp('table', 'accounts', 'col_registered_at') => $this->db->now()
 						)
 					);
 					
@@ -175,7 +175,7 @@ class LoginLib {
 					$this->getProp('table', 'login_tokens', 'name'),
 					array(
 						$this->getProp('table', 'login_tokens', 'col_account_id') => $account[$this->getProp('table', 'accounts', 'col_id')],
-						$this->getProp('table', 'login_tokens', 'col_created_at') => "CURRENT_TIMESTAMP",
+						$this->getProp('table', 'login_tokens', 'col_created_at') => $this->db->now(),
 						$this->getProp('table', 'login_tokens', 'col_token') => $login_token
 					)
 				);
@@ -215,7 +215,7 @@ class LoginLib {
 			$r = $this->db->update(
 				$this->getProp('table', 'login_tokens', 'name'),
 				array(
-					'logged_out' => "CURRENT_TIMESTAMP"
+					'logged_out' => $this->db->now()
 				)
 			);
 			
