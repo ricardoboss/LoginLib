@@ -18,7 +18,7 @@ The installation is easy, the implementation can be difficult:
 4. Create an instance of your `IDatabase` implementation and pass it as the second parameter in the constructor. More on that topic [later on](#database).
 5. Use [the official API](https://mcmainiac.github.io/LoginLib/namespaces/LoginLib.html) to get the information you want from LoginLib.
 
-**Don't forget to `use LoginLib;` or create the instance like this: `$loginlib = new LoginLib\LoginLib($config, $db);`
+**Don't forget to `use LoginLib;` or create the instance like this: `$loginlib = new LoginLib\LoginLib($config, $db);`**
 
 ## Database <small>[top](#loginlib)</small>
 
