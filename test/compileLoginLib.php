@@ -1,6 +1,6 @@
 <?php
 class Compiler {
-	const root = __DIR__.'../';
+	const root = dirname(__DIR__);
 	const outputfile = Compiler::root.'dist/LoginLib.php';
 	const sourcefiles = array(
 		'LoginLib.php',
@@ -39,4 +39,4 @@ class Compiler {
 Compiler::start();
 
 // Test if no php errors are thrown
-include(Compiler::outputfile);
+require(Compiler::outputfile);
