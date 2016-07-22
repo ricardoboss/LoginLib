@@ -2,18 +2,19 @@
 class Compiler {
 	public $root;
 	public $outputfile;
-	const sourcefiles = array(
-		'LoginLib.php',
-		'Config.php',
-		'Results.php',
-		'IDatabase.php',
-		'User.php',
-		'Exceptions.php'
-	);
+	private $sourcefiles;
 	
 	public function __construct($root) {
 		$this->root = $root;
 		$this->outputfile = $this->root.'/dist/LoginLib.php';
+		$this->sourcefiles = array(
+			'LoginLib.php',
+			'Config.php',
+			'Results.php',
+			'IDatabase.php',
+			'User.php',
+			'Exceptions.php'
+		);
 	}
 
 	public function compile() {
@@ -28,7 +29,7 @@ class Compiler {
 		$this->append("namespace LoginLib;");
 
 		// loop through the source files and add them to the output file
-		foreach (Compiler::sourcefiles as $file) {
+		foreach ($this->sourcefiles as $file) {
 			if (substr($file, 0, 1) !== ".")
 				$this->append(file_get_contents($this->root.'/src/'.$file));
 		}
