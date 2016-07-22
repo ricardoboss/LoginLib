@@ -54,4 +54,4 @@ require($c->outputfile);
 
 // echo current LoginLib version, if build succeed
 if (class_exists("LoginLib\LoginLib"))
-	LoginLib::version(true);
+	LoginLib\LoginLib::version(true);
