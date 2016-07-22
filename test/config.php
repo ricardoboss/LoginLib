@@ -26,7 +26,7 @@ $config = array(
 	),
 	'cookie' => array(
 		'path' => "*",
-		'domain' => $_SERVER['HTTP_HOST'],
+		'domain' => "",
 		'login_token' => array(
 			'name' => "ll_lt",
 			'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
@@ -39,7 +39,7 @@ $config = array(
 );
 
 $databaseConfig = array(
-	'host' => "localhost",
+	'host' => "80.131.66.207",
 	'username' => "loginlib",
 	'password' => "CmH93W4k",
 	'db' => "LoginLib"
