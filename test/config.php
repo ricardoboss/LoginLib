@@ -1,7 +1,8 @@
 <?php
 $config = array(
 	'authentication' => array(
-		'type' => "both" // username, email or both
+		'username' => "both", // 'username', 'email' or 'both'
+		'storing' => "cookie" // 'cookie' or 'session'
 	),
 	'table' => array(
 		'accounts' => array(
