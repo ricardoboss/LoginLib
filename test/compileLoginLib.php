@@ -95,8 +95,10 @@ $loginlib = new LoginLib\LoginLib($config, $db);
 /*****************************************************************************/
 
 echo "Starting tests...\n\n";
+$i = 0;
 
-echo "[TEST 001]: Register with wrong password\n";
+$i++;
+echo "[TEST ".$i."]: Register with wrong password\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], "not my password...", function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -104,7 +106,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], "no
 
 echo "\n";
 
-echo "[TEST 002]: Register\n";
+$i++;
+echo "[TEST ".$i."]: Register\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -112,7 +115,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], $us
 
 echo "\n";
 
-echo "[TEST 003]: Register with existing username\n";
+$i++;
+echo "[TEST ".$i."]: Register with existing username\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -120,7 +124,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], $us
 
 echo "\n";
 
-echo "[TEST 004]: Register with existing email\n";
+$i++;
+echo "[TEST ".$i."]: Register with existing email\n";
 $loginlib->register($user2['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -128,7 +133,8 @@ $loginlib->register($user2['username'], $user1['email'], $user1['password'], $us
 
 echo "\n";
 
-echo "[TEST 005]: Login with wrong credentials\n";
+$i++;
+echo "[TEST ".$i."]: Login with wrong credentials\n";
 $loginlib->login($user1['username'], $user2['password'], function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -136,7 +142,8 @@ $loginlib->login($user1['username'], $user2['password'], function($result) {
 
 echo "\n";
 
-echo "[TEST 006]: Login\n";
+$i++;
+echo "[TEST ".$i."]: Login\n";
 $loginlib->login($user1['username'], $user1['password'], function($result) {
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
@@ -147,7 +154,8 @@ if (!$loginlib->isLoggedIn())
 
 echo "\n";
 
-echo "[TEST 007]: Logout\n";
+$i++;
+echo "[TEST ".$i."]: Logout\n";
 $loginlib->logout();
 echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 
