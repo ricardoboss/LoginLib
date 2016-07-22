@@ -1,4 +1,5 @@
 <?php
+$filestarttime = microtime(true);
 class Compiler {
 	public $root;
 	public $outputfile;
@@ -34,8 +35,7 @@ class Compiler {
 				$this->append(file_get_contents($this->root.'/src/'.$file));
 		}
 
-		echo "Compiling finished! (Took: ".(microtime(true) - $starttime)."ms)\n";
-		echo "\n";
+		echo "Compiling finished! (Took: ".(microtime(true) - $starttime)."ms)\n\n";
 	}
 
 	private function append($file) {
@@ -47,15 +47,118 @@ class Compiler {
 	}
 }
 
+/*****************************************************************************/
+
+echo "Compiling...\n";
+
 $c = new Compiler(dirname(__DIR__));
 $c->compile();
-
-echo "Testing class for php errors...\n";
-echo "\n";
 
 // Test if no php errors are thrown
 require($c->outputfile);
 
 // echo current LoginLib version, if build succeed
-if (class_exists("LoginLib\LoginLib"))
-	echo "Running LoginLib v".LoginLib\LoginLib::version();
+if (!class_exists("LoginLib\LoginLib"))
+	die(trigger_error("Class LoginLib\LoginLib not found!", E_USER_ERROR));
+
+echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
+
+/*****************************************************************************/
+
+echo "Loading testing environment...\n";
+
+// create test users
+$user1 = array(
+	'username' => "MCMainiac1",
+	'email' => "mcmainiac1@gmail.com",
+	'password' => "password1"
+);
+
+$user2 = array(
+	'username' => "MCMainiac2",
+	'email' => "mcmainiac2@gmail.com",
+	'password' => "password2"
+);
+
+// load classes
+require("MysqliDb.php");
+require("DatabaseAdapter.php");
+
+// load config
+require("config.php");
+
+// create database adapter
+$db = new DatabaseAdapter($databaseConfig);
+
+$loginlib = new LoginLib\LoginLib($config, $db);
+
+/*****************************************************************************/
+
+echo "Starting tests...\n\n";
+
+echo "[TEST 001]: Register with wrong password\n";
+$loginlib->register($user1['username'], $user1['email'], $user1['password'], "not my password...", function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+echo "\n";
+
+echo "[TEST 002]: Register\n";
+$loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+echo "\n";
+
+echo "[TEST 003]: Register with existing username\n";
+$loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+echo "\n";
+
+echo "[TEST 004]: Register with existing email\n";
+$loginlib->register($user2['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+echo "\n";
+
+echo "[TEST 005]: Login with wrong credentials\n";
+$loginlib->login($user1['username'], $user2['password'], function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+echo "\n";
+
+echo "[TEST 006]: Login\n";
+$loginlib->login($user1['username'], $user1['password'], function($result) {
+	echo "Result: ".$result."\n";
+	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+});
+
+if (!$loginlib->isLoggedIn())
+	die(trigger_error("Login did not succeed! Fatal error!", E_USER_ERROR));
+
+echo "\n";
+
+echo "[TEST 007]: Logout\n";
+$loginlib->logout();
+echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+
+echo "\nTests finished!\n\n";
+
+/*****************************************************************************/
+
+echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
+
+
+
+
+
+
