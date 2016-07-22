@@ -33,6 +33,9 @@ class LoginLib {
 	/** @var IDatabase The database class object used to communitcate with the database */
 	private $db;
 	
+	/** @var string The current LoginLib version */
+	const version = "1.0.1";
+	
 	/**
 	 * The constructor of LoginLib.
 	 * 
@@ -250,6 +253,20 @@ class LoginLib {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * This method returns (or echoes) the current LoginLib version
+	 * 
+	 * @param bool $echo
+	 * 
+	 * @return string The current LoginLib version
+	 */
+	public static function version($echo = false) {
+		if ($echo)
+			echo "LoginLib v".LoginLib::version;
+		
+		return LoginLib::version;
 	}
 	
 	/**

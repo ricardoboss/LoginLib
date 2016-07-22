@@ -51,3 +51,7 @@ $c->compile();
 
 // Test if no php errors are thrown
 require($c->outputfile);
+
+// echo current LoginLib version, if build succeed
+if (class_exists("LoginLib"))
+	LoginLib::version(true);
