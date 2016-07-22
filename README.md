@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=master)](https://travis-ci.org/MCMainiac/LoginLib)
+| [![Master Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=master)](https://travis-ci.org/MCMainiac/LoginLib) | [![Development Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=develop)](https://travis-ci.org/MCMainiac/LoginLib) |
+|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------:|
+| Release | Development |
 
 # LoginLib
 
