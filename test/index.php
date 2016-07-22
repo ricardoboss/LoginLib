@@ -13,7 +13,7 @@ switch (@$_GET['ref']) {
 		if ($loginlib->isLoggedIn())
 			$message = 'You are already logged in. <a href="./loggedin.php">Switch to loggedin page</a>?';
 		else
-			$message = null;
+			$message = 'To see your current login status, check <a href="./loggedin.php">this page</a>';
 }
 
 if (isset($_POST['method'])) {
