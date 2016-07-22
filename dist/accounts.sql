@@ -3,13 +3,10 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 22. Jul 2016 um 03:02
--- Server-Version: 10.1.13-MariaDB
--- PHP-Version: 5.6.21
+-- Generation Time: Jul 22, 2016 at 03:12 AM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.21
 
---
--- LoginLib database table accounts
---
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -20,15 +17,15 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `loginlib`
+-- Database: `loginlib`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `accounts`
+-- Table structure for table `accounts`
 --
--- Erstellt am: 06. Jul 2016 um 04:12
+-- Creation: Jul 06, 2016 at 04:12 AM
 --
 
 CREATE TABLE `accounts` (
@@ -41,11 +38,11 @@ CREATE TABLE `accounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `accounts`
+-- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
@@ -53,11 +50,11 @@ ALTER TABLE `accounts`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `accounts`
+-- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
