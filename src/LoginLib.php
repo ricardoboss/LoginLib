@@ -107,6 +107,7 @@ class LoginLib {
 						)
 					);
 					
+					//IDEA: add option to log in user directly after registration
 					$code = RegisterResult::SUCCESS;
 				} else {
 					$code = RegisterResult::EMAIL_GIVEN;
@@ -183,6 +184,8 @@ class LoginLib {
 					)
 				);
 				
+				//TODO: Add option to choose between cookie and session authorization
+				
 				// store login token and token id in cookie
 				$this->setCookie('login_token', $login_token);
 				$this->setCookie('token_id', $id);
@@ -253,6 +256,15 @@ class LoginLib {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * A simple to string method that returns the version string
+	 * 
+	 * @return string The textual representation of LoginLib
+	 */
+	public function __toString() {
+		return LoginLib::version();
 	}
 	
 	/**
