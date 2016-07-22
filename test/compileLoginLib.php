@@ -34,7 +34,8 @@ class Compiler {
 				$this->append(file_get_contents($this->root.'/src/'.$file));
 		}
 
-		echo "Finished! (Took: ".(microtime(true) - $starttime)."ms)\n";
+		echo "Compiling finished! (Took: ".(microtime(true) - $starttime)."ms)\n";
+		echo "\n";
 	}
 
 	private function append($file) {
@@ -48,6 +49,9 @@ class Compiler {
 
 $c = new Compiler(dirname(__DIR__));
 $c->compile();
+
+echo "Testing class for php errors...\n";
+echo "\n";
 
 // Test if no php errors are thrown
 require($c->outputfile);
