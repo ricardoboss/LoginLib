@@ -1,6 +1,8 @@
 <?php
 /**
  * This file contains all classes for LoginLib.
+ * 
+ * Dont't forget the dependency on MysqliDb!
  */
 namespace LoginLib;
 
@@ -14,7 +16,7 @@ namespace LoginLib;
  * @copyright &copy; 2016 Ricardo Boss
  * @license https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
  * @link https://github.com/MCMainiac/LoginLib
- * @version 1.0.0
+ * @version 1.0.1
  */
 class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
@@ -22,6 +24,9 @@ class LoginLib {
 	
 	/** @var IDatabase The database class object used to communitcate with the database */
 	private $db;
+	
+	/** @var string The current LoginLib version */
+	const version = "1.0.1";
 	
 	/**
 	 * The constructor of LoginLib.
@@ -94,6 +99,7 @@ class LoginLib {
 						)
 					);
 					
+					//IDEA: add option to log in user directly after registration
 					$code = RegisterResult::SUCCESS;
 				} else {
 					$code = RegisterResult::EMAIL_GIVEN;
@@ -170,6 +176,8 @@ class LoginLib {
 					)
 				);
 				
+				//TODO: Add option to choose between cookie and session authorization
+				
 				// store login token and token id in cookie
 				$this->setCookie('login_token', $login_token);
 				$this->setCookie('token_id', $id);
@@ -240,6 +248,29 @@ class LoginLib {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * A simple to string method that returns the version string
+	 * 
+	 * @return string The textual representation of LoginLib
+	 */
+	public function __toString() {
+		return LoginLib::version();
+	}
+	
+	/**
+	 * This method returns (or echoes) the current LoginLib version
+	 * 
+	 * @param bool $echo
+	 * 
+	 * @return string The current LoginLib version
+	 */
+	public static function version($echo = false) {
+		if ($echo)
+			echo "LoginLib v".LoginLib::version."\n";
+		
+		return LoginLib::version;
 	}
 	
 	/**
@@ -494,15 +525,90 @@ class RegisterResult extends MethodResult {
  * This is the interface used to communicate with your database
  */
 interface IDatabase {
-	function __construct($config);
+	/**
+	 * The constructor of your Database implementation must use an array as configuration
+	 * 
+	 * @param array $config Your config should have the following keys: 'host', 'username', 'password', 'db'
+	 * 
+	 * @return void
+	 */
+	function __construct(array $config);
+	
+	/**
+	 * This function checks if a given table exists in your database
+	 * 
+	 * @param string $tableName The name of the table
+	 * 
+	 * @return bool True if the table exists, false otherwise
+	 */
 	function tableExists($tableName);
+	
+	/**
+	 * Add an " AND " to your where query.
+	 * Example:
+	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
+	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>AND</u> col2 = 2"</code>
+	 * 
+	 * @param string $column The column name
+	 * @param string $andValue The needed value
+	 */
 	function where($column, $andValue);
+
+	/**
+	 * Add an <code>" OR "</code> to your where query.
+	 * Example:
+	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
+	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>OR</u> col2 = 2"</code>
+	 *
+	 * @param string $column The column name
+	 * @param string $orValue The other value
+	 */
 	function orWhere($column, $orValue);
+	
+	/**
+	 * This functions returns the result of selecting one row with the prepared query
+	 * 
+	 * @param string $tableName The name of the table
+	 * 
+	 * @return array|null The selected row
+	 */
 	function getOne($tableName);
-	function insert($tableName, $data);
-	function update($tableName, $data);
+	
+	/**
+	 * This function inserts data in selected columns (using an associative array) into a table
+	 * 
+	 * @param string $tableName The name of the table
+	 * @param array $data The data to insert
+	 */
+	function insert($tableName, array $data);
+	
+	/**
+	 * This function updates values in selected columns (using an associative array) in a table
+	 * 
+	 * @param string $tableName The name of the table
+	 * @param array $data The data to update
+	 */
+	function update($tableName, array $data);
+	
+	/**
+	 * Used to keep unused databse connections open
+	 * 
+	 * @return bool True if the connection is established
+	 */
 	function ping();
+	
+	/**
+	 * This function reconnects to your Database, if neccessary
+	 * 
+	 * @return void
+	 */
 	function connect();
+	
+	/**
+	 * Method returns generated interval function as an insert/update function
+	 * 
+	 * @return array
+	 */
 	function now();
 }
 
