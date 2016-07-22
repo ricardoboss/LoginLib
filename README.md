@@ -1,6 +1,8 @@
+[![Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=master)](https://travis-ci.org/MCMainiac/LoginLib)
+
 # LoginLib
 
-\- **LoginLib** is a php library that provides the background mechanics for registering new users and logging them in.
+> **LoginLib** is a php library that provides the background mechanics for registering new users and logging them in.
 
 ### Navigation:
 1. [Installation](#installation)
