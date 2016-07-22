@@ -264,7 +264,7 @@ class LoginLib {
 	 */
 	public static function version($echo = false) {
 		if ($echo)
-			echo "LoginLib v".LoginLib::version;
+			echo "LoginLib v".LoginLib::version."\n";
 		
 		return LoginLib::version;
 	}

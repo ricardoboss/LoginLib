@@ -34,7 +34,7 @@ class Compiler {
 				$this->append(file_get_contents($this->root.'/src/'.$file));
 		}
 
-		echo "Finished! (Took: ".(microtime(true) - $starttime)."ms)";
+		echo "Finished! (Took: ".(microtime(true) - $starttime)."ms)\n";
 	}
 
 	private function append($file) {
