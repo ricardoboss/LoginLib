@@ -58,11 +58,11 @@ class LoginLib {
 	 * @param string $email The email address
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
-	 * @param \function $callback A callback function that gets called when the function finished processing
+	 * @param \function $registercallback A callback function that gets called when the function finished processing
 	 * 
 	 * @return RegisterResult
 	 */
-	public function register($username, $email, $password, $confirm, callable $callback = null) {
+	public function register($username, $email, $password, $confirm, callable $registercallback = null) {
 		// first of all, check the db
 		$this->checkDb();
 		
@@ -113,8 +113,8 @@ class LoginLib {
 		
 		$result = new RegisterResult($code);
 		
-		if ($callback !== null)
-			$callback($result);
+		if ($registercallback !== null)
+			$registercallback($result);
 		
 		return $result;
 	}
@@ -122,7 +122,7 @@ class LoginLib {
 	/**
 	 * Call this method to authenticate a registered user
 	 * 
-	 * @throws ConfigurationException when the user misconfigured his config.php
+	 * @throws ConfigurationException
 	 * 
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
@@ -135,7 +135,7 @@ class LoginLib {
 		$this->checkDb();
 
 		// add where selector based on authentication type
-		switch ($this->getProp('authentication', 'type')) {
+		switch (strtolower($this->getProp('authentication', 'username'))) {
 			case 'username':
 				$this->db->where($this->getProp('table', 'accounts', 'col_username'), $username);
 				break;
@@ -148,7 +148,7 @@ class LoginLib {
 				break;
 			
 			default:
-				throw new ConfigurationException("[authentication] => [type]", "Invalid authentication type: ".$this->getProp('authentication', 'type'));
+				throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'type'));
 		}
 		
 		// get one row only
@@ -176,11 +176,23 @@ class LoginLib {
 					)
 				);
 				
-				//TODO: Add option to choose between cookie and session authorization
-				
-				// store login token and token id in cookie
-				$this->setCookie('login_token', $login_token);
-				$this->setCookie('token_id', $id);
+				$storing = strtolower($this->getProp('authentication', 'storing'));
+				if ($storing == "cookie") {
+					
+					// store login token and token id in cookie
+					$this->setCookie('login_token', $login_token);
+					$this->setCookie('token_id', $id);
+					
+				} else if ($storing == "session") {
+					
+					// start session and store token and id in session
+					$this->initSession();
+					
+					$_SESSION['login_token'] = $login_token;
+					$_SESSION['token_id'] = $id;
+					
+				} else
+					throw new ConfigurationException("[authentication] => [storing]", "Invalid storing type for login credentials: ".$storing);
 				
 				$code = LoginResult::SUCCESS;
 			} else {
@@ -203,13 +215,50 @@ class LoginLib {
 	/**
 	 * This method is used to log users out
 	 * 
+	 * @throws ConfigurationException
+	 * 
 	 * @return bool
 	 */
 	public function logout() {
 		if ($this->isLoggedIn()) {
-			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $_COOKIE[$this->getProp('cookie', 'token_id', 'name')]);
-			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $_COOKIE[$this->getProp('cookie', 'login_token', 'name')]);
+			$storing = strtolower($this->getProp('authentication', 'storing'));
 			
+			if ($storing == "cookie") {
+				
+				$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
+				$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
+				
+				// unset cookies
+				if (!$this->setCookie('login_token', null, -1) || !$this->setCookie('token_id', null, -1))
+					return false;
+					
+			} else if ($storing == "session") {
+				
+				$token_id = @$_SESSION['token_id'];
+				$login_token = @$_SESSION['login_token'];
+				
+				// destroy session
+				$this->closeSession(true);
+					
+			} else
+				throw new ConfigurationException("[authentication] => [storing]", "Invalid storing type for login credentials: ".$storing);
+
+			// null-check the values
+			if ($token_id == null || $login_token == null)
+				return false;
+			
+			// add row selectors
+			$this->db->where(
+				$this->getProp('table', 'login_tokens', 'col_id'),
+				$token_id
+			);
+			
+			$this->db->where(
+				$this->getProp('table', 'login_tokens', 'col_token'),
+				$login_token
+			);
+			
+			// set logout timestamp
 			$r = $this->db->update(
 				$this->getProp('table', 'login_tokens', 'name'),
 				array(
@@ -217,18 +266,12 @@ class LoginLib {
 				)
 			);
 			
+			// if the result is not set, the login token could not be found although the user is logged in
 			if (!$r)
 				return false;
-			
-			if ($this->setCookie('login_token', null, -1))
-				if ($this->setCookie('token_id', null, -1))
-					return true;
-				else
-					return false;
-			else
-				return false;
-		} else
-			return true;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -237,17 +280,29 @@ class LoginLib {
 	 * @return bool
 	 */
 	public function isLoggedIn() {
-		$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
-		$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
+		if ($storing == "cookie") {
+			
+			$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
+			$token_id = @$_COOKIE[$this->getProp('cookie', 'token_id', 'name')];
+			
+		} else if ($storing == "session") {
+			
+			$login_token = @$_SESSION['login_token'];
+			$token_id = @$_SESSION['token_id'];
+			
+		}
 		
 		if (isset($login_token) && isset($token_id)) {
+			
 			$this->db->where($this->getProp('table', 'login_tokens', 'col_id'), $token_id);
 			$this->db->where($this->getProp('table', 'login_tokens', 'col_token'), $login_token);
+			
 			$r = $this->db->getOne($this->getProp('table', 'login_tokens', 'name'));
+			
 			return $r ? true : false;
-		} else {
+			
+		} else
 			return false;
-		}
 	}
 	
 	/**
@@ -257,6 +312,15 @@ class LoginLib {
 	 */
 	public function __toString() {
 		return LoginLib::version();
+	}
+	
+	/**
+	 * The destructor is used to close the current session
+	 * 
+	 * @return void
+	 */
+	public function __destruct() {
+		$this->closeSession();
 	}
 	
 	/**
@@ -334,6 +398,47 @@ class LoginLib {
 			return $p;
 		}
 	}
+	
+	/**
+	 * Initializes a session
+	 * 
+	 * @return void
+	 */
+	private function initSession() {
+		if (\session_status() != PHP_SESSION_ACTIVE) {
+			
+			// set session cookie params
+			\session_set_cookie_params(
+				0, // delete session at the end
+				$this->getProp('cookie', 'path'),
+				$this->getProp('cookie', 'domain'),
+				false,
+				false
+			);
+			
+			// start a new session
+			\session_start();
+		}
+	}
+	
+	/**
+	 * Closes a session
+	 * 
+	 * @param bool $destroy If the session should be destroyed or not
+	 * 
+	 * @return void
+	 */
+	private function closeSession($destroy = false) {
+		if (\session_status() != PHP_SESSION_DISABLED) {
+			if ($destroy) {
+				\session_unset(); // remove all the data
+					
+				\session_destroy(); // destroy the session
+			} else {
+				\session_write_close(); // save all the data and close the session
+			}
+		}
+	}
 }
 
 
@@ -347,7 +452,8 @@ class Config {
 	/** @var array The default configuration for LoginLib */
 	private static $default = array(
 		'authentication' => array(
-			'type' => "both"
+			'username' => "both",
+			'storing' => "cookie"
 		),
 		'table' => array(
 			'accounts' => array(
