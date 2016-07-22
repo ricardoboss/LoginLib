@@ -67,10 +67,11 @@ class LoginLib {
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
 	 * @param \function $registercallback A callback function that gets called when the function finished processing
+	 * @param \function $logincallback A callback function that gets passed to the login method if login_after_registration is true
 	 * 
 	 * @return RegisterResult
 	 */
-	public function register($username, $email, $password, $confirm, callable $registercallback = null) {
+	public function register($username, $email, $password, $confirm, callable $registercallback = null, callable $logincallback = null) {
 		// first of all, check the db
 		$this->checkDb();
 		
@@ -107,7 +108,23 @@ class LoginLib {
 						)
 					);
 					
-					//IDEA: add option to log in user directly after registration
+					if ($this->getProp('authentication', 'login_after_registration') == true) {
+						switch (strtolower($this->getProp('authentication', 'username'))) {
+							case 'both':
+							case 'username':
+								$loginname = $username;
+								break;
+							case 'email':
+								$loginname = $email;
+								break;
+									
+							default:
+								throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'username'));
+						}
+						
+						$this->login($loginname, $password, $logincallback);
+					}
+					
 					$code = RegisterResult::SUCCESS;
 				} else {
 					$code = RegisterResult::EMAIL_GIVEN;
@@ -156,7 +173,7 @@ class LoginLib {
 				break;
 			
 			default:
-				throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'type'));
+				throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'username'));
 		}
 		
 		// get one row only

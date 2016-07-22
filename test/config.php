@@ -2,7 +2,8 @@
 $config = array(
 	'authentication' => array(
 		'username' => "both", // 'username', 'email' or 'both'
-		'storing' => "cookie" // 'cookie' or 'session'
+		'storing' => "cookie", // 'cookie' or 'session'
+		'login_after_registration' => true // true or false
 	),
 	'table' => array(
 		'accounts' => array(

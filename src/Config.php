@@ -19,7 +19,8 @@ class Config {
 	private static $default = array(
 		'authentication' => array(
 			'username' => "both",
-			'storing' => "cookie"
+			'storing' => "cookie",
+			'login_after_registration' => true
 		),
 		'table' => array(
 			'accounts' => array(
