@@ -1,6 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
-DROP TABLE IF EXISTS `loginlib`.`login_tokens`;
+DROP TABLE `loginlib`.`login_tokens`;
 
 CREATE TABLE `loginlib`.`login_tokens` (
   `id` bigint(255) UNSIGNED NOT NULL,
