@@ -1,10 +1,8 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
-USE `loginlib`;
+DROP TABLE IF EXISTS `loginlib`.`accounts`;
 
-DROP TABLE IF EXISTS `accounts`;
-
-CREATE TABLE `accounts` (
+CREATE TABLE `loginlib`.`accounts` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `username` varchar(64) NOT NULL,
   `email` varchar(45) NOT NULL,
@@ -13,10 +11,9 @@ CREATE TABLE `accounts` (
   `registered_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `accounts`
+ALTER TABLE `loginlib`.`accounts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
 
-ALTER TABLE `accounts`
-  MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `loginlib`.`accounts` MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
