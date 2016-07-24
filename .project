@@ -8,24 +8,4 @@
 	</buildSpec>
 	<natures>
 	</natures>
-	<filteredResources>
-		<filter>
-			<id>1469150211194</id>
-			<name></name>
-			<type>6</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-true-false-README.md</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1469150211210</id>
-			<name></name>
-			<type>6</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-.htaccess</arguments>
-			</matcher>
-		</filter>
-	</filteredResources>
 </projectDescription>
