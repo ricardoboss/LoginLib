@@ -1,5 +1,9 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
+USE `loginlib`;
+
+DROP TABLE IF EXISTS `accounts`;
+
 CREATE TABLE `accounts` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `username` varchar(64) NOT NULL,
