@@ -65,44 +65,37 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
 
-function printStackTrace($ex) {
-	foreach ($ex->getTrace() as $entry => $line)
-		echo "[".$entry."] in ".$line['file']." on line ".$line['line']." executing '".$line['function']."' with args '".$line['args']."'";
-}
+echo "Loading testing environment...\n";
 
-try {
-	echo "Loading testing environment...\n";
-	
-	// create test users
-	$user1 = array(
-		'username' => "MCMainiac1",
-		'email' => "mcmainiac1@example.com",
-		'password' => "password1"
-	);
-	
-	$user2 = array(
-		'username' => "MCMainiac2",
-		'email' => "mcmainiac2@example.com",
-		'password' => "password2"
-	);
-	
-	// load classes
-	require("MysqliDb.php");
-	require("DatabaseAdapter.php");
-	
-	// load config
-	require("config.php");
-	
-	// create database adapter
-	$db = new DatabaseAdapter($databaseConfig);
-	
-	$loginlib = new LoginLib\LoginLib($config, $db);
-} catch (Exception $e) {
-	echo "Exception occured while loading testing environment!\n";
-	echo $e->getMessage();
-	printStackTrace($e);
-	exit;
-}
+// create test users
+$user1 = array(
+	'username' => "MCMainiac1",
+	'email' => "mcmainiac1@example.com",
+	'password' => "password1"
+);
+
+$user2 = array(
+	'username' => "MCMainiac2",
+	'email' => "mcmainiac2@example.com",
+	'password' => "password2"
+);
+
+// load classes
+require("MysqliDb.php");
+require("DatabaseAdapter.php");
+
+// load config
+require("config.php");
+
+// create database adapter
+$db = new DatabaseAdapter($databaseConfig);
+
+// create tables
+$db->rawQuery(file_get_contents("../dist/accounts.sql"));
+$db->rawQuery(file_get_contents("../dist/login_tokens.sql"));
+
+// create LoginLib instance
+$loginlib = new LoginLib\LoginLib($config, $db);
 
 /*****************************************************************************/
 
