@@ -30,19 +30,22 @@ class LoginLib {
 	
 	/**
 	 * The constructor of LoginLib.
-	 * 
-	 * @throws ClassNotFoundException if the required MysqliDb class cannot be found or autoloaded
-	 * @throws ConfigurationException if there is a problem with the provided config array
-	 * 
+	 *
+	 * @throws DatabaseException
+	 * @throws ConfigurationException
+	 *
 	 * @param array $config The configuration array of LoginLib
 	 * @param IDatabase $database Your database implementation of the IDatabase interface
-	 * 
+	 *
 	 * @return LoginLib
 	 */
 	public function __construct(array $config, IDatabase &$database) {
 		$this->config = new Config($config);
 		
 		$this->db = &$database;
+		
+		if (!$this->checkDb())
+			throw new DatabaseException("Could not connect to database!");
 		
 		foreach($this->config->get('table') as $table)
 			if (!$this->db->tableExists($table['name'])) {
@@ -53,16 +56,19 @@ class LoginLib {
 	
 	/**
 	 * This method is used to register a new user
-	 * 
+	 *
+	 * @throws ConfigurationException
+	 *
 	 * @param string $username The username
 	 * @param string $email The email address
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
 	 * @param \function $registercallback A callback function that gets called when the function finished processing
-	 * 
+	 * @param \function $logincallback A callback function that gets passed to the login method if login_after_registration is true
+	 *
 	 * @return RegisterResult
 	 */
-	public function register($username, $email, $password, $confirm, callable $registercallback = null) {
+	public function register($username, $email, $password, $confirm, callable $registercallback = null, callable $logincallback = null) {
 		// first of all, check the db
 		$this->checkDb();
 		
@@ -75,7 +81,7 @@ class LoginLib {
 			// check if this is NOT an account
 			if (!$account) {
 				// next check if the email exists
-				// We need to check the username and the email address seperately (although they 
+				// We need to check the username and the email address seperately (although they
 				// both can be used as the username) to tell the user what he has to change.
 				$this->db->where($this->getProp('table', 'accounts', 'col_email'), $email);
 				$account = $this->db->getOne($this->getProp('table', 'accounts', 'name'));
@@ -99,7 +105,23 @@ class LoginLib {
 						)
 					);
 					
-					//IDEA: add option to log in user directly after registration
+					if ($this->getProp('authentication', 'login_after_registration') == true) {
+						switch (strtolower($this->getProp('authentication', 'username'))) {
+							case 'both':
+							case 'username':
+								$loginname = $username;
+								break;
+							case 'email':
+								$loginname = $email;
+								break;
+									
+							default:
+								throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'username'));
+						}
+						
+						$this->login($loginname, $password, $logincallback);
+					}
+					
 					$code = RegisterResult::SUCCESS;
 				} else {
 					$code = RegisterResult::EMAIL_GIVEN;
@@ -121,13 +143,13 @@ class LoginLib {
 	
 	/**
 	 * Call this method to authenticate a registered user
-	 * 
+	 *
 	 * @throws ConfigurationException
-	 * 
+	 *
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
 	 * @param \function $callback A callback function that gets called when the function finished processing
-	 * 
+	 *
 	 * @return LoginResult
 	 */
 	public function login($username, $password, callable $callback = null) {
@@ -148,7 +170,7 @@ class LoginLib {
 				break;
 			
 			default:
-				throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'type'));
+				throw new ConfigurationException("[authentication] => [username]", "Invalid authentication type for username: ".$this->getProp('authentication', 'username'));
 		}
 		
 		// get one row only
@@ -214,9 +236,9 @@ class LoginLib {
 	
 	/**
 	 * This method is used to log users out
-	 * 
+	 *
 	 * @throws ConfigurationException
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function logout() {
@@ -239,7 +261,7 @@ class LoginLib {
 				
 				// destroy session
 				$this->closeSession(true);
-					
+				
 			} else
 				throw new ConfigurationException("[authentication] => [storing]", "Invalid storing type for login credentials: ".$storing);
 
@@ -276,10 +298,14 @@ class LoginLib {
 	
 	/**
 	 * This function returns true if the browser is logged in or false if not
-	 * 
+	 *
+	 * @throws ConfigurationException
+	 *
 	 * @return bool
 	 */
 	public function isLoggedIn() {
+		$storing = strtolower($this->getProp('authentication', 'storing'));
+		
 		if ($storing == "cookie") {
 			
 			$login_token = @$_COOKIE[$this->getProp('cookie', 'login_token', 'name')];
@@ -290,7 +316,8 @@ class LoginLib {
 			$login_token = @$_SESSION['login_token'];
 			$token_id = @$_SESSION['token_id'];
 			
-		}
+		} else
+			throw new ConfigurationException("[authentication] => [storing]", "Invalid storing type for login credentials: ".$storing);
 		
 		if (isset($login_token) && isset($token_id)) {
 			
@@ -307,7 +334,7 @@ class LoginLib {
 	
 	/**
 	 * A simple to string method that returns the version string
-	 * 
+	 *
 	 * @return string The textual representation of LoginLib
 	 */
 	public function __toString() {
@@ -316,7 +343,7 @@ class LoginLib {
 	
 	/**
 	 * The destructor is used to close the current session
-	 * 
+	 *
 	 * @return void
 	 */
 	public function __destruct() {
@@ -325,9 +352,9 @@ class LoginLib {
 	
 	/**
 	 * This method returns (or echoes) the current LoginLib version
-	 * 
+	 *
 	 * @param bool $echo
-	 * 
+	 *
 	 * @return string The current LoginLib version
 	 */
 	public static function version($echo = false) {
@@ -338,22 +365,24 @@ class LoginLib {
 	}
 	
 	/**
-	 * Check the database connection, ping it or reconnect if neccessary
-	 * 
-	 * @return void
+	 * Check the database connection, ping it and reconnect if neccessary
+	 *
+	 * @return bool if everything is ok
 	 */
 	private function checkDb() {
 		if (! $this->db->ping())
-			$this->db->connect();
+			return $this->db->connect();
+		else
+			return true;
 	}
 	
 	/**
 	 * Sets a cookie with custom expire time
-	 * 
+	 *
 	 * @param string $id The id of the cookie
 	 * @param mixed $value The value of the cookie
 	 * @param int|null $expires The expiration time of the cookie
-	 * 
+	 *
 	 * @return bool True if the cookie has been set
 	 */
 	private function setCookie($id, $value, $expires = null) {
@@ -361,25 +390,25 @@ class LoginLib {
 			$expires = time() + $this->getProp('cookie', $id, 'expire');
 
 		return \setcookie(
-			$this->getProp('cookie', $id, 'name'), 
-			$value, 
-			$expires, 
-			$this->getProp('cookie', 'path'), 
-			$this->getProp('cookie', 'domain'), 
-			false, 
+			$this->getProp('cookie', $id, 'name'),
+			$value,
+			$expires,
+			$this->getProp('cookie', 'path'),
+			$this->getProp('cookie', 'domain'),
+			false,
 			false
 		);
 	}
 	
 	/**
 	 * Get a specific config property
-	 * 
+	 *
 	 * @throws ConfigurationException if the requested property is not set
-	 *  
+	 *
 	 * @param string $type Either 'table', 'cookie' or 'database'
 	 * @param string $id The id of the (parent) prop in the config
 	 * @param string|null $prop The id of the prop itself
-	 * 
+	 *
 	 * @return string|null The requested property of the config
 	 */
 	private function getProp($type, $id, $prop = null) {
@@ -401,7 +430,7 @@ class LoginLib {
 	
 	/**
 	 * Initializes a session
-	 * 
+	 *
 	 * @return void
 	 */
 	private function initSession() {
@@ -423,9 +452,9 @@ class LoginLib {
 	
 	/**
 	 * Closes a session
-	 * 
+	 *
 	 * @param bool $destroy If the session should be destroyed or not
-	 * 
+	 *
 	 * @return void
 	 */
 	private function closeSession($destroy = false) {
@@ -453,7 +482,8 @@ class Config {
 	private static $default = array(
 		'authentication' => array(
 			'username' => "both",
-			'storing' => "cookie"
+			'storing' => "cookie",
+			'login_after_registration' => true
 		),
 		'table' => array(
 			'accounts' => array(
@@ -547,7 +577,7 @@ abstract class MethodResult {
 	const UNDEFINED = - 1;
 	
 	/** @var int Contains the method result */
-	private $result = MethodResult::UNDEFINED;
+	protected $result = MethodResult::UNDEFINED;
 	
 	/**
 	 * A constructor for LoginResults
@@ -575,6 +605,13 @@ abstract class MethodResult {
 	 * @return bool
 	 */
 	public abstract function getSimpleResult();
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public abstract function __toString();
 }
 
 /**
@@ -592,11 +629,29 @@ class LoginResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS:
+			case LoginResult::SUCCESS:
 				return true;
 			
 			default:
 				return false;
+		}
+	}
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		switch ($this->result) {
+			case LoginResult::USERNAME_NOT_FOUND:
+				return "LoginResult::USERNAME_NOT_FOUND";
+			case LoginResult::PASSWORD_WRONG:
+				return "LoginResult::PASSWORD_WRONG";
+			case LoginResult::SUCCESS:
+				return "LoginResult::SUCCESS";
+			default:
+				return "LoginResult::UNDEFINED";
 		}
 	}
 }
@@ -617,11 +672,31 @@ class RegisterResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS:
+			case RegisterResult::SUCCESS:
 				return true;
 			
 			default:
 				return false;
+		}
+	}
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		switch ($this->result) {
+			case RegisterResult::USERNAME_GIVEN:
+				return "RegisterResult::USERNAME_GIVEN";
+			case RegisterResult::EMAIL_GIVEN:
+				return "RegisterResult::EMAIL_GIVEN";
+			case RegisterResult::PASSWORD_MISMATCH:
+				return "RegisterResult::PASSWORD_MISMATCH";
+			case RegisterResult::SUCCESS:
+				return "RegisterResult::SUCCESS";
+			default:
+				return "RegisterResult::UNDEFINED";
 		}
 	}
 }
@@ -819,33 +894,18 @@ class User {
 /**
  * Exception class for the case that a class was not found
  */
-class ClassNotFoundException extends \Exception {
-	/** @var string The classname that wasn't found */
-	private $classname;
-
+class DatabaseException extends \Exception {
 	/**
-	 * The constrcutor of ClassNotFoundExceptions
+	 * The constrcutor of DatabaseException
 	 *
-	 * @param string $class The searched classname
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
 	 * @param \Exception $previous The previous exception
-	 * 
-	 * @return ClassNotFoundException
+	 *
+	 * @return DatabaseException
 	 */
-	public function __construct($classname, $message = "", $code = 0, $previous = null) {
+	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ($message, $code, $previous);
-		
-		$this->classname = $classname;
-	}
-	
-	/**
-	 * Returns the missing classname
-	 * 
-	 * @return string The required class name
-	 */
-	public function getClassname() {
-		return $this->classname;
 	}
 }
 
@@ -863,7 +923,7 @@ class ConfigurationException extends \Exception {
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
 	 * @param \Exception $previous The previous exception
-	 * 
+	 *
 	 * @return ConfigurationException
 	 */
 	public function __construct($prop, $message = "", $code = 0, $previous = null) {
@@ -874,7 +934,7 @@ class ConfigurationException extends \Exception {
 	
 	/**
 	 * A method to return the misconfigured property
-	 * 
+	 *
 	 * @return string The misconfigured config property
 	 */
 	public function getProp() {
