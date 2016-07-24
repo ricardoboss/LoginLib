@@ -1,5 +1,3 @@
-DROP TABLE `loginlib`.`login_tokens`;
-
 CREATE TABLE `loginlib`.`login_tokens` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `account_id` bigint(255) UNSIGNED NOT NULL,

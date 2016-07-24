@@ -1,5 +1,3 @@
-DROP TABLE `loginlib`.`accounts`;
-
 CREATE TABLE `loginlib`.`accounts` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `username` varchar(64) NOT NULL,
