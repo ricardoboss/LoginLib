@@ -97,7 +97,9 @@ interface IDatabase {
 	/**
 	 * A function to run raw sql queries
 	 *
+	 * @param string the query
+	 *
 	 * @return array
 	 */
-	function rawQuery();
+	function rawQuery($q);
 }
