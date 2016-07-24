@@ -1,5 +1,3 @@
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
 DROP TABLE `loginlib`.`accounts`;
 
 CREATE TABLE `loginlib`.`accounts` (
