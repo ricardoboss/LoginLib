@@ -7,9 +7,6 @@ CREATE TABLE `loginlib`.`accounts` (
   `registered_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE `loginlib`.`accounts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `loginlib`.`accounts` ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `loginlib`.`accounts` MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
