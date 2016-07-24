@@ -13,7 +13,7 @@ $config = array(
 			'col_email' => "email",
 			'col_password_hash' => "password_hash",
 			'col_updated_at' => "updated_at",
-			'col_registered_at' => "registered_at" 
+			'col_registered_at' => "registered_at"
 		),
 		'login_tokens' => array(
 			'name' => "login_tokens",
@@ -39,8 +39,8 @@ $config = array(
 );
 
 $databaseConfig = array(
-	'host' => "80.131.66.207",
-	'username' => "loginlib",
-	'password' => "CmH93W4k",
-	'db' => "LoginLib"
+	'host' => "127.0.0.1",
+	'username' => "travis",
+	'password' => "",
+	'db' => ""
 );

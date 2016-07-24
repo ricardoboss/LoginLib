@@ -65,32 +65,44 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
 
-echo "Loading testing environment...\n";
+function printStackTrace($ex) {
+	foreach ($ex->getTrace() as $entry => $line)
+		echo "[".$entry."] in ".$line['file']." on line ".$line['line']." executing '".$line['function']."' with args '".$line['args']."'";
+}
 
-// create test users
-$user1 = array(
-	'username' => "MCMainiac1",
-	'email' => "mcmainiac1@gmail.com",
-	'password' => "password1"
-);
-
-$user2 = array(
-	'username' => "MCMainiac2",
-	'email' => "mcmainiac2@gmail.com",
-	'password' => "password2"
-);
-
-// load classes
-require("MysqliDb.php");
-require("DatabaseAdapter.php");
-
-// load config
-require("config.php");
-
-// create database adapter
-$db = new DatabaseAdapter($databaseConfig);
-
-$loginlib = new LoginLib\LoginLib($config, $db);
+try {
+	echo "Loading testing environment...\n";
+	
+	// create test users
+	$user1 = array(
+		'username' => "MCMainiac1",
+		'email' => "mcmainiac1@example.com",
+		'password' => "password1"
+	);
+	
+	$user2 = array(
+		'username' => "MCMainiac2",
+		'email' => "mcmainiac2@example.com",
+		'password' => "password2"
+	);
+	
+	// load classes
+	require("MysqliDb.php");
+	require("DatabaseAdapter.php");
+	
+	// load config
+	require("config.php");
+	
+	// create database adapter
+	$db = new DatabaseAdapter($databaseConfig);
+	
+	$loginlib = new LoginLib\LoginLib($config, $db);
+} catch (Exception $e) {
+	echo "Exception occured while loading testing environment!\n";
+	echo $e->getMessage();
+	printStackTrace($e);
+	exit;
+}
 
 /*****************************************************************************/
 
@@ -101,7 +113,6 @@ $i++;
 echo "[TEST ".$i."]: Register with wrong password\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], "not my password...", function($result) {
 	echo "Result: ".$result."\n";
-	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 });
 
 echo "\n";
@@ -109,8 +120,9 @@ echo "\n";
 $i++;
 echo "[TEST ".$i."]: Register\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	global $loginlib;
 	echo "Result: ".$result."\n";
-	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
+	echo "Logged in: ".($loginlib->isLoggedIn() ? "Yes":"No")."\n";
 });
 
 echo "\n";
@@ -118,8 +130,8 @@ echo "\n";
 $i++;
 echo "[TEST ".$i."]: Register with existing username\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	global $loginlib;
 	echo "Result: ".$result."\n";
-	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 });
 
 echo "\n";
@@ -127,8 +139,8 @@ echo "\n";
 $i++;
 echo "[TEST ".$i."]: Register with existing email\n";
 $loginlib->register($user2['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
+	global $loginlib;
 	echo "Result: ".$result."\n";
-	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 });
 
 echo "\n";
@@ -136,6 +148,7 @@ echo "\n";
 $i++;
 echo "[TEST ".$i."]: Login with wrong credentials\n";
 $loginlib->login($user1['username'], $user2['password'], function($result) {
+	global $loginlib;
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 });
@@ -145,6 +158,7 @@ echo "\n";
 $i++;
 echo "[TEST ".$i."]: Login\n";
 $loginlib->login($user1['username'], $user1['password'], function($result) {
+	global $loginlib;
 	echo "Result: ".$result."\n";
 	echo "Am I logged in?: ".($loginlib->isLoggedIn() ? "Yes!":"No!")."\n";
 });
