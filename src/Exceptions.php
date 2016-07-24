@@ -7,33 +7,18 @@ namespace LoginLib\Exceptions;
 /**
  * Exception class for the case that a class was not found
  */
-class ClassNotFoundException extends \Exception {
-	/** @var string The classname that wasn't found */
-	private $classname;
-
+class DatabaseException extends \Exception {
 	/**
-	 * The constrcutor of ClassNotFoundExceptions
+	 * The constrcutor of DatabaseException
 	 *
-	 * @param string $class The searched classname
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
 	 * @param \Exception $previous The previous exception
-	 * 
-	 * @return ClassNotFoundException
+	 *
+	 * @return DatabaseException
 	 */
-	public function __construct($classname, $message = "", $code = 0, $previous = null) {
+	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ($message, $code, $previous);
-		
-		$this->classname = $classname;
-	}
-	
-	/**
-	 * Returns the missing classname
-	 * 
-	 * @return string The required class name
-	 */
-	public function getClassname() {
-		return $this->classname;
 	}
 }
 
@@ -51,7 +36,7 @@ class ConfigurationException extends \Exception {
 	 * @param string $message The message of the exception
 	 * @param int $code The code of the exception
 	 * @param \Exception $previous The previous exception
-	 * 
+	 *
 	 * @return ConfigurationException
 	 */
 	public function __construct($prop, $message = "", $code = 0, $previous = null) {
@@ -62,7 +47,7 @@ class ConfigurationException extends \Exception {
 	
 	/**
 	 * A method to return the misconfigured property
-	 * 
+	 *
 	 * @return string The misconfigured config property
 	 */
 	public function getProp() {
