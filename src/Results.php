@@ -1,7 +1,7 @@
 <?php
 /**
  * This file defines the MethodResults
- * 
+ *
  * MethodResults get return from the methods of LoginLib
  */
 namespace LoginLib\Results;
@@ -13,7 +13,7 @@ abstract class MethodResult {
 	const UNDEFINED = - 1;
 	
 	/** @var int Contains the method result */
-	private $result = MethodResult::UNDEFINED;
+	protected $result = MethodResult::UNDEFINED;
 	
 	/**
 	 * A constructor for LoginResults
@@ -41,6 +41,13 @@ abstract class MethodResult {
 	 * @return bool
 	 */
 	public abstract function getSimpleResult();
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public abstract function __toString();
 }
 
 /**
@@ -58,11 +65,29 @@ class LoginResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS:
+			case LoginResult::SUCCESS:
 				return true;
 			
 			default:
 				return false;
+		}
+	}
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		switch ($this->result) {
+			case LoginResult::USERNAME_NOT_FOUND:
+				return "LoginResult::USERNAME_NOT_FOUND";
+			case LoginResult::PASSWORD_WRONG:
+				return "LoginResult::PASSWORD_WRONG";
+			case LoginResult::SUCCESS:
+				return "LoginResult::SUCCESS";
+			default:
+				return "LoginResult::UNDEFINED";
 		}
 	}
 }
@@ -83,11 +108,31 @@ class RegisterResult extends MethodResult {
 	 */
 	public function getSimpleResult() {
 		switch ($this->result) {
-			case SUCCESS:
+			case RegisterResult::SUCCESS:
 				return true;
 			
 			default:
 				return false;
+		}
+	}
+	
+	/**
+	 * Overwrite the toString() method to return the string version of the result
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		switch ($this->result) {
+			case RegisterResult::USERNAME_GIVEN:
+				return "RegisterResult::USERNAME_GIVEN";
+			case RegisterResult::EMAIL_GIVEN:
+				return "RegisterResult::EMAIL_GIVEN";
+			case RegisterResult::PASSWORD_MISMATCH:
+				return "RegisterResult::PASSWORD_MISMATCH";
+			case RegisterResult::SUCCESS:
+				return "RegisterResult::SUCCESS";
+			default:
+				return "RegisterResult::UNDEFINED";
 		}
 	}
 }
