@@ -91,8 +91,7 @@ require("config.php");
 $db = new DatabaseAdapter($databaseConfig);
 
 // create tables
-$db->rawQuery(file_get_contents(__DIR__.DIRECTORY_SEPARATOR."accounts.sql"));
-$db->rawQuery(file_get_contents(__DIR__.DIRECTORY_SEPARATOR."login_tokens.sql"));
+$db->rawQuery(file_get_contents(__DIR__.DIRECTORY_SEPARATOR."loginlib.sql"));
 
 // create LoginLib instance
 $loginlib = new LoginLib\LoginLib($config, $db);
