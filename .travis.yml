@@ -23,3 +23,6 @@ before_script:
   - mysql -u root -e 'create database IF NOT EXISTS loginlib;'
 
 script: php ./test/compileLoginLib.php
+
+notifications:
+ email: false
