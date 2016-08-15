@@ -1,5 +1,5 @@
 Compiling...
-Compiling finished! (Took: 0.32292509078979ms)
+Compiling finished! (Took: 0.78883218765259ms)
 
 Running LoginLib v1.0.1
 
@@ -10,7 +10,11 @@ Starting tests...
 Result: RegisterResult::PASSWORD_MISMATCH
 
 [TEST 2]: Register
-Result: RegisterResult::USERNAME_GIVEN
+
+Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
+
+Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
+Result: RegisterResult::SUCCESS
 Logged in: No
 
 [TEST 3]: Register with existing username
@@ -31,4 +35,4 @@ Warning: Cannot modify header information - headers already sent by (output star
 Result: LoginResult::SUCCESS
 Am I logged in?: No!
 
-Fatal error: Login did not succeed! Fatal error! in E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php on line 156
+Fatal error: Login did not succeed! Fatal error! in E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php on line 180

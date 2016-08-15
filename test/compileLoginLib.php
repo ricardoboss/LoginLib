@@ -90,8 +90,17 @@ require("config.php");
 // create database adapter
 $db = new DatabaseAdapter($databaseConfig);
 
+// read queries
+$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
+$queries = split(";", $queriesraw);
+
+foreach ($queries as $id => $query)
+	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
+
 // create tables
-$db->rawQuery(file_get_contents(__DIR__.DIRECTORY_SEPARATOR."loginlib.sql"));
+foreach ($queries as $query)
+	if (strlen($query) != 0)
+		$db->rawQuery($query);
 
 // create LoginLib instance
 $loginlib = new LoginLib\LoginLib($config, $db);
@@ -101,6 +110,8 @@ $loginlib = new LoginLib\LoginLib($config, $db);
 echo "Starting tests...\n\n";
 $i = 0;
 
+//====================
+
 $i++;
 echo "[TEST ".$i."]: Register with wrong password\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], "not my password...", function($result) {
@@ -108,6 +119,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], "no
 });
 
 echo "\n";
+
+//====================
 
 $i++;
 echo "[TEST ".$i."]: Register\n";
@@ -119,6 +132,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], $us
 
 echo "\n";
 
+//====================
+
 $i++;
 echo "[TEST ".$i."]: Register with existing username\n";
 $loginlib->register($user1['username'], $user1['email'], $user1['password'], $user1['password'], function($result) {
@@ -127,6 +142,8 @@ $loginlib->register($user1['username'], $user1['email'], $user1['password'], $us
 });
 
 echo "\n";
+
+//====================
 
 $i++;
 echo "[TEST ".$i."]: Register with existing email\n";
@@ -137,6 +154,8 @@ $loginlib->register($user2['username'], $user1['email'], $user1['password'], $us
 
 echo "\n";
 
+//====================
+
 $i++;
 echo "[TEST ".$i."]: Login with wrong credentials\n";
 $loginlib->login($user1['username'], $user2['password'], function($result) {
@@ -146,6 +165,8 @@ $loginlib->login($user1['username'], $user2['password'], function($result) {
 });
 
 echo "\n";
+
+//====================
 
 $i++;
 echo "[TEST ".$i."]: Login\n";
@@ -160,6 +181,8 @@ if (!$loginlib->isLoggedIn())
 
 echo "\n";
 
+//====================
+
 $i++;
 echo "[TEST ".$i."]: Logout\n";
 $loginlib->logout();
@@ -169,10 +192,17 @@ echo "\nTests finished!\n\n";
 
 /*****************************************************************************/
 
+$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."delete.sql");
+$queries = split(";", $queriesraw);
+
+foreach ($queries as $id => $query)
+	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
+
+// create tables
+foreach ($queries as $query)
+	if (strlen($query) != 0)
+		$db->rawQuery($query);
+
+/*****************************************************************************/
+
 echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
-
-
-
-
-
-
