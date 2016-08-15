@@ -1,38 +1,561 @@
 Compiling...
-Compiling finished! (Took: 0.78883218765259ms)
+Compiling finished! (Took: 0.87210988998413ms)
 
 Running LoginLib v1.0.1
 
-Loading testing environment...
-Starting tests...
+Running tests:
+-----
+Test [1] ("register-password-mismatch.php"):
+array(14) {
+  ["_GET"]=>
+  array(0) {
+  }
+  ["_POST"]=>
+  array(0) {
+  }
+  ["_COOKIE"]=>
+  array(0) {
+  }
+  ["_FILES"]=>
+  array(0) {
+  }
+  ["argv"]=>
+  array(1) {
+    [0]=>
+    string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+  }
+  ["argc"]=>
+  int(1)
+  ["_SERVER"]=>
+  array(52) {
+    ["ALLUSERSPROFILE"]=>
+    string(14) "C:\ProgramData"
+    ["APPDATA"]=>
+    string(32) "C:\Users\Ricardo\AppData\Roaming"
+    ["CommonProgramFiles"]=>
+    string(35) "C:\Program Files (x86)\Common Files"
+    ["CommonProgramFiles(x86)"]=>
+    string(35) "C:\Program Files (x86)\Common Files"
+    ["CommonProgramW6432"]=>
+    string(29) "C:\Program Files\Common Files"
+    ["COMPUTERNAME"]=>
+    string(6) "RICOPC"
+    ["comspec"]=>
+    string(27) "C:\Windows\System32\cmd.exe"
+    ["DNX_HOME"]=>
+    string(18) "%USERPROFILE%\.dnx"
+    ["HOMEDRIVE"]=>
+    string(2) "C:"
+    ["HOMEPATH"]=>
+    string(14) "\Users\Ricardo"
+    ["JAVA_HOME"]=>
+    string(34) "C:\Program Files\Java\jdk1.8.0_102"
+    ["LOCALAPPDATA"]=>
+    string(30) "C:\Users\Ricardo\AppData\Local"
+    ["LOGONSERVER"]=>
+    string(18) "\\MicrosoftAccount"
+    ["NUMBER_OF_PROCESSORS"]=>
+    string(1) "4"
+    ["OS"]=>
+    string(10) "Windows_NT"
+    ["Path"]=>
+    string(1253) "C:\Program Files (x86)\Borland\Delphi7\Bin;C:\Program Files (x86)\Borland\Delphi7\Projects\Bpl\;C:\Program Files (x86)\Embarcadero\Studio\17.0\bin64;C:\Users\Ricardo\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Skype\Phone\;C:\adb;E:\XAMPP\php;C:\ProgramData\ComposerSetup\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\nodejs\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\110\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Graphviz 2.28\bin;C:\cygwin64\bin;C:\Program Files\Java\jdk1.8.0_102\;C:\ProgramFiles\Java\jre1.8.0_102\;C:\Program Files\Java\jre1.8.0_102\bin\;C:\Program Files\Java\jdk1.8.0_102\bin\;C:\Ruby23-x64\bin;C:\Users\Ricardo\.dnx\bin;C:\Users\Ricardo\AppData\Roaming\Composer\vendor\bin;C:\Users\Ricardo\AppData\Roaming\npm"
+    ["PATHEXT"]=>
+    string(62) ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW"
+    ["PROCESSOR_ARCHITECTURE"]=>
+    string(3) "x86"
+    ["PROCESSOR_ARCHITEW6432"]=>
+    string(5) "AMD64"
+    ["PROCESSOR_IDENTIFIER"]=>
+    string(50) "Intel64 Family 6 Model 58 Stepping 9, GenuineIntel"
+    ["PROCESSOR_LEVEL"]=>
+    string(1) "6"
+    ["PROCESSOR_REVISION"]=>
+    string(4) "3a09"
+    ["ProgramData"]=>
+    string(14) "C:\ProgramData"
+    ["ProgramFiles"]=>
+    string(22) "C:\Program Files (x86)"
+    ["ProgramFiles(x86)"]=>
+    string(22) "C:\Program Files (x86)"
+    ["ProgramW6432"]=>
+    string(16) "C:\Program Files"
+    ["PROMPT"]=>
+    string(4) "$P$G"
+    ["PSModulePath"]=>
+    string(326) "C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules\;C:\Program Files\WindowsPowerShell\Modules\;C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ResourceManager\AzureResourceManager\;C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\;C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\Storage\"
+    ["PUBLIC"]=>
+    string(15) "C:\Users\Public"
+    ["SESSIONNAME"]=>
+    string(7) "Console"
+    ["SystemDrive"]=>
+    string(2) "C:"
+    ["SystemRoot"]=>
+    string(10) "C:\WINDOWS"
+    ["TEMP"]=>
+    string(35) "C:\Users\Ricardo\AppData\Local\Temp"
+    ["TMP"]=>
+    string(35) "C:\Users\Ricardo\AppData\Local\Temp"
+    ["USERDOMAIN"]=>
+    string(6) "RICOPC"
+    ["USERDOMAIN_ROAMINGPROFILE"]=>
+    string(6) "RICOPC"
+    ["USERNAME"]=>
+    string(7) "Ricardo"
+    ["USERPROFILE"]=>
+    string(16) "C:\Users\Ricardo"
+    ["VS110COMNTOOLS"]=>
+    string(66) "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\Tools\"
+    ["VS120COMNTOOLS"]=>
+    string(66) "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\"
+    ["VS140COMNTOOLS"]=>
+    string(66) "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\"
+    ["VSSDK140Install"]=>
+    string(58) "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VSSDK\"
+    ["windir"]=>
+    string(10) "C:\WINDOWS"
+    ["PHP_SELF"]=>
+    string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+    ["SCRIPT_NAME"]=>
+    string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+    ["SCRIPT_FILENAME"]=>
+    string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+    ["PATH_TRANSLATED"]=>
+    string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+    ["DOCUMENT_ROOT"]=>
+    string(0) ""
+    ["REQUEST_TIME_FLOAT"]=>
+    float(1471296054.9576)
+    ["REQUEST_TIME"]=>
+    int(1471296054)
+    ["argv"]=>
+    array(1) {
+      [0]=>
+      string(85) "E:\XAMPP\htdocs\projects\LoginLib\repo\compile\tests\1-register-password-mismatch.php"
+    }
+    ["argc"]=>
+    int(1)
+  }
+  ["GLOBALS"]=>
+  *RECURSION*
+  ["root"]=>
+  string(39) "E:\XAMPP\htdocs\projects\LoginLib\repo\"
+  ["config"]=>
+  array(3) {
+    ["authentication"]=>
+    array(3) {
+      ["username"]=>
+      string(4) "both"
+      ["storing"]=>
+      string(6) "cookie"
+      ["login_after_registration"]=>
+      bool(true)
+    }
+    ["table"]=>
+    array(2) {
+      ["accounts"]=>
+      array(7) {
+        ["name"]=>
+        string(8) "accounts"
+        ["col_id"]=>
+        string(2) "id"
+        ["col_username"]=>
+        string(8) "username"
+        ["col_email"]=>
+        string(5) "email"
+        ["col_password_hash"]=>
+        string(13) "password_hash"
+        ["col_updated_at"]=>
+        string(10) "updated_at"
+        ["col_registered_at"]=>
+        string(13) "registered_at"
+      }
+      ["login_tokens"]=>
+      array(6) {
+        ["name"]=>
+        string(12) "login_tokens"
+        ["col_id"]=>
+        string(2) "id"
+        ["col_token"]=>
+        string(5) "token"
+        ["col_account_id"]=>
+        string(10) "account_id"
+        ["col_created_at"]=>
+        string(10) "created_at"
+        ["col_logged_out"]=>
+        string(10) "logged_out"
+      }
+    }
+    ["cookie"]=>
+    array(4) {
+      ["path"]=>
+      string(1) "*"
+      ["domain"]=>
+      string(0) ""
+      ["login_token"]=>
+      array(2) {
+        ["name"]=>
+        string(5) "ll_lt"
+        ["expire"]=>
+        int(2419200)
+      }
+      ["token_id"]=>
+      array(2) {
+        ["name"]=>
+        string(5) "ll_ti"
+        ["expire"]=>
+        int(2419200)
+      }
+    }
+  }
+  ["databaseConfig"]=>
+  array(4) {
+    ["host"]=>
+    string(18) "mcmainiac.ddns.net"
+    ["username"]=>
+    string(6) "travis"
+    ["password"]=>
+    string(6) "travis"
+    ["db"]=>
+    string(6) "travis"
+  }
+  ["db"]=>
+  &object(DatabaseAdapter)#1 (1) {
+    ["mysqlidb":"DatabaseAdapter":private]=>
+    object(MysqliDb)#2 (35) {
+      ["_mysqli":protected]=>
+      object(mysqli)#5 (19) {
+        ["affected_rows"]=>
+        int(-1)
+        ["client_info"]=>
+        string(79) "mysqlnd 5.0.11-dev - 20120503 - $Id: 76b08b24596e12d4553bd41fc93cccd5bac2fe7a $"
+        ["client_version"]=>
+        int(50011)
+        ["connect_errno"]=>
+        int(0)
+        ["connect_error"]=>
+        NULL
+        ["errno"]=>
+        int(0)
+        ["error"]=>
+        string(0) ""
+        ["error_list"]=>
+        array(0) {
+        }
+        ["field_count"]=>
+        int(21)
+        ["host_info"]=>
+        string(29) "mcmainiac.ddns.net via TCP/IP"
+        ["info"]=>
+        NULL
+        ["insert_id"]=>
+        int(0)
+        ["server_info"]=>
+        string(21) "5.5.5-10.1.13-MariaDB"
+        ["server_version"]=>
+        int(50505)
+        ["stat"]=>
+        string(136) "Uptime: 8231  Threads: 2  Questions: 3052  Slow queries: 0  Opens: 192  Flush tables: 1  Open tables: 172  Queries per second avg: 0.370"
+        ["sqlstate"]=>
+        string(5) "00000"
+        ["protocol_version"]=>
+        int(10)
+        ["thread_id"]=>
+        int(159)
+        ["warning_count"]=>
+        int(0)
+      }
+      ["_query":protected]=>
+      NULL
+      ["_lastQuery":protected]=>
+      string(118) "SELECT  * FROM information_schema.tables WHERE  table_schema = 'travis'  AND table_name in ( 'login_tokens' )  LIMIT 1"
+      ["_queryOptions":protected]=>
+      array(0) {
+      }
+      ["_join":protected]=>
+      array(0) {
+      }
+      ["_where":protected]=>
+      array(0) {
+      }
+      ["_having":protected]=>
+      array(0) {
+      }
+      ["_orderBy":protected]=>
+      array(0) {
+      }
+      ["_groupBy":protected]=>
+      array(0) {
+      }
+      ["_bindParams":protected]=>
+      array(1) {
+        [0]=>
+        string(0) ""
+      }
+      ["count"]=>
+      int(1)
+      ["totalCount"]=>
+      int(0)
+      ["_stmtError":protected]=>
+      string(0) ""
+      ["_stmtErrno":protected]=>
+      int(0)
+      ["host":protected]=>
+      string(18) "mcmainiac.ddns.net"
+      ["username":protected]=>
+      string(6) "travis"
+      ["password":protected]=>
+      string(6) "travis"
+      ["db":protected]=>
+      string(6) "travis"
+      ["port":protected]=>
+      NULL
+      ["charset":protected]=>
+      string(4) "utf8"
+      ["isSubQuery":protected]=>
+      bool(false)
+      ["_lastInsertId":protected]=>
+      NULL
+      ["_updateColumns":protected]=>
+      NULL
+      ["returnType"]=>
+      string(5) "array"
+      ["_nestJoin":protected]=>
+      bool(false)
+      ["_tableName":"MysqliDb":private]=>
+      string(0) ""
+      ["_forUpdate":protected]=>
+      bool(false)
+      ["_lockInShareMode":protected]=>
+      bool(false)
+      ["_mapKey":protected]=>
+      NULL
+      ["traceStartQ":protected]=>
+      NULL
+      ["traceEnabled":protected]=>
+      NULL
+      ["traceStripPrefix":protected]=>
+      NULL
+      ["trace"]=>
+      array(0) {
+      }
+      ["pageLimit"]=>
+      int(20)
+      ["totalPages"]=>
+      int(0)
+    }
+  }
+  ["loginlib"]=>
+  object(LoginLib\LoginLib)#3 (2) {
+    ["config":"LoginLib\LoginLib":private]=>
+    object(LoginLib\Config)#4 (1) {
+      ["config":"LoginLib\Config":private]=>
+      array(3) {
+        ["authentication"]=>
+        array(3) {
+          ["username"]=>
+          string(4) "both"
+          ["storing"]=>
+          string(6) "cookie"
+          ["login_after_registration"]=>
+          bool(true)
+        }
+        ["table"]=>
+        array(2) {
+          ["accounts"]=>
+          array(7) {
+            ["name"]=>
+            string(8) "accounts"
+            ["col_id"]=>
+            string(2) "id"
+            ["col_username"]=>
+            string(8) "username"
+            ["col_email"]=>
+            string(5) "email"
+            ["col_password_hash"]=>
+            string(13) "password_hash"
+            ["col_updated_at"]=>
+            string(10) "updated_at"
+            ["col_registered_at"]=>
+            string(13) "registered_at"
+          }
+          ["login_tokens"]=>
+          array(6) {
+            ["name"]=>
+            string(12) "login_tokens"
+            ["col_id"]=>
+            string(2) "id"
+            ["col_token"]=>
+            string(5) "token"
+            ["col_account_id"]=>
+            string(10) "account_id"
+            ["col_created_at"]=>
+            string(10) "created_at"
+            ["col_logged_out"]=>
+            string(10) "logged_out"
+          }
+        }
+        ["cookie"]=>
+        array(4) {
+          ["path"]=>
+          string(1) "*"
+          ["domain"]=>
+          string(0) ""
+          ["login_token"]=>
+          array(2) {
+            ["name"]=>
+            string(5) "ll_lt"
+            ["expire"]=>
+            int(2419200)
+          }
+          ["token_id"]=>
+          array(2) {
+            ["name"]=>
+            string(5) "ll_ti"
+            ["expire"]=>
+            int(2419200)
+          }
+        }
+      }
+    }
+    ["db":"LoginLib\LoginLib":private]=>
+    &object(DatabaseAdapter)#1 (1) {
+      ["mysqlidb":"DatabaseAdapter":private]=>
+      object(MysqliDb)#2 (35) {
+        ["_mysqli":protected]=>
+        object(mysqli)#5 (19) {
+          ["affected_rows"]=>
+          int(-1)
+          ["client_info"]=>
+          string(79) "mysqlnd 5.0.11-dev - 20120503 - $Id: 76b08b24596e12d4553bd41fc93cccd5bac2fe7a $"
+          ["client_version"]=>
+          int(50011)
+          ["connect_errno"]=>
+          int(0)
+          ["connect_error"]=>
+          NULL
+          ["errno"]=>
+          int(0)
+          ["error"]=>
+          string(0) ""
+          ["error_list"]=>
+          array(0) {
+          }
+          ["field_count"]=>
+          int(21)
+          ["host_info"]=>
+          string(29) "mcmainiac.ddns.net via TCP/IP"
+          ["info"]=>
+          NULL
+          ["insert_id"]=>
+          int(0)
+          ["server_info"]=>
+          string(21) "5.5.5-10.1.13-MariaDB"
+          ["server_version"]=>
+          int(50505)
+          ["stat"]=>
+          string(136) "Uptime: 8232  Threads: 2  Questions: 3052  Slow queries: 0  Opens: 192  Flush tables: 1  Open tables: 172  Queries per second avg: 0.370"
+          ["sqlstate"]=>
+          string(5) "00000"
+          ["protocol_version"]=>
+          int(10)
+          ["thread_id"]=>
+          int(159)
+          ["warning_count"]=>
+          int(0)
+        }
+        ["_query":protected]=>
+        NULL
+        ["_lastQuery":protected]=>
+        string(118) "SELECT  * FROM information_schema.tables WHERE  table_schema = 'travis'  AND table_name in ( 'login_tokens' )  LIMIT 1"
+        ["_queryOptions":protected]=>
+        array(0) {
+        }
+        ["_join":protected]=>
+        array(0) {
+        }
+        ["_where":protected]=>
+        array(0) {
+        }
+        ["_having":protected]=>
+        array(0) {
+        }
+        ["_orderBy":protected]=>
+        array(0) {
+        }
+        ["_groupBy":protected]=>
+        array(0) {
+        }
+        ["_bindParams":protected]=>
+        array(1) {
+          [0]=>
+          string(0) ""
+        }
+        ["count"]=>
+        int(1)
+        ["totalCount"]=>
+        int(0)
+        ["_stmtError":protected]=>
+        string(0) ""
+        ["_stmtErrno":protected]=>
+        int(0)
+        ["host":protected]=>
+        string(18) "mcmainiac.ddns.net"
+        ["username":protected]=>
+        string(6) "travis"
+        ["password":protected]=>
+        string(6) "travis"
+        ["db":protected]=>
+        string(6) "travis"
+        ["port":protected]=>
+        NULL
+        ["charset":protected]=>
+        string(4) "utf8"
+        ["isSubQuery":protected]=>
+        bool(false)
+        ["_lastInsertId":protected]=>
+        NULL
+        ["_updateColumns":protected]=>
+        NULL
+        ["returnType"]=>
+        string(5) "array"
+        ["_nestJoin":protected]=>
+        bool(false)
+        ["_tableName":"MysqliDb":private]=>
+        string(0) ""
+        ["_forUpdate":protected]=>
+        bool(false)
+        ["_lockInShareMode":protected]=>
+        bool(false)
+        ["_mapKey":protected]=>
+        NULL
+        ["traceStartQ":protected]=>
+        NULL
+        ["traceEnabled":protected]=>
+        NULL
+        ["traceStripPrefix":protected]=>
+        NULL
+        ["trace"]=>
+        array(0) {
+        }
+        ["pageLimit"]=>
+        int(20)
+        ["totalPages"]=>
+        int(0)
+      }
+    }
+  }
+  ["_SESSION"]=>
+  &array(1) {
+    ["test"]=>
+    string(4) "test"
+  }
+}
+-----
+Test [2] ("register-success.php"):
+Session:
+array(0) {
+}
+-----
 
-[TEST 1]: Register with wrong password
-Result: RegisterResult::PASSWORD_MISMATCH
-
-[TEST 2]: Register
-
-Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
-
-Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
-Result: RegisterResult::SUCCESS
-Logged in: No
-
-[TEST 3]: Register with existing username
-Result: RegisterResult::USERNAME_GIVEN
-
-[TEST 4]: Register with existing email
-Result: RegisterResult::EMAIL_GIVEN
-
-[TEST 5]: Login with wrong credentials
-Result: LoginResult::PASSWORD_WRONG
-Am I logged in?: No!
-
-[TEST 6]: Login
-
-Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
-
-Warning: Cannot modify header information - headers already sent by (output started at E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php:52) in E:\XAMPP\htdocs\projects\LoginLib\repo\dist\LoginLib.php on line 400
-Result: LoginResult::SUCCESS
-Am I logged in?: No!
-
-Fatal error: Login did not succeed! Fatal error! in E:\XAMPP\htdocs\projects\LoginLib\repo\test\compileLoginLib.php on line 180
+Complete build with tests took: 2.825649023056ms

@@ -7,6 +7,256 @@
 namespace LoginLib;
 
 /**
+ * The Config class is a helper class for LoginLib
+ */
+class Config {
+	/** @var array The main config array of LoginLib */
+	private $config = array();
+	
+	/** @var array The default configuration for LoginLib */
+	private static $default = array(
+		'authentication' => array(
+			'username' => "both",
+			'storing' => "cookie",
+			'login_after_registration' => true
+		),
+		'table' => array(
+			'accounts' => array(
+				'name' => "accounts",
+				'col_id' => "id",
+				'col_username' => "username",
+				'col_email' => "email",
+				'col_password_hash' => "password_hash",
+				'col_updated_at' => "updated_at",
+				'col_registered_at' => "registered_at" 
+			),
+			'login_tokens' => array(
+				'name' => "login_tokens",
+				'col_id' => "id",
+				'col_token' => "token",
+				'col_account_id' => "account_id",
+				'col_created_at' => "created_at",
+				'col_logged_out' => "logged_out"
+			)
+		),
+		'cookie' => array(
+			'path' => "*",
+			'domain' => "",//$_SERVER['HTTP_HOST'],
+			'login_token' => array(
+				'name' => "ll_lt",
+				'expire' => 2419200 // 1 month
+			),
+			'token_id' => array(
+				'name' => "ll_ti",
+				'expire' => 2419200 // 1 month
+			)
+		)
+	);
+	
+	/**
+	 * The constructor checks the given config array and merges it with the default config
+	 * 
+	 * @throws ConfigurationException
+	 * 
+	 * @param array custom config
+	 * 
+	 * @return Config
+	 */
+	public function __construct($arr) {
+		$this->config = $this->merge($arr, Config::$default);
+	}
+	
+	/**
+	 * This function returns a specific part of the config array
+	 * 
+	 * @throws ConfigurationException if the requested type could not be found
+	 * 
+	 * @param string $type The section of the config array
+	 * 
+	 * @return array
+	 */
+	public function get($type) {
+		if (isset($this->config[$type]))
+			return $this->config[$type];
+		else {
+			throw new ConfigurationException("[".$type."]", "The requested section could not be found!");
+			exit;
+		}
+	}
+	
+	/**
+	 * This functions merges the $src array with the $fallback array and returns the result
+	 * 
+	 * @param $src The source array
+	 * @param $fallback The default array
+	 * 
+	 * @return array The merged array
+	 */
+	private function merge($src, $fallback) {
+		$ret = $fallback;
+		foreach ($src as $key => $value)
+			if (array_key_exists($key, $ret))
+				if (is_array($value))
+					$ret[$key] = $this->merge($value, $fallback[$key]);
+				else
+					$ret[$key] = $value;
+
+		return $ret;
+	}
+}
+
+/**
+ * Exception class for the case that a class was not found
+ */
+class DatabaseException extends \Exception {
+	/**
+	 * The constrcutor of DatabaseException
+	 *
+	 * @param string $message The message of the exception
+	 * @param int $code The code of the exception
+	 * @param \Exception $previous The previous exception
+	 *
+	 * @return DatabaseException
+	 */
+	public function __construct($message = "", $code = 0, $previous = null) {
+		parent::__construct ($message, $code, $previous);
+	}
+}
+
+/**
+ * Exception that gets thrown if the user miconfigured their config
+ */
+class ConfigurationException extends \Exception {
+	/** @var string the misconfigured property */
+	private $prop;
+
+	/**
+	 * The constrcutor of ConfigurationExceptions
+	 *
+	 * @param string $prop The misconfigured property; format: [key] => [prop]
+	 * @param string $message The message of the exception
+	 * @param int $code The code of the exception
+	 * @param \Exception $previous The previous exception
+	 *
+	 * @return ConfigurationException
+	 */
+	public function __construct($prop, $message = "", $code = 0, $previous = null) {
+		parent::__construct ($message, $code, $previous);
+		
+		$this->prop = $prop;
+	}
+	
+	/**
+	 * A method to return the misconfigured property
+	 *
+	 * @return string The misconfigured config property
+	 */
+	public function getProp() {
+		return $this->prop;
+	}
+}
+
+/**
+ * This is the interface used to communicate with your database
+ */
+interface IDatabase {
+	/**
+	 * The constructor of your Database implementation must use an array as configuration
+	 *
+	 * @param array $config Your config should have the following keys: 'host', 'username', 'password', 'db'
+	 *
+	 * @return void
+	 */
+	function __construct(array $config);
+	
+	/**
+	 * This function checks if a given table exists in your database
+	 *
+	 * @param string $tableName The name of the table
+	 *
+	 * @return bool True if the table exists, false otherwise
+	 */
+	function tableExists($tableName);
+	
+	/**
+	 * Add an " AND " to your where query.
+	 * Example:
+	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
+	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>AND</u> col2 = 2"</code>
+	 *
+	 * @param string $column The column name
+	 * @param string $andValue The needed value
+	 */
+	function where($column, $andValue);
+
+	/**
+	 * Add an <code>" OR "</code> to your where query.
+	 * Example:
+	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
+	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>OR</u> col2 = 2"</code>
+	 *
+	 * @param string $column The column name
+	 * @param string $orValue The other value
+	 */
+	function orWhere($column, $orValue);
+	
+	/**
+	 * This functions returns the result of selecting one row with the prepared query
+	 *
+	 * @param string $tableName The name of the table
+	 *
+	 * @return array|null The selected row
+	 */
+	function getOne($tableName);
+	
+	/**
+	 * This function inserts data in selected columns (using an associative array) into a table
+	 *
+	 * @param string $tableName The name of the table
+	 * @param array $data The data to insert
+	 */
+	function insert($tableName, array $data);
+	
+	/**
+	 * This function updates values in selected columns (using an associative array) in a table
+	 *
+	 * @param string $tableName The name of the table
+	 * @param array $data The data to update
+	 */
+	function update($tableName, array $data);
+	
+	/**
+	 * Used to keep unused databse connections open
+	 *
+	 * @return bool True if the connection is established
+	 */
+	function ping();
+	
+	/**
+	 * This function reconnects to your Database, if neccessary
+	 *
+	 * @return void
+	 */
+	function connect();
+	
+	/**
+	 * Method returns generated interval function as an insert/update function
+	 *
+	 * @return array
+	 */
+	function now();
+	
+	/**
+	 * A function to run raw sql queries
+	 *
+	 * @param string the query
+	 *
+	 * @return array
+	 */
+	function rawQuery($q);
+}
+
+/**
  * A class that provides the background mechanics for login and registration forms
  *
  * Use this class to authenticate your users on your website. Design a corresponding
@@ -472,105 +722,6 @@ class LoginLib {
 
 
 /**
- * The Config class is a helper class for LoginLib
- */
-class Config {
-	/** @var array The main config array of LoginLib */
-	private $config = array();
-	
-	/** @var array The default configuration for LoginLib */
-	private static $default = array(
-		'authentication' => array(
-			'username' => "both",
-			'storing' => "cookie",
-			'login_after_registration' => true
-		),
-		'table' => array(
-			'accounts' => array(
-				'name' => "accounts",
-				'col_id' => "id",
-				'col_username' => "username",
-				'col_email' => "email",
-				'col_password_hash' => "password_hash",
-				'col_updated_at' => "updated_at",
-				'col_registered_at' => "registered_at" 
-			),
-			'login_tokens' => array(
-				'name' => "login_tokens",
-				'col_id' => "id",
-				'col_token' => "token",
-				'col_account_id' => "account_id",
-				'col_created_at' => "created_at",
-				'col_logged_out' => "logged_out"
-			)
-		),
-		'cookie' => array(
-			'path' => "*",
-			'domain' => "",//$_SERVER['HTTP_HOST'],
-			'login_token' => array(
-				'name' => "ll_lt",
-				'expire' => 2419200 // 1 month
-			),
-			'token_id' => array(
-				'name' => "ll_ti",
-				'expire' => 2419200 // 1 month
-			)
-		)
-	);
-	
-	/**
-	 * The constructor checks the given config array and merges it with the default config
-	 * 
-	 * @throws ConfigurationException
-	 * 
-	 * @param array custom config
-	 * 
-	 * @return Config
-	 */
-	public function __construct($arr) {
-		$this->config = $this->merge($arr, Config::$default);
-	}
-	
-	/**
-	 * This function returns a specific part of the config array
-	 * 
-	 * @throws ConfigurationException if the requested type could not be found
-	 * 
-	 * @param string $type The section of the config array
-	 * 
-	 * @return array
-	 */
-	public function get($type) {
-		if (isset($this->config[$type]))
-			return $this->config[$type];
-		else {
-			throw new ConfigurationException("[".$type."]", "The requested section could not be found!");
-			exit;
-		}
-	}
-	
-	/**
-	 * This functions merges the $src array with the $fallback array and returns the result
-	 * 
-	 * @param $src The source array
-	 * @param $fallback The default array
-	 * 
-	 * @return array The merged array
-	 */
-	private function merge($src, $fallback) {
-		$ret = $fallback;
-		foreach ($src as $key => $value)
-			if (array_key_exists($key, $ret))
-				if (is_array($value))
-					$ret[$key] = $this->merge($value, $fallback[$key]);
-				else
-					$ret[$key] = $value;
-
-		return $ret;
-	}
-}
-
-/**
  * An abstract class that is used to provide results of methods
  */
 abstract class MethodResult {
@@ -703,106 +854,6 @@ class RegisterResult extends MethodResult {
 
 
 /**
- * This is the interface used to communicate with your database
- */
-interface IDatabase {
-	/**
-	 * The constructor of your Database implementation must use an array as configuration
-	 *
-	 * @param array $config Your config should have the following keys: 'host', 'username', 'password', 'db'
-	 *
-	 * @return void
-	 */
-	function __construct(array $config);
-	
-	/**
-	 * This function checks if a given table exists in your database
-	 *
-	 * @param string $tableName The name of the table
-	 *
-	 * @return bool True if the table exists, false otherwise
-	 */
-	function tableExists($tableName);
-	
-	/**
-	 * Add an " AND " to your where query.
-	 * Example:
-	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
-	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>AND</u> col2 = 2"</code>
-	 *
-	 * @param string $column The column name
-	 * @param string $andValue The needed value
-	 */
-	function where($column, $andValue);
-
-	/**
-	 * Add an <code>" OR "</code> to your where query.
-	 * Example:
-	 * 	<code>"SELECT * FROM users WHERE col1 = 1"
-	 *	=> "SELECT * FROM users WHERE col1 = 1 <u>OR</u> col2 = 2"</code>
-	 *
-	 * @param string $column The column name
-	 * @param string $orValue The other value
-	 */
-	function orWhere($column, $orValue);
-	
-	/**
-	 * This functions returns the result of selecting one row with the prepared query
-	 *
-	 * @param string $tableName The name of the table
-	 *
-	 * @return array|null The selected row
-	 */
-	function getOne($tableName);
-	
-	/**
-	 * This function inserts data in selected columns (using an associative array) into a table
-	 *
-	 * @param string $tableName The name of the table
-	 * @param array $data The data to insert
-	 */
-	function insert($tableName, array $data);
-	
-	/**
-	 * This function updates values in selected columns (using an associative array) in a table
-	 *
-	 * @param string $tableName The name of the table
-	 * @param array $data The data to update
-	 */
-	function update($tableName, array $data);
-	
-	/**
-	 * Used to keep unused databse connections open
-	 *
-	 * @return bool True if the connection is established
-	 */
-	function ping();
-	
-	/**
-	 * This function reconnects to your Database, if neccessary
-	 *
-	 * @return void
-	 */
-	function connect();
-	
-	/**
-	 * Method returns generated interval function as an insert/update function
-	 *
-	 * @return array
-	 */
-	function now();
-	
-	/**
-	 * A function to run raw sql queries
-	 *
-	 * @param string the query
-	 *
-	 * @return array
-	 */
-	function rawQuery($q);
-}
-
-/**
  * The user class is used to hold data secure and easy to access (for LoginLib). 
  */
 class User {
@@ -897,56 +948,5 @@ class User {
 			'updated_at' => $this->updated_at,
 			'registered_at' => $this->registered_at
 		);
-	}
-}
-
-/**
- * Exception class for the case that a class was not found
- */
-class DatabaseException extends \Exception {
-	/**
-	 * The constrcutor of DatabaseException
-	 *
-	 * @param string $message The message of the exception
-	 * @param int $code The code of the exception
-	 * @param \Exception $previous The previous exception
-	 *
-	 * @return DatabaseException
-	 */
-	public function __construct($message = "", $code = 0, $previous = null) {
-		parent::__construct ($message, $code, $previous);
-	}
-}
-
-/**
- * Exception that gets thrown if the user miconfigured their config
- */
-class ConfigurationException extends \Exception {
-	/** @var string the misconfigured property */
-	private $prop;
-
-	/**
-	 * The constrcutor of ConfigurationExceptions
-	 *
-	 * @param string $prop The misconfigured property; format: [key] => [prop]
-	 * @param string $message The message of the exception
-	 * @param int $code The code of the exception
-	 * @param \Exception $previous The previous exception
-	 *
-	 * @return ConfigurationException
-	 */
-	public function __construct($prop, $message = "", $code = 0, $previous = null) {
-		parent::__construct ($message, $code, $previous);
-		
-		$this->prop = $prop;
-	}
-	
-	/**
-	 * A method to return the misconfigured property
-	 *
-	 * @return string The misconfigured config property
-	 */
-	public function getProp() {
-		return $this->prop;
 	}
 }

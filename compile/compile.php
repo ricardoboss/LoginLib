@@ -66,34 +66,21 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
 
-if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
-	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
-}
+// create tables
 
-$tests = array();
-
-while (false !== ($entry = readdir($h))) {
-	if (substr($entry, 0, 1) != ".") {
-		$test[] = __DIR__.DIRECTORY_SEPARATOR.$entry; 
-	}
-}
-
-for ($i = 0; $i < count($tests); $i++) {
-	$result = shell_exec("php \"".$tests[$i]."\"");
-	
-	echo "Test [".($i + 1)."]: " . $result;
-}
-
-/*****************************************************************************/
-
-$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."delete.sql");
+$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
 
 foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-// create tables
+require("../test/MysqliDb.php");
+require("../test/DatabaseAdapter.php");
+require("../test/config.php");
+
+$db = new DatabaseAdapter($databaseConfig);
+
 foreach ($queries as $query) {
 	if (strlen($query) != 0) {
 		$db->rawQuery($query);
@@ -102,5 +89,48 @@ foreach ($queries as $query) {
 
 /*****************************************************************************/
 
+if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
+	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
+}
+
+$tests = array();
+
+while (false !== ($entry = readdir($h))) {
+	if (substr($entry, 0, 1) != "." && is_numeric(substr($entry, 0, 1))) {
+		$tests[] = __DIR__.DIRECTORY_SEPARATOR."tests".DIRECTORY_SEPARATOR.$entry; 
+	}
+}
+
+echo "Running tests:\n";
+echo "-----\n";
+
+for ($i = 0; $i < count($tests); $i++) {
+	$result = shell_exec("php \"".$tests[$i]."\"");
+	
+	echo "Test [".($i + 1)."] (\"".substr(end(explode(DIRECTORY_SEPARATOR, $tests[$i])), 2)."\"):\n";
+	echo trim($result);
+	echo "\n-----\n";
+}
+
+/*****************************************************************************/
+
+// delete tables
+
+$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."delete.sql");
+$queries = explode(";", $queriesraw);
+
+foreach ($queries as $id => $query) {
+	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
+}
+
+foreach ($queries as $query) {
+	if (strlen($query) != 0) {
+		$db->rawQuery($query);
+	}
+}
+
+/*****************************************************************************/
+
+echo "\n";
 echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
 
