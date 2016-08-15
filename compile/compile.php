@@ -58,27 +58,47 @@ $c->compile();
 require($c->outputfile);
 
 // echo current LoginLib version, if build succeed
-if (!class_exists("LoginLib\LoginLib"))
+if (!class_exists("LoginLib\LoginLib")) {
 	die(trigger_error("Class LoginLib\LoginLib not found!", E_USER_ERROR));
+}
 
 echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
 
-// TODO: run tests
+if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
+	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
+}
+
+$tests = array();
+
+while (false !== ($entry = readdir($h))) {
+	if (substr($entry, 0, 1) != ".") {
+		$test[] = __DIR__.DIRECTORY_SEPARATOR.$entry; 
+	}
+}
+
+for ($i = 0; $i < count($tests); $i++) {
+	$result = shell_exec("php \"".$tests[$i]."\"");
+	
+	echo "Test [".($i + 1)."]: " . $result;
+}
 
 /*****************************************************************************/
 
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."delete.sql");
 $queries = split(";", $queriesraw);
 
-foreach ($queries as $id => $query)
+foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
+}
 
 // create tables
-foreach ($queries as $query)
-	if (strlen($query) != 0)
+foreach ($queries as $query) {
+	if (strlen($query) != 0) {
 		$db->rawQuery($query);
+	}
+}
 
 /*****************************************************************************/
 
