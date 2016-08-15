@@ -87,7 +87,7 @@ for ($i = 0; $i < count($tests); $i++) {
 /*****************************************************************************/
 
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."delete.sql");
-$queries = split(";", $queriesraw);
+$queries = explode(";", $queriesraw);
 
 foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
