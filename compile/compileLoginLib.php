@@ -9,12 +9,12 @@ class Compiler {
 		$this->root = $root;
 		$this->outputfile = $this->root.'/dist/LoginLib.php';
 		$this->sourcefiles = array(
-			'LoginLib.php',
 			'Config.php',
-			'Results.php',
+			'Exceptions.php',
 			'IDatabase.php',
-			'User.php',
-			'Exceptions.php'
+			'LoginLib.php',
+			'Results.php',
+			'User.php'
 		);
 	}
 
@@ -81,11 +81,11 @@ $user2 = array(
 );
 
 // load classes
-require("MysqliDb.php");
-require("DatabaseAdapter.php");
+require("../test/MysqliDb.php");
+require("../test/DatabaseAdapter.php");
 
 // load config
-require("config.php");
+require("../test/config.php");
 
 // create database adapter
 $db = new DatabaseAdapter($databaseConfig);
