@@ -42,5 +42,5 @@ $databaseConfig = array(
 	'host' => "localhost",
 	'username' => "root",
 	'password' => "",
-	'db' => "travis"
+	'db' => "loginlib"
 );
