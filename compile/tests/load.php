@@ -21,3 +21,10 @@ try {
 	trigger_error("Caught ConfigurationException: ".$e->getMessage());
 	return 1;
 }
+
+function logEntry($message) {
+	if (is_array($message)) {
+		var_dump($message);
+	} else
+		echo date("[H:i:s.S]") . $message . "\n";
+}

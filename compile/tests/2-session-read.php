@@ -3,8 +3,8 @@ require("load.php");
 
 session_start(0);
 
-echo "\$_SESSION:\n";
-var_dump($_SESSION);
+logEntry("\$_SESSION:");
+logEntry($_SESSION);
 
 if (isset($_SESSION['test'])) {
 	return 0;
