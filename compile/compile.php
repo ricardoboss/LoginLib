@@ -1,6 +1,5 @@
 <?php
 $filestarttime = microtime(true);
-$returncode = 0;
 
 class Compiler {
 	public $root;
@@ -72,6 +71,12 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 echo "Creating tables in database...\n";
 
+// HOTFIX: get the database adapter class and the config from the old test directory
+// TODO: move class and config to another dir
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
+
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
 
@@ -79,24 +84,25 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-// *HOTFIX* get the database adapter class and the config from the old test directory
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
-
 $db = new DatabaseAdapter($databaseConfig);
 
 try {
 	$db->connect();
 } catch (Exception $e) {
-	die(trigger_error("Failed to connect to database!", E_USER_ERROR));
+	trigger_error("Failed to connect to database!", E_USER_ERROR);
+	return 1;
 }
 
-foreach ($queries as $id => $query) {
-	if (strlen($query) != 0) {
-		echo "Running query " . $id . ": " . substr($query, 0, 40) . "\n";
-		$db->rawQuery($query);
+try { 
+	foreach ($queries as $id => $query) {
+		if (strlen($query) != 0) {
+			echo "Running query " . $id . ": " . substr($query, 0, 30) . "\n";
+			$db->rawQuery($query);
+		}
 	}
+} catch (Exception $e) {
+	trigger_error("Failed to run sql queries!", E_USER_ERROR);
+	return 1;
 }
 
 echo "\n";
@@ -106,7 +112,8 @@ echo "\n";
 // collect tests
 
 if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
-	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
+	trigger_error("Could not open directory handle for tests!", E_USER_ERROR);
+	return 1;
 }
 
 $tests = array();
@@ -144,8 +151,10 @@ for ($i = 0; $i < count($tests); $i++) {
 
 if ($ok)
 	echo "Tests completed successfully! (took: ".(microtime(true) - $teststarttime)."ms)\n";
-else
-	die(trigger_error("Tests failed! (took: ".(microtime(true) - $teststarttime)."ms)\n", E_USER_ERROR));
+else {
+	trigger_error("Tests failed! (took: ".(microtime(true) - $teststarttime)."ms)\n", E_USER_ERROR);
+	return 1;
+}
 
 /*****************************************************************************/
 
@@ -158,10 +167,23 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-foreach ($queries as $query) {
-	if (strlen($query) != 0) {
-		$db->rawQuery($query);
+try {
+	$db->connect();
+} catch (Exception $e) {
+	trigger_error("Failed to connect to database!", E_USER_ERROR);
+	return 1;
+}
+
+try {
+	foreach ($queries as $id => $query) {
+		if (strlen($query) != 0) {
+			echo "Running query " . $id . ": " . substr($query, 0, 30) . "\n";
+			$db->rawQuery($query);
+		}
 	}
+} catch (Exception $e) {
+	trigger_error("Failed to run sql queries!", E_USER_ERROR);
+	return 1;
 }
 
 /*****************************************************************************/
@@ -169,5 +191,5 @@ foreach ($queries as $query) {
 echo "\n";
 echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
 
-return $returncode;
+return 0;
 
