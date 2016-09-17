@@ -1,5 +1,6 @@
 <?php
 $filestarttime = microtime(true);
+
 class Compiler {
 	public $root;
 	public $outputfile;
@@ -57,16 +58,24 @@ $c->compile();
 // Test if no php errors are thrown
 require($c->outputfile);
 
-// echo current LoginLib version, if build succeed
 if (!class_exists("LoginLib\LoginLib")) {
 	die(trigger_error("Class LoginLib\LoginLib not found!", E_USER_ERROR));
 }
 
+// echo current LoginLib version, if build succeed
 echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
 
 // create tables
+
+echo "Creating tables in database...\n";
+
+// HOTFIX: get the database adapter class and the config from the old test directory
+// TODO: move classes and config to another dir
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
 
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
@@ -75,24 +84,46 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
+<<<<<<< HEAD
 // TODO: fix class paths
 
 require($c->root);
 require("DatabaseAdapter.php");
 require("config.php");
 
+=======
+>>>>>>> 51e12942ccf1c48f9deecf9cede5709fa50db01d
 $db = new DatabaseAdapter($databaseConfig);
 
-foreach ($queries as $query) {
-	if (strlen($query) != 0) {
-		$db->rawQuery($query);
-	}
+try {
+	$db->connect();
+} catch (Exception $e) {
+	trigger_error("Failed to connect to database!", E_USER_ERROR);
+	return 1;
 }
+
+try {
+	foreach ($queries as $id => $query) {
+		if (strlen($query) != 0) {
+			//echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
+			$response = $db->rawQuery($query);
+			
+		}
+	}
+} catch (Exception $e) {
+	trigger_error("Failed to run sql queries: " . $db->getLastError(), E_USER_ERROR);
+	return 1;
+}
+
+echo "\n";
 
 /*****************************************************************************/
 
+// collect tests
+
 if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
-	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
+	trigger_error("Could not open directory handle for tests!", E_USER_ERROR);
+	return 1;
 }
 
 $tests = array();
@@ -103,15 +134,38 @@ while (false !== ($entry = readdir($h))) {
 	}
 }
 
+// running tests
+
+$teststarttime = microtime(true);
+
 echo "Running tests:\n";
-echo "-----\n";
+
+$ok = true;
 
 for ($i = 0; $i < count($tests); $i++) {
-	$result = shell_exec("php \"".$tests[$i]."\"");
+	exec("php \"".$tests[$i]."\"", $output, $return);
 	
-	echo "Test [".($i + 1)."] (\"".substr(end(explode(DIRECTORY_SEPARATOR, $tests[$i])), 2)."\"):\n";
-	echo trim($result);
-	echo "\n-----\n";
+	$path = explode(DIRECTORY_SEPARATOR, $tests[$i]);
+	$file = substr(end($path), 2);
+	
+	echo "==== Test [".($i + 1)."] (\"".$file."\") ====\n";
+	foreach ($output as $line)
+		echo $line."\n";
+	echo "\n";
+	echo "Returned: ".$return."\n";
+	echo "\n";
+	
+	if ($return != 0) {
+		$ok = false;
+		break;
+	}
+}
+
+if ($ok)
+	echo "Tests completed successfully! (took: ".(microtime(true) - $teststarttime)."ms)\n";
+else {
+	trigger_error("Tests failed! (took: ".(microtime(true) - $teststarttime)."ms)\n", E_USER_ERROR);
+	return 1;
 }
 
 /*****************************************************************************/
@@ -125,14 +179,30 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-foreach ($queries as $query) {
-	if (strlen($query) != 0) {
-		$db->rawQuery($query);
+try {
+	$db->connect();
+} catch (Exception $e) {
+	trigger_error("Failed to connect to database!", E_USER_ERROR);
+	return 1;
+}
+
+try {
+	foreach ($queries as $id => $query) {
+		if (strlen($query) != 0) {
+			//echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
+			$response = $db->rawQuery($query);
+				
+		}
 	}
+} catch (Exception $e) {
+	trigger_error("Failed to run sql queries: " . $db->getLastError(), E_USER_ERROR);
+	return 1;
 }
 
 /*****************************************************************************/
 
 echo "\n";
 echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
+
+return 0;
 

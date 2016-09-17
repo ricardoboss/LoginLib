@@ -58,6 +58,10 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 		return $this->mysqlidb->getLastQuery();
 	}
 	
+	public function getLastError() {
+		return $this->mysqlidb->getLastError();
+	}
+	
 	public function rawQuery($q) {
 		return $this->mysqlidb->rawQuery($q);
 	}

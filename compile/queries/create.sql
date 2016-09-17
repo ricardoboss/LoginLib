@@ -1,4 +1,4 @@
-CREATE TABLE travis.`accounts` (
+CREATE TABLE loginlib.`accounts` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `username` varchar(64) NOT NULL,
   `email` varchar(45) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE travis.`accounts` (
   `registered_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE travis.`login_tokens` (
+CREATE TABLE loginlib.`login_tokens` (
   `id` bigint(255) UNSIGNED NOT NULL,
   `account_id` bigint(255) UNSIGNED NOT NULL,
   `token` varchar(64) NOT NULL,
@@ -16,16 +16,16 @@ CREATE TABLE travis.`login_tokens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-ALTER TABLE travis.`accounts`
+ALTER TABLE loginlib.`accounts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`),
   ADD UNIQUE KEY `email` (`email`);
 
-ALTER TABLE travis.`login_tokens`
+ALTER TABLE loginlib.`login_tokens`
   ADD PRIMARY KEY (`id`);
 
 
-ALTER TABLE travis.`accounts`
+ALTER TABLE loginlib.`accounts`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
-ALTER TABLE travis.`login_tokens`
+ALTER TABLE loginlib.`login_tokens`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;

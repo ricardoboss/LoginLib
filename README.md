@@ -1,4 +1,4 @@
-[![Development Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=develop)](https://travis-ci.org/MCMainiac/LoginLib)
+[![Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=develop)](https://travis-ci.org/MCMainiac/LoginLib)
 
 # LoginLib
 
@@ -27,6 +27,12 @@ The installation is easy, the implementation can be difficult:
 To communicate with your database, LoginLib uses the `IDatabase` interface.
 
 To create your own implementation, I made [an example](https://github.com/MCMainiac/LoginLib/blob/master/test/DatabaseAdapter.php) `DatabaseAdapter` that is using the `MysqliDb` class from [here](https://github.com/joshcam/PHP-MySQLi-Database-Class).
+
+You need two tables for LoginLib to work properly:
+- one `accounts` table to store all the users
+- and one `login_tokens` table to store login tokens and authenticate the users
+
+For both tables there is this sql script in the `/compile/queries` directory: [create.sql](https://github.com/MCMainiac/LoginLib/blob/develop/compile/queries/create.sql).
 
 ## Methods <small>[top](#loginlib)</small>
 

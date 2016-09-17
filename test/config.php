@@ -39,8 +39,8 @@ $config = array(
 );
 
 $databaseConfig = array(
-	'host' => "mcmainiac.ddns.net",
-	'username' => "travis",
-	'password' => "travis",
-	'db' => "travis"
+	'host' => "localhost",
+	'username' => "root",
+	'password' => "",
+	'db' => "loginlib"
 );

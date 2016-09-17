@@ -1,2 +1,4 @@
-DROP TABLE travis.`accounts`;
-DROP TABLE travis.`login_tokens`;
+DROP TABLE loginlib.`accounts`;
+DROP TABLE loginlib.`login_tokens`;
+
+DROP DATABASE loginlib;
