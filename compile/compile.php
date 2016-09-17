@@ -70,7 +70,7 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 // create tables
 
-echo "Creating tables in database...";
+echo "Creating tables in database...\n";
 
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
@@ -94,7 +94,7 @@ try {
 
 foreach ($queries as $id => $query) {
 	if (strlen($query) != 0) {
-		echo "Running query " . $id . ": " . substr($query, 0, 8) . "\n";
+		echo "Running query " . $id . ": " . substr($query, 0, 20) . "\n";
 		$db->rawQuery($query);
 	}
 }
