@@ -26,5 +26,5 @@ function logEntry($message) {
 	if (is_array($message)) {
 		var_dump($message);
 	} else
-		echo date("[H:i:s] ") . $message . "\n";
+		echo $message . "\n";
 }

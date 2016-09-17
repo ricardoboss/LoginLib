@@ -1,7 +1,7 @@
 <?php
 require("load.php");
 
-session_start(0);
+session_start();
 
 logEntry("\$_SESSION:");
 logEntry($_SESSION);
