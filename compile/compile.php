@@ -84,6 +84,15 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
+<<<<<<< HEAD
+// TODO: fix class paths
+
+require($c->root);
+require("DatabaseAdapter.php");
+require("config.php");
+
+=======
+>>>>>>> 51e12942ccf1c48f9deecf9cede5709fa50db01d
 $db = new DatabaseAdapter($databaseConfig);
 
 try {
