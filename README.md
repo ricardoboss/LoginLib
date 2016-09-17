@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=develop)](https://travis-ci.org/MCMainiac/LoginLib)
+[![Build Status](https://travis-ci.org/MCMainiac/LoginLib.svg?branch=master)](https://travis-ci.org/MCMainiac/LoginLib)
 
 # LoginLib
 
