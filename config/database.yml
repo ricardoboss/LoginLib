@@ -1,5 +1,5 @@
 loginlib:
   adapter: mysqli
   database: loginlib
-  username: travis
+  username: root
   encoding: utf8

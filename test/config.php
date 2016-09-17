@@ -40,7 +40,7 @@ $config = array(
 
 $databaseConfig = array(
 	'host' => "localhost",
-	'username' => "travis",
-	'password' => "travis",
+	'username' => "root",
+	'password' => "",
 	'db' => "travis"
 );
