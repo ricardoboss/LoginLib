@@ -142,7 +142,7 @@ for ($i = 0; $i < count($tests); $i++) {
 	
 	echo "Test [".($i + 1)."] (\"".$file."\"):\n";
 	foreach ($output as $line)
-		echo $line."\n";
+		echo "[" . ($i + 1) . "] " . $line."\n";
 	echo "\n";
 	echo "Returned: ".$return."\n";
 	echo "-----\n";
