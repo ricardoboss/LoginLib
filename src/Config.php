@@ -18,7 +18,9 @@ class Config {
 	/** @var array The default configuration for LoginLib */
 	private static $default = array(
 		'authentication' => array(
-			'type' => "both"
+			'username' => "both",
+			'storing' => "cookie",
+			'login_after_registration' => true
 		),
 		'table' => array(
 			'accounts' => array(

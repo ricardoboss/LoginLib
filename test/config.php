@@ -1,7 +1,9 @@
 <?php
 $config = array(
 	'authentication' => array(
-		'type' => "both" // username, email or both
+		'username' => "both", // 'username', 'email' or 'both'
+		'storing' => "cookie", // 'cookie' or 'session'
+		'login_after_registration' => true // true or false
 	),
 	'table' => array(
 		'accounts' => array(
@@ -11,7 +13,7 @@ $config = array(
 			'col_email' => "email",
 			'col_password_hash' => "password_hash",
 			'col_updated_at' => "updated_at",
-			'col_registered_at' => "registered_at" 
+			'col_registered_at' => "registered_at"
 		),
 		'login_tokens' => array(
 			'name' => "login_tokens",
@@ -24,7 +26,7 @@ $config = array(
 	),
 	'cookie' => array(
 		'path' => "*",
-		'domain' => $_SERVER['HTTP_HOST'],
+		'domain' => "",
 		'login_token' => array(
 			'name' => "ll_lt",
 			'expire' => (60 * 60 * 24 * 7 * 4) // 1 month
@@ -38,7 +40,7 @@ $config = array(
 
 $databaseConfig = array(
 	'host' => "localhost",
-	'username' => "loginlib",
-	'password' => "CmH93W4k",
-	'db' => "LoginLib"
+	'username' => "root",
+	'password' => "",
+	'db' => "loginlib"
 );

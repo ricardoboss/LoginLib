@@ -1,6 +1,4 @@
-<?php
-require('load.php');
-?>
+<?php require('load.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

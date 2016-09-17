@@ -2,5 +2,5 @@
 .project
 .buildpath
 
-# website security
-.htaccess
+# travis
+.travis.yml

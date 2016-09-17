@@ -1,0 +1,5 @@
+loginlib:
+  adapter: mysqli
+  database: loginlib
+  username: root
+  encoding: utf8
