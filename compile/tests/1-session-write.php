@@ -5,7 +5,7 @@ session_start(0);
 
 $_SESSION['test'] = "test";
 
-echo "Set $_SESSION['test] to \"test\"";
+echo "Set \$_SESSION['test'] to \"test\"";
 
 if (isset($_SESSION['test'])) {
 	return 0;
