@@ -7,5 +7,15 @@ require($root."test".DIRECTORY_SEPARATOR."MysqliDb.php");
 require($root."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
 require($root."test".DIRECTORY_SEPARATOR."config.php");
 
-$db = new DatabaseAdapter($databaseConfig);
-$loginlib = new LoginLib\LoginLib($config, $db);
+try {
+	$db = new DatabaseAdapter($databaseConfig);
+	$db->connect();
+} catch (Exception $e) {
+	die(trigger_error("Could not connect to database!", E_USER_ERROR));
+}
+
+try {
+	$loginlib = new LoginLib\LoginLib($config, $db);
+} catch(LoginLib\ConfigurationException $e) {
+	die(trigger_error("Caught ConfigurationException: ".$e->getMessage()));
+}
