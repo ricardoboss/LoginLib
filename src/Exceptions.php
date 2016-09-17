@@ -19,6 +19,8 @@ class DatabaseException extends \Exception {
 	 */
 	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ($message, $code, $previous);
+
+        return $this;
 	}
 }
 
@@ -43,6 +45,8 @@ class ConfigurationException extends \Exception {
 		parent::__construct ($message, $code, $previous);
 		
 		$this->prop = $prop;
+
+        return $this;
 	}
 	
 	/**

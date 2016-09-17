@@ -24,6 +24,8 @@ abstract class MethodResult {
 	 */
 	public function __construct($result) {
 		$this->result = $result;
+
+        return $this;
 	}
 	
 	/**
