@@ -1,6 +1,4 @@
-<?php
-require('load.php');
-?>
+<?php require('load.php'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +10,11 @@ require('load.php');
 	<div>
 		<p>
 			<form action="index.php" method="post">
-				You are <span class="<?php echo $loginlib->isLoggedIn() ? 'text-success">':'text-danger">not '; ?>logged in</span>!<br>
+				<?php if ($loginlib->isLoggedIn()) { ?>
+				You are <span class="text-success">logged in</span>!<br>
+				<?php } else { ?>
+				You are <span class="text-danger">not logged in</span>!<br>
+				<?php } ?>
 				<button type="submit">Log<?php echo $loginlib->isLoggedIn() ? 'out':'in'; ?></button>
 				<input type="hidden" name="method" value="<?php echo $loginlib->isLoggedIn() ? 'logout':'redir'; ?>">
 			</form>
