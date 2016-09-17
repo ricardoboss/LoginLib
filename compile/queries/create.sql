@@ -29,6 +29,3 @@ ALTER TABLE loginlib.`accounts`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE loginlib.`login_tokens`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
-
-INSERT INTO loginlib.`accounts` VALUES (0, 'test', 'test@email.com', '12345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-INSERT INTO loginlib.`login_tokens` VALUES (0, 0, '12345', CURRENT_TIMESTAMP, NULL);

@@ -24,7 +24,7 @@ try {
 
 function logEntry($message) {
 	if (is_array($message)) {
-		var_dump($message);
+		print_r($message);
 	} else
 		echo $message . "\n";
 }
