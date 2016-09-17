@@ -70,6 +70,8 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 // create tables
 
+echo "Creating tables in database...";
+
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
 
@@ -90,11 +92,14 @@ try {
 	die(trigger_error("Failed to connect to database!", E_USER_ERROR));
 }
 
-foreach ($queries as $query) {
+foreach ($queries as $id => $query) {
 	if (strlen($query) != 0) {
+		echo "Running query " . $id . ": " . substr($query, 0, 8) . "\n";
 		$db->rawQuery($query);
 	}
 }
+
+echo "\n";
 
 /*****************************************************************************/
 
