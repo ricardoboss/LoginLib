@@ -101,7 +101,7 @@ try {
 		}
 	}
 } catch (Exception $e) {
-	trigger_error("Failed to run sql queries!", E_USER_ERROR);
+	trigger_error("Failed to run sql queries: " . $db->getLastError(), E_USER_ERROR);
 	return 1;
 }
 

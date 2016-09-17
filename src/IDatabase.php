@@ -95,6 +95,13 @@ interface IDatabase {
 	function now();
 	
 	/**
+	 * This method returns the textual representation of the last mysqli error
+	 * 
+	 * @return string
+	 */
+	function getLastError();
+	
+	/**
 	 * A function to run raw sql queries
 	 *
 	 * @param string the query
