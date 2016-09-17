@@ -112,7 +112,7 @@
 		<b>Namespace:</b> <a href="namespace-LoginLib.html">LoginLib</a><br>
 		
 
-			<b>Located at</b> <a href="source-class-LoginLib.IDatabase.html#7-105" title="Go to source code">IDatabase.php</a>
+			<b>Located at</b> <a href="source-class-LoginLib.IDatabase.html#7-112" title="Go to source code">IDatabase.php</a>
 		<br>
 	</div>
 
@@ -125,7 +125,7 @@
 
 			<td class="attributes"><code>
 				 public 
-				
+				<code><a href="class-LoginLib.IDatabase.html">LoginLib\IDatabase</a></code>
 				
 				</code>
 			</td>
@@ -148,6 +148,10 @@
 						<dd>Your config should have the following keys: 'host', 'username', 'password', 'db'</dd>
 					</dl></div>
 
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-LoginLib.IDatabase.html">LoginLib\IDatabase</a></code>
+					</div>
 
 
 
@@ -494,6 +498,39 @@ Example:</p>
 			</div>
 			</div></td>
 		</tr>
+		<tr data-order="getLastError" id="_getLastError">
+
+			<td class="attributes"><code>
+				 public 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_getLastError">#</a>
+			<code><a href="source-class-LoginLib.IDatabase.html#97-102" title="Go to source code">getLastError</a>( )</code>
+
+			<div class="description short">
+				<p>This method returns the textual representation of the last mysqli error</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>This method returns the textual representation of the last mysqli error</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
 		<tr data-order="rawQuery" id="_rawQuery">
 
 			<td class="attributes"><code>
@@ -505,7 +542,7 @@ Example:</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_rawQuery">#</a>
-			<code><a href="source-class-LoginLib.IDatabase.html#97-104" title="Go to source code">rawQuery</a>( <span>string <var>$q</var></span> )</code>
+			<code><a href="source-class-LoginLib.IDatabase.html#104-111" title="Go to source code">rawQuery</a>( <span>string <var>$q</var></span> )</code>
 
 			<div class="description short">
 				<p>A function to run raw sql queries</p>
@@ -518,7 +555,7 @@ Example:</p>
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$q</var></dt>
-						<dd>query</dd>
+						<dd>the query</dd>
 					</dl></div>
 
 					<h4>Returns</h4>
