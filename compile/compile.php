@@ -128,7 +128,7 @@ for ($i = 0; $i < count($tests); $i++) {
 	foreach ($output as $line)
 		echo $line."\n";
 	echo "\n";
-	echo "Returned: ".$return;
+	echo "Returned: ".$return."\n";
 	echo "-----\n";
 	
 	if ($return != 0) {
