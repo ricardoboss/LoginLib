@@ -39,7 +39,7 @@ $config = array(
 );
 
 $databaseConfig = array(
-	'host' => "mcmainiac.ddns.net",
+	'host' => "localhost",
 	'username' => "travis",
 	'password' => "travis",
 	'db' => "travis"

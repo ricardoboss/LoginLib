@@ -84,6 +84,12 @@ require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
 
 $db = new DatabaseAdapter($databaseConfig);
 
+try {
+	$db->connect();
+} catch (Exception $e) {
+	die(trigger_error("Failed to connect to database!", E_USER_ERROR));
+}
+
 foreach ($queries as $query) {
 	if (strlen($query) != 0) {
 		$db->rawQuery($query);
