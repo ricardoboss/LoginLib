@@ -96,7 +96,7 @@ try {
 try { 
 	foreach ($queries as $id => $query) {
 		if (strlen($query) != 0) {
-			echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
+			//echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
 			$response = $db->rawQuery($query);
 			
 		}
@@ -130,7 +130,6 @@ while (false !== ($entry = readdir($h))) {
 $teststarttime = microtime(true);
 
 echo "Running tests:\n";
-echo "-----\n";
 
 $ok = true;
 
@@ -140,12 +139,12 @@ for ($i = 0; $i < count($tests); $i++) {
 	$path = explode(DIRECTORY_SEPARATOR, $tests[$i]);
 	$file = substr(end($path), 2);
 	
-	echo "Test [".($i + 1)."] (\"".$file."\"):\n";
+	echo "==== Test [".($i + 1)."] (\"".$file."\") ====\n";
 	foreach ($output as $line)
 		echo "[" . ($i + 1) . "] " . $line."\n";
 	echo "\n";
 	echo "Returned: ".$return."\n";
-	echo "-----\n";
+	echo "\n";
 	
 	if ($return != 0) {
 		$ok = false;
@@ -181,7 +180,7 @@ try {
 try {
 	foreach ($queries as $id => $query) {
 		if (strlen($query) != 0) {
-			echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
+			//echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
 			$response = $db->rawQuery($query);
 				
 		}
