@@ -150,7 +150,7 @@
 </span><span id="50" class="l"><a href="#50"> 50 </a>        <span class="php-var">$this</span>-&gt;db = &amp;<span class="php-var">$database</span>;
 </span><span id="51" class="l"><a href="#51"> 51 </a>        
 </span><span id="52" class="l"><a href="#52"> 52 </a>        <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;checkDb())
-</span><span id="53" class="l"><a href="#53"> 53 </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> DatabaseException(<span class="php-quote">&quot;Could not connect to database!&quot;</span>);
+</span><span id="53" class="l"><a href="#53"> 53 </a>            <span class="php-keyword1">throw</span> <span class="php-keyword1">new</span> DatabaseException(<span class="php-quote">&quot;Could not connect to database: &quot;</span> . <span class="php-var">$this</span>-&gt;db-&gt;getLastError());
 </span><span id="54" class="l"><a href="#54"> 54 </a>        
 </span><span id="55" class="l"><a href="#55"> 55 </a>        <span class="php-keyword1">foreach</span>(<span class="php-var">$this</span>-&gt;config-&gt;get(<span class="php-quote">'table'</span>) <span class="php-keyword1">as</span> <span class="php-var">$table</span>)
 </span><span id="56" class="l"><a href="#56"> 56 </a>            <span class="php-keyword1">if</span> (!<span class="php-var">$this</span>-&gt;db-&gt;tableExists(<span class="php-var">$table</span>[<span class="php-quote">'name'</span>])) {
