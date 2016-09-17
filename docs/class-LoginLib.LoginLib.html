@@ -5,65 +5,40 @@
 
 	<title>Class LoginLib\LoginLib</title>
 
-	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
-	<link rel="stylesheet" href="resources/style.css?49f43d3208c5d7e33fa16d36107a345bf11cc00d">
+	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
 </head>
 
 <body>
-	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand">Overview</a>
-			</div>
-			<div class="collapse navbar-collapse">
-
-                <form id="search" class="navbar-form navbar-left" role="search">
-                    <input type="hidden" name="cx" value="">
-                    <input type="hidden" name="ie" value="UTF-8">
-                    <div class="form-group">
-                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
-					</div>
-				</form>
-
-				<ul class="nav navbar-nav">
-					<li>
-						<a href="namespace-LoginLib.html" title="Summary of LoginLib"><span>Namespace</span></a>
-					</li>
-					<li class="active">
-<span>Class</span>					</li>
-
-
-
-
-
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<div id="left">
+<div id="left">
 	<div id="menu">
+		<a href="index.html" title="Overview"><span>Overview</span></a>
+
 
 		<div id="groups">
 				<h3>Namespaces</h3>
 			<ul>
-					<li class="active">
-						<a href="namespace-LoginLib.html">
-							LoginLib<span></span>
-						</a>
-							<ul>
-					<li>
-						<a href="namespace-LoginLib.Exceptions.html">
-							Exceptions						</a>
-							</li>
-					<li>
-						<a href="namespace-LoginLib.Results.html">
-							Results						</a>
-							</li>
-								</ul></li>
+				<li class="active">
+					<a href="namespace-LoginLib.html">
+						LoginLib<span></span>
+					</a>
+
+						<ul>
+				<li>
+					<a href="namespace-LoginLib.Exceptions.html">
+						Exceptions					</a>
+
+						</li>
+				<li>
+					<a href="namespace-LoginLib.Results.html">
+						Results					</a>
+
+						</li>
+							</ul></li>
 			</ul>
 		</div>
+
+		<hr>
 
 
 		<div id="elements">
@@ -89,7 +64,30 @@
 <div id="splitter"></div>
 
 <div id="right">
-	<div id="rightInner">
+<div id="rightInner">
+	<form id="search">
+		<input type="hidden" name="cx" value="">
+		<input type="hidden" name="ie" value="UTF-8">
+		<input type="text" name="q" class="text" placeholder="Search">
+	</form>
+
+	<div id="navigation">
+		<ul>
+			<li>
+				<a href="index.html" title="Overview"><span>Overview</span></a>
+			</li>
+			<li>
+				<a href="namespace-LoginLib.html" title="Summary of LoginLib"><span>Namespace</span></a>
+			</li>
+			<li class="active">
+<span>Class</span>			</li>
+		</ul>
+		<ul>
+		</ul>
+		<ul>
+		</ul>
+	</div>
+
 <div id="content" class="class">
 	<h1>Class LoginLib</h1>
 
@@ -109,7 +107,7 @@ login/registration page on your website and this class will do the logic behind 
 
 
 
-	<div class="alert alert-info">
+	<div class="info">
 		
 		
 		<b>Namespace:</b> <a href="namespace-LoginLib.html">LoginLib</a><br>
@@ -125,381 +123,391 @@ login/registration page on your website and this class will do the logic behind 
 				1.0.1<br>
 				<b>Link:</b>
 				<a href="https://github.com/MCMainiac/LoginLib">https://github.com/MCMainiac/LoginLib</a><br>
-			<b>Located at</b> <a href="source-class-LoginLib.LoginLib.html#17-479" title="Go to source code">LoginLib.php</a>
+			<b>Located at</b> <a href="source-class-LoginLib.LoginLib.html#14-476" title="Go to source code">LoginLib.php</a>
 		<br>
 	</div>
 
 
 
-		<div class="panel panel-default">
-			<div class="panel-heading"><h2>Methods summary</h2></div>
-			<table class="summary table table-bordered table-striped methods" id="methods">
-		<tr data-order="__construct" id="___construct">
-
-			<td class="attributes"><code>
-				 public 
-				<code><a href="class-LoginLib.LoginLib.html">LoginLib\LoginLib</a></code>
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#39-63" title="Go to source code">__construct</a>( <span>array <var>$config</var></span>, <span><code><a href="class-LoginLib.IDatabase.html">LoginLib\IDatabase</a></code> <var>&amp; $database</var></span> )</code>
-
-			<div class="description short">
-				<p>The constructor of LoginLib.</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>The constructor of LoginLib.</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$config</var></dt>
-						<dd>The configuration array of LoginLib</dd>
-						<dt><var>$database</var></dt>
-						<dd>Your database implementation of the IDatabase interface</dd>
-					</dl></div>
-
-					<h4>Returns</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.LoginLib.html">LoginLib\LoginLib</a></code>
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Exceptions.DatabaseException.html">LoginLib\Exceptions\DatabaseException</a></code><br>
-						<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="register" id="_register">
-
-			<td class="attributes"><code>
-				 public 
-				<code><a href="class-LoginLib.Results.RegisterResult.html">LoginLib\Results\RegisterResult</a></code>
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_register">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#65-150" title="Go to source code">register</a>( <span>string <var>$username</var></span>, <span>string <var>$email</var></span>, <span>string <var>$password</var></span>, <span>string <var>$confirm</var></span>, <span>callable <var>$registercallback</var> = <span class="php-keyword1">null</span></span>, <span>callable <var>$logincallback</var> = <span class="php-keyword1">null</span></span> )</code>
-
-			<div class="description short">
-				<p>This method is used to register a new user</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>This method is used to register a new user</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$username</var></dt>
-						<dd>The username</dd>
-						<dt><var>$email</var></dt>
-						<dd>The email address</dd>
-						<dt><var>$password</var></dt>
-						<dd>The password</dd>
-						<dt><var>$confirm</var></dt>
-						<dd>The password confirmation</dd>
-						<dt><var>$registercallback</var></dt>
-						<dd>A callback function that gets called when the function finished processing</dd>
-						<dt><var>$logincallback</var></dt>
-						<dd>A callback function that gets passed to the login method if login_after_registration is true</dd>
-					</dl></div>
-
-					<h4>Returns</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Results.RegisterResult.html">LoginLib\Results\RegisterResult</a></code>
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="login" id="_login">
-
-			<td class="attributes"><code>
-				 public 
-				<code><a href="class-LoginLib.Results.LoginResult.html">LoginLib\Results\LoginResult</a></code>
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_login">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#152-243" title="Go to source code">login</a>( <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>callable <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
-
-			<div class="description short">
-				<p>Call this method to authenticate a registered user</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Call this method to authenticate a registered user</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$username</var></dt>
-						<dd>The username or email-address of the user</dd>
-						<dt><var>$password</var></dt>
-						<dd>The password or key the user provides</dd>
-						<dt><var>$callback</var></dt>
-						<dd>A callback function that gets called when the function finished processing</dd>
-					</dl></div>
-
-					<h4>Returns</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Results.LoginResult.html">LoginLib\Results\LoginResult</a></code>
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="logout" id="_logout">
-
-			<td class="attributes"><code>
-				 public 
-				boolean
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_logout">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#245-305" title="Go to source code">logout</a>( )</code>
-
-			<div class="description short">
-				<p>This method is used to log users out</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>This method is used to log users out</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						boolean
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="isLoggedIn" id="_isLoggedIn">
-
-			<td class="attributes"><code>
-				 public 
-				boolean
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_isLoggedIn">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#307-341" title="Go to source code">isLoggedIn</a>( )</code>
-
-			<div class="description short">
-				<p>This function returns true if the browser is logged in or false if not</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>This function returns true if the browser is logged in or false if not</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						boolean
-					</div>
-
-					<h4>Throws</h4>
-					<div class="list">
-						<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
-					</div>
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="__toString" id="___toString">
-
-			<td class="attributes"><code>
-				 public 
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#___toString">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#343-350" title="Go to source code">__toString</a>( )</code>
-
-			<div class="description short">
-				<p>A simple to string method that returns the version string</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>A simple to string method that returns the version string</p>
-
-
-
-					<h4>Returns</h4>
-					<div class="list">
-						string<br>The textual representation of LoginLib
-					</div>
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="__destruct" id="___destruct">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#___destruct">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#352-359" title="Go to source code">__destruct</a>( )</code>
-
-			<div class="description short">
-				<p>The destructor is used to close the current session</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>The destructor is used to close the current session</p>
-
-
-
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="version" id="_version">
-
-			<td class="attributes"><code>
-				 public static
-				string
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_version">#</a>
-			<code><a href="source-class-LoginLib.LoginLib.html#361-373" title="Go to source code">version</a>( <span>boolean <var>$echo</var> = <span class="php-keyword1">false</span></span> )</code>
-
-			<div class="description short">
-				<p>This method returns (or echoes) the current LoginLib version</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>This method returns (or echoes) the current LoginLib version</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$echo</var></dt>
-						<dd></dd>
-					</dl></div>
-
-					<h4>Returns</h4>
-					<div class="list">
-						string<br>The current LoginLib version
-					</div>
-
-
-
-
-			</div>
-			</div></td>
-		</tr>
-			</table>
+	<table class="summary methods" id="methods">
+	<caption>Methods summary</caption>
+	<tr data-order="__construct" id="___construct">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-LoginLib.LoginLib.html">LoginLib\LoginLib</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___construct">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#36-61" title="Go to source code">__construct</a>( <span>array <var>$config</var></span>, <span><code><a href="class-LoginLib.IDatabase.html">LoginLib\IDatabase</a></code> <var>&amp; $database</var></span> )</code>
+
+		<div class="description short">
+			<p>The constructor of LoginLib.</p>
 		</div>
 
+		<div class="description detailed hidden">
+			<p>The constructor of LoginLib.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$config</var></dt>
+					<dd>The configuration array of LoginLib</dd>
+					<dt><var>$database</var></dt>
+					<dd>Your database implementation of the IDatabase interface</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.LoginLib.html">LoginLib\LoginLib</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Exceptions.DatabaseException.html">LoginLib\Exceptions\DatabaseException</a></code><br>
+					<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
+				</div>
 
 
 
-
-
-
-
-		<div class="panel panel-default">
-            <div class="panel-heading"><h2>Constants summary</h2></div>
-			<table class="summary table table-bordered table-striped constants" id="constants">
-			<tr data-order="version" id="version">
-
-				<td class="attributes"><code>string</code></td>
-				<td class="name">
-					<code>
-						<a href="source-class-LoginLib.LoginLib.html#36-37" title="Go to source code"><b>version</b></a>
-					</code>
-
-					<div class="description short">
-						
-					</div>
-
-					<div class="description detailed hidden">
-						
-
-					</div>
-				</td>
-				<td class="value">
-					<div>
-						<a href="#version" class="anchor">#</a>
-						<code><span class="php-quote">&quot;1.0.1&quot;</span></code>
-					</div>
-				</td>
-			</tr>
-			</table>
 		</div>
+		</div></td>
+	</tr>
+	<tr data-order="register" id="_register">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-LoginLib.Results.RegisterResult.html">LoginLib\Results\RegisterResult</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_register">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#63-148" title="Go to source code">register</a>( <span>string <var>$username</var></span>, <span>string <var>$email</var></span>, <span>string <var>$password</var></span>, <span>string <var>$confirm</var></span>, <span>callable <var>$registercallback</var> = <span class="php-keyword1">null</span></span>, <span>callable <var>$logincallback</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>This method is used to register a new user</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>This method is used to register a new user</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$username</var></dt>
+					<dd>The username</dd>
+					<dt><var>$email</var></dt>
+					<dd>The email address</dd>
+					<dt><var>$password</var></dt>
+					<dd>The password</dd>
+					<dt><var>$confirm</var></dt>
+					<dd>The password confirmation</dd>
+					<dt><var>$registercallback</var></dt>
+					<dd>A callback function that gets called when the function finished processing</dd>
+					<dt><var>$logincallback</var></dt>
+					<dd>A callback function that gets passed to the login method if login_after_registration is true</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Results.RegisterResult.html">LoginLib\Results\RegisterResult</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="login" id="_login">
+
+		<td class="attributes"><code>
+			 public 
+
+			<code><a href="class-LoginLib.Results.LoginResult.html">LoginLib\Results\LoginResult</a></code>
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_login">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#150-238" title="Go to source code">login</a>( <span>string <var>$username</var></span>, <span>string <var>$password</var></span>, <span>callable <var>$callback</var> = <span class="php-keyword1">null</span></span> )</code>
+
+		<div class="description short">
+			<p>Call this method to authenticate a registered user</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Call this method to authenticate a registered user</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$username</var></dt>
+					<dd>The username or email-address of the user</dd>
+					<dt><var>$password</var></dt>
+					<dd>The password or key the user provides</dd>
+					<dt><var>$callback</var></dt>
+					<dd>A callback function that gets called when the function finished processing</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Results.LoginResult.html">LoginLib\Results\LoginResult</a></code>
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="logout" id="_logout">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_logout">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#240-300" title="Go to source code">logout</a>( )</code>
+
+		<div class="description short">
+			<p>This method is used to log users out</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>This method is used to log users out</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="isLoggedIn" id="_isLoggedIn">
+
+		<td class="attributes"><code>
+			 public 
+
+			boolean
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_isLoggedIn">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#302-336" title="Go to source code">isLoggedIn</a>( )</code>
+
+		<div class="description short">
+			<p>This function returns true if the browser is logged in or false if not</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>This function returns true if the browser is logged in or false if not</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					boolean
+				</div>
+
+				<h4>Throws</h4>
+				<div class="list">
+					<code><a href="class-LoginLib.Exceptions.ConfigurationException.html">LoginLib\Exceptions\ConfigurationException</a></code>
+				</div>
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__toString" id="___toString">
+
+		<td class="attributes"><code>
+			 public 
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___toString">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#338-345" title="Go to source code">__toString</a>( )</code>
+
+		<div class="description short">
+			<p>A simple to string method that returns the version string</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>A simple to string method that returns the version string</p>
+
+
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>The textual representation of LoginLib
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="__destruct" id="___destruct">
+
+		<td class="attributes"><code>
+			 public 
+
+			
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#___destruct">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#347-354" title="Go to source code">__destruct</a>( )</code>
+
+		<div class="description short">
+			<p>The destructor is used to close the current session</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>The destructor is used to close the current session</p>
+
+
+
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="version" id="_version">
+
+		<td class="attributes"><code>
+			 public static
+
+			string
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_version">#</a>
+		<code><a href="source-class-LoginLib.LoginLib.html#356-368" title="Go to source code">version</a>( <span>boolean <var>$echo</var> = <span class="php-keyword1">false</span></span> )</code>
+
+		<div class="description short">
+			<p>This method returns (or echoes) the current LoginLib version</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>This method returns (or echoes) the current LoginLib version</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$echo</var></dt>
+					<dd></dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					string<br>The current LoginLib version
+				</div>
+
+
+
+
+		</div>
+		</div></td>
+	</tr>
+	</table>
+
+
+
+
+
+
+
+
+	<table class="summary constants" id="constants">
+	<caption>Constants summary</caption>
+	<tr data-order="version" id="version">
+
+		<td class="attributes"><code>string</code></td>
+		<td class="name">
+			<code>
+				<a href="source-class-LoginLib.LoginLib.html#33-34" title="Go to source code"><b>version</b></a>
+			</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+			</div>
+		</td>
+		<td class="value">
+			<div>
+				<a href="#version" class="anchor">#</a>
+				<code><span class="php-quote">&quot;1.0.1&quot;</span></code>
+			</div>
+		</td>
+	</tr>
+	</table>
+
+
+
+
+
+
 
 
 
 
 </div>
-	</div>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
+</div>
 </div>
 <script src="resources/combined.js"></script>
 <script src="elementlist.js"></script>
