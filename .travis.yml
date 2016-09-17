@@ -1,3 +1,13 @@
+dist: trusty
+sudo: required
+
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+
 language: php
 php:
   - '5.3'
@@ -12,8 +22,5 @@ script: php ./compile/compile.php
 notifications:
   email: false
 
-services:
-  - mysql
-  
 before_script:
-  - mysql -e 'create database loginlib;'
+  - mysql -u root -e 'create database loginlib;'
