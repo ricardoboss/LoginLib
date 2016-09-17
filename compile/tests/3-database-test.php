@@ -7,7 +7,7 @@ try {
 	
 	logEntry("Running test queries:");
 	
-	$queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."test.sql");
+	$queriesraw = file_get_contents(dirname(__DIR__).DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."test.sql");
 	$queries = explode(";", $queriesraw);
 	
 	foreach ($queries as $id => $query) {
