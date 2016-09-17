@@ -78,6 +78,7 @@ foreach ($queries as $id => $query) {
 }
 
 // *HOTFIX* get the database adapter class and the config from the old test directory
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
 require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
 require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
 
