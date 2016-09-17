@@ -1,7 +1,3 @@
-<<<<<<< HEAD
 .idea/
-=======
-# eclipse project
-.project
-.buildpath
->>>>>>> a778bdac615925365cc1a71fdc8d1a5e0d52961a
+apigen.phar
+compileDocs.cmd
