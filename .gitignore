@@ -1,6 +1,1 @@
-# eclipse project
-.project
-.buildpath
-
-# travis
-.travis.yml
+.idea/

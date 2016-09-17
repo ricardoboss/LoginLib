@@ -60,12 +60,14 @@ class Config {
 	 * 
 	 * @throws ConfigurationException
 	 * 
-	 * @param array custom config
+	 * @param array $arr custom config
 	 * 
 	 * @return Config
 	 */
 	public function __construct($arr) {
 		$this->config = $this->merge($arr, Config::$default);
+
+        return $this;
 	}
 	
 	/**
@@ -82,15 +84,14 @@ class Config {
 			return $this->config[$type];
 		else {
 			throw new ConfigurationException("[".$type."]", "The requested section could not be found!");
-			exit;
 		}
 	}
 	
 	/**
 	 * This functions merges the $src array with the $fallback array and returns the result
 	 * 
-	 * @param $src The source array
-	 * @param $fallback The default array
+	 * @param mixed $src The source array
+	 * @param mixed $fallback The default array
 	 * 
 	 * @return array The merged array
 	 */

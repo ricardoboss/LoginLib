@@ -6,13 +6,10 @@
  */
 namespace LoginLib;
 
-use LoginLib\Config;
 use LoginLib\Exceptions\ConfigurationException;
 use LoginLib\Exceptions\DatabaseException;
-use LoginLib\IDatabase;
 use LoginLib\Results\LoginResult;
 use LoginLib\Results\RegisterResult;
-use LoginLib\User;
 
 /**
  * A class that provides the background mechanics for login and registration forms
@@ -53,13 +50,14 @@ class LoginLib {
 		$this->db = &$database;
 		
 		if (!$this->checkDb())
-			throw new DatabaseException("Could not connect to database!");
+			throw new DatabaseException("Could not connect to database: " . $this->db->getLastError());
 		
 		foreach($this->config->get('table') as $table)
 			if (!$this->db->tableExists($table['name'])) {
 				throw new ConfigurationException("[table] => [".$table['name']."]", "Table does not exist: ".$table['name']);
-				exit;
 			}
+
+        return $this;
 	}
 	
 	/**
@@ -71,8 +69,8 @@ class LoginLib {
 	 * @param string $email The email address
 	 * @param string $password The password
 	 * @param string $confirm The password confirmation
-	 * @param \function $registercallback A callback function that gets called when the function finished processing
-	 * @param \function $logincallback A callback function that gets passed to the login method if login_after_registration is true
+	 * @param \callable $registercallback A callback function that gets called when the function finished processing
+	 * @param \callable $logincallback A callback function that gets passed to the login method if login_after_registration is true
 	 *
 	 * @return RegisterResult
 	 */
@@ -102,7 +100,7 @@ class LoginLib {
 					$passhash = crypt($password, sprintf("$2a$%02d$", 10) . strtr(base64_encode(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM)), '+', '.'));
 					
 					// insert new user into database and obtain id
-					$id = $this->db->insert(
+					$this->db->insert(
 						$this->getProp('table', 'accounts', 'name'),
 						array(
 							$this->getProp('table', 'accounts', 'col_username') => $username,
@@ -156,7 +154,7 @@ class LoginLib {
 	 *
 	 * @param string $username The username or email-address of the user
 	 * @param string $password The password or key the user provides
-	 * @param \function $callback A callback function that gets called when the function finished processing
+	 * @param \callable $callback A callback function that gets called when the function finished processing
 	 *
 	 * @return LoginResult
 	 */
@@ -189,9 +187,6 @@ class LoginLib {
 			// check if the password hashs are equal
 			if (hash_equals($account[$this->getProp('table', 'accounts', 'col_password_hash')], crypt($password, $account[$this->getProp('table', 'accounts', 'col_password_hash')]))) {
 				// if they are, the user is logged in
-				
-				// convert table row into a user object
-				$user = new User($account, $this->getProp('table', 'accounts'));
 				
 				// generate a secure random string as a login token
 				$login_token = bin2hex(openssl_random_pseudo_bytes(32));
@@ -378,9 +373,11 @@ class LoginLib {
 	 * @return bool if everything is ok
 	 */
 	private function checkDb() {
-		if (! $this->db->ping())
-			return $this->db->connect();
-		else
+		if (! $this->db->ping()) {
+            $this->db->connect();
+
+            return $this->db->ping();
+        } else
 			return true;
 	}
 	

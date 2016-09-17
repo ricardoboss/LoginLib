@@ -9,7 +9,13 @@
 	<h1>LoginLib Test Page</h1>
 	<div>
 		<form action="index.php" method="post">
-			You are <span class="<?php echo $loginlib->isLoggedIn() ? 'text-success">':'text-danger">not '; ?>logged in</span>!<br>
+			You are 
+			<?php if ($loginlib->isLoggedIn()) { ?>
+			<span class="text-success">logged in</span>
+			<?php } else { ?>
+			<span class="text-danger">not logged in</span>
+			<?php } ?>
+			!<br>
 			<button type="submit">Log<?php echo $loginlib->isLoggedIn() ? 'out':'in'; ?></button>
 			<input type="hidden" name="method" value="<?php echo $loginlib->isLoggedIn() ? 'logout':'redir'; ?>">
 		</form>

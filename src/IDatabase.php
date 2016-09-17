@@ -13,7 +13,7 @@ interface IDatabase {
 	 *
 	 * @param array $config Your config should have the following keys: 'host', 'username', 'password', 'db'
 	 *
-	 * @return void
+	 * @return IDatabase
 	 */
 	function __construct(array $config);
 	
@@ -104,7 +104,7 @@ interface IDatabase {
 	/**
 	 * A function to run raw sql queries
 	 *
-	 * @param string the query
+	 * @param string $q the query
 	 *
 	 * @return array
 	 */

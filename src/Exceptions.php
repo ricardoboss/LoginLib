@@ -19,11 +19,13 @@ class DatabaseException extends \Exception {
 	 */
 	public function __construct($message = "", $code = 0, $previous = null) {
 		parent::__construct ($message, $code, $previous);
+
+        return $this;
 	}
 }
 
 /**
- * Exception that gets thrown if the user miconfigured their config
+ * Exception that gets thrown if the user misconfigured their config
  */
 class ConfigurationException extends \Exception {
 	/** @var string the misconfigured property */
@@ -43,6 +45,8 @@ class ConfigurationException extends \Exception {
 		parent::__construct ($message, $code, $previous);
 		
 		$this->prop = $prop;
+
+        return $this;
 	}
 	
 	/**

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>PHP</ID>
+  <OriginalElement>\LoginLib\LoginLib</OriginalElement>
+  <nodes>
+    <node x="1775.0" y="466.0">\LoginLib\Config</node>
+    <node x="977.0" y="744.0">\LoginLib\LoginLib</node>
+    <node x="552.5250000000001" y="87.5">\LoginLib\Results\MethodResult</node>
+    <node x="654.0" y="466.5">\LoginLib\Results\LoginResult</node>
+    <node x="953.75" y="0.0">\Exception</node>
+    <node x="414.0" y="455.5">\LoginLib\Results\RegisterResult</node>
+    <node x="0.0" y="389.5">\LoginLib\IDatabase</node>
+    <node x="1115.0" y="511.0">\LoginLib\Exceptions\DatabaseException</node>
+    <node x="937.0" y="488.0">\LoginLib\Exceptions\ConfigurationException</node>
+    <node x="1404.0" y="389.0">\LoginLib\User</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="\LoginLib\Exceptions\ConfigurationException" target="\Exception">
+      <point x="0.0" y="-48.5" />
+      <point x="1016.0" y="364.0" />
+      <point x="1043.25" y="364.0" />
+      <point x="-89.5" y="169.5" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\Exceptions\ConfigurationException">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="48.5" />
+    </edge>
+    <edge source="\LoginLib\Results\LoginResult" target="\LoginLib\Results\MethodResult">
+      <point x="0.0" y="-70.0" />
+      <point x="785.5" y="364.0" />
+      <point x="703.2750000000001" y="364.0" />
+      <point x="50.25" y="82.0" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\User">
+      <point x="22.285714285714334" y="-14.5" />
+      <point x="1038.2857142857144" y="714.0" />
+      <point x="1579.5" y="714.0" />
+      <point x="0.0" y="147.5" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\Results\LoginResult">
+      <point x="-11.14285714285711" y="-14.5" />
+      <point x="1004.8571428571429" y="704.0" />
+      <point x="785.5" y="704.0" />
+      <point x="0.0" y="70.0" />
+    </edge>
+    <edge source="\LoginLib\Results\RegisterResult" target="\LoginLib\Results\MethodResult">
+      <point x="0.0" y="-81.0" />
+      <point x="524.0" y="364.0" />
+      <point x="602.7750000000001" y="364.0" />
+      <point x="-50.25" y="82.0" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\Config">
+      <point x="33.428571428571445" y="-14.5" />
+      <point x="1049.4285714285716" y="724.0" />
+      <point x="1869.5" y="724.0" />
+      <point x="0.0" y="70.5" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\Exceptions\DatabaseException">
+      <point x="11.14285714285711" y="-14.5" />
+      <point x="1027.142857142857" y="704.0" />
+      <point x="1249.5" y="704.0" />
+      <point x="0.0" y="25.5" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\IDatabase">
+      <point x="-33.428571428571445" y="-14.5" />
+      <point x="982.5714285714287" y="724.0" />
+      <point x="197.0" y="724.0" />
+      <point x="0.0" y="147.0" />
+    </edge>
+    <edge source="\LoginLib\Exceptions\DatabaseException" target="\Exception">
+      <point x="0.0" y="-25.5" />
+      <point x="1249.5" y="364.0" />
+      <point x="1222.25" y="364.0" />
+      <point x="89.5" y="169.5" />
+    </edge>
+    <edge source="\LoginLib\LoginLib" target="\LoginLib\Results\RegisterResult">
+      <point x="-22.285714285714334" y="-14.5" />
+      <point x="993.7142857142858" y="714.0" />
+      <point x="524.0" y="714.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.7258064516129032" x="982.0" y="386.5" />
+  <SelectedNodes>
+    <node>\LoginLib\LoginLib</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constants</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
