@@ -93,7 +93,7 @@ try {
 	return 1;
 }
 
-try { 
+try {
 	foreach ($queries as $id => $query) {
 		if (strlen($query) != 0) {
 			//echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
@@ -141,7 +141,7 @@ for ($i = 0; $i < count($tests); $i++) {
 	
 	echo "==== Test [".($i + 1)."] (\"".$file."\") ====\n";
 	foreach ($output as $line)
-		echo "[" . ($i + 1) . "] " . $line."\n";
+		echo $line."\n";
 	echo "\n";
 	echo "Returned: ".$return."\n";
 	echo "\n";
