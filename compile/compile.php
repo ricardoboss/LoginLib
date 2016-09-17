@@ -1,5 +1,7 @@
 <?php
 $filestarttime = microtime(true);
+$returncode = 0;
+
 class Compiler {
 	public $root;
 	public $outputfile;
@@ -57,11 +59,11 @@ $c->compile();
 // Test if no php errors are thrown
 require($c->outputfile);
 
-// echo current LoginLib version, if build succeed
 if (!class_exists("LoginLib\LoginLib")) {
 	die(trigger_error("Class LoginLib\LoginLib not found!", E_USER_ERROR));
 }
 
+// echo current LoginLib version, if build succeed
 echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 /*****************************************************************************/
@@ -75,9 +77,11 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-require("../test/MysqliDb.php");
-require("../test/DatabaseAdapter.php");
-require("../test/config.php");
+// TODO: fix class paths
+
+require($c->root);
+require("DatabaseAdapter.php");
+require("config.php");
 
 $db = new DatabaseAdapter($databaseConfig);
 
@@ -88,6 +92,8 @@ foreach ($queries as $query) {
 }
 
 /*****************************************************************************/
+
+// collect tests
 
 if (!($h = opendir(__DIR__.DIRECTORY_SEPARATOR."tests"))) {
 	die(trigger_error("Could not open directory handle for tests!", E_USER_ERROR));
@@ -101,16 +107,35 @@ while (false !== ($entry = readdir($h))) {
 	}
 }
 
+// running tests
+
+$teststarttime = microtime(true);
+
 echo "Running tests:\n";
 echo "-----\n";
 
+$ok = true;
+
 for ($i = 0; $i < count($tests); $i++) {
-	$result = shell_exec("php \"".$tests[$i]."\"");
+	exec("php \"".$tests[$i]."\"", $output, $return);
 	
 	echo "Test [".($i + 1)."] (\"".substr(end(explode(DIRECTORY_SEPARATOR, $tests[$i])), 2)."\"):\n";
-	echo trim($result);
-	echo "\n-----\n";
+	foreach ($output as $line)
+		echo $line."\n";
+	echo "\n";
+	echo "Returned: ".$return;
+	echo "-----\n";
+	
+	if ($return != 0) {
+		$ok = false;
+		break;
+	}
 }
+
+if ($ok)
+	echo "Tests completed successfully! (took: ".(microtime(true) - $teststarttime)."ms)\n";
+else
+	die(trigger_error("Tests failed! (took: ".(microtime(true) - $teststarttime)."ms)\n", E_USER_ERROR));
 
 /*****************************************************************************/
 
@@ -133,4 +158,6 @@ foreach ($queries as $query) {
 
 echo "\n";
 echo "Complete build with tests took: ".(microtime(true) - $filestarttime)."ms\n";
+
+return $returncode;
 
