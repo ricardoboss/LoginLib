@@ -11,7 +11,7 @@ try {
 	$db = new DatabaseAdapter($databaseConfig);
 	$db->connect();
 } catch (Exception $e) {
-	trigger_error("Could not connect to database!", E_USER_ERROR);
+	trigger_error("Could not connect to database: " . $e->getMessage(), E_USER_ERROR);
 	return 1;
 }
 
