@@ -6,10 +6,8 @@ session_start(0);
 echo "\$_SESSION:\n";
 var_dump($_SESSION);
 
-echo "\n";
-
-if (!isset($_SESSION['test'])) {
-	return 1;
-} else {
+if (isset($_SESSION['test'])) {
 	return 0;
+} else {
+	return 1;
 }
