@@ -25,7 +25,7 @@ class DatabaseException extends \Exception {
 }
 
 /**
- * Exception that gets thrown if the user miconfigured their config
+ * Exception that gets thrown if the user misconfigured their config
  */
 class ConfigurationException extends \Exception {
 	/** @var string the misconfigured property */

@@ -50,7 +50,7 @@ class LoginLib {
 		$this->db = &$database;
 		
 		if (!$this->checkDb())
-			throw new DatabaseException("Could not connect to database!");
+			throw new DatabaseException("Could not connect to database: " . $this->db->getLastError());
 		
 		foreach($this->config->get('table') as $table)
 			if (!$this->db->tableExists($table['name'])) {
