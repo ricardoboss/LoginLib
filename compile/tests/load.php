@@ -11,11 +11,13 @@ try {
 	$db = new DatabaseAdapter($databaseConfig);
 	$db->connect();
 } catch (Exception $e) {
-	die(trigger_error("Could not connect to database!", E_USER_ERROR));
+	trigger_error("Could not connect to database!", E_USER_ERROR);
+	return 1;
 }
 
 try {
 	$loginlib = new LoginLib\LoginLib($config, $db);
 } catch(LoginLib\ConfigurationException $e) {
-	die(trigger_error("Caught ConfigurationException: ".$e->getMessage()));
+	trigger_error("Caught ConfigurationException: ".$e->getMessage());
+	return 1;
 }
