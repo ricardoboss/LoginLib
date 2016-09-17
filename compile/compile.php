@@ -72,7 +72,7 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 echo "Creating tables in database...\n";
 
 // HOTFIX: get the database adapter class and the config from the old test directory
-// TODO: move class and config to another dir
+// TODO: move classes and config to another dir
 require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
 require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
 require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
@@ -97,7 +97,8 @@ try {
 	foreach ($queries as $id => $query) {
 		if (strlen($query) != 0) {
 			echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
-			$db->rawQuery($query);
+			$response = $db->rawQuery($query);
+			
 		}
 	}
 } catch (Exception $e) {
@@ -136,7 +137,10 @@ $ok = true;
 for ($i = 0; $i < count($tests); $i++) {
 	exec("php \"".$tests[$i]."\"", $output, $return);
 	
-	echo "Test [".($i + 1)."] (\"".substr(end(explode(DIRECTORY_SEPARATOR, $tests[$i])), 2)."\"):\n";
+	$path = explode(DIRECTORY_SEPARATOR, $tests[$i]);
+	$file = substr(end($path), 2);
+	
+	echo "Test [".($i + 1)."] (\"".$file."\"):\n";
 	foreach ($output as $line)
 		echo $line."\n";
 	echo "\n";
@@ -177,12 +181,13 @@ try {
 try {
 	foreach ($queries as $id => $query) {
 		if (strlen($query) != 0) {
-			echo "Running query " . $id . ": " . substr($query, 0, 30) . "\n";
-			$db->rawQuery($query);
+			echo "Running query " . $id . ": \"" . substr($query, 0, 25) . "...\"\n";
+			$response = $db->rawQuery($query);
+				
 		}
 	}
 } catch (Exception $e) {
-	trigger_error("Failed to run sql queries!", E_USER_ERROR);
+	trigger_error("Failed to run sql queries: " . $db->getLastError(), E_USER_ERROR);
 	return 1;
 }
 
