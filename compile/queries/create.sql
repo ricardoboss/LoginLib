@@ -29,3 +29,6 @@ ALTER TABLE travis.`accounts`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
 ALTER TABLE travis.`login_tokens`
   MODIFY `id` bigint(255) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+INSERT INTO travis.`accounts` VALUES (0, 'test', 'test@email.com', '12345', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO travis.`login_tokens` VALUES (0, 0, '12345', CURRENT_TIMESTAMP, NULL);

@@ -94,7 +94,7 @@ try {
 
 foreach ($queries as $id => $query) {
 	if (strlen($query) != 0) {
-		echo "Running query " . $id . ": " . substr($query, 0, 20) . "\n";
+		echo "Running query " . $id . ": " . substr($query, 0, 40) . "\n";
 		$db->rawQuery($query);
 	}
 }
