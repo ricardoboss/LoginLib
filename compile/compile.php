@@ -77,11 +77,9 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-// TODO: fix class paths
-
-require($c->root);
-require("DatabaseAdapter.php");
-require("config.php");
+// *HOTFIX* get the database adapter class and the config from the old test directory
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
+require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
 
 $db = new DatabaseAdapter($databaseConfig);
 
