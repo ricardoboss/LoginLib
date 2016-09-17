@@ -10,4 +10,10 @@ php:
 script: php ./compile/compile.php
 
 notifications:
- email: false
+  email: false
+
+services:
+  - mysql
+  
+before_script:
+  - mysql -e 'create database loginlib;'
