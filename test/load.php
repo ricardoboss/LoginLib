@@ -1,5 +1,6 @@
 <?php
 $root = dirname ( __DIR__ ) . DIRECTORY_SEPARATOR . 'src';
+$file = "";
 
 if ($h = opendir ( $root )) {
 	while ( false !== ($file = readdir ( $h )) ) {
@@ -9,7 +10,7 @@ if ($h = opendir ( $root )) {
 	
 	closedir ( $h );
 } else {
-	echo "An error occured: unable to open resource handle in: '" . $path . "' on line 4 in load.php!";
+	echo "An error occured: unable to open resource handle in: '" . $root . DIRECTORY_SEPARATOR . $file . "' on line 4 in load.php!";
 }
 
 unset ( $root, $h, $file );
@@ -18,7 +19,11 @@ require('config.php');
 
 require('MysqliDb.php');
 require('DatabaseAdapter.php');
-$db = new DatabaseAdapter($databaseConfig);
+if (isset($databaseConfig)) {
+    $db = new DatabaseAdapter($databaseConfig);
+}
 
 // create a login lib instance with the config (defined in config.php)
-$loginlib = new LoginLib\LoginLib($config, $db);
+if (isset($config)) {
+    $loginlib = new LoginLib\LoginLib($config, $db);
+}

@@ -5,12 +5,10 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 	public function __construct(array $config = null) {
 		if ($config == null) {
 			throw new Exception("Config cannot be null!");
-			exit;
 		}
 		
 		if (!class_exists("MysqliDb")) {
 			throw new Exception("Class not found: MysqliDb");
-			exit;
 		}
 		
 		$this->mysqlidb = new MysqliDb($config);
@@ -47,7 +45,7 @@ class DatabaseAdapter implements LoginLib\IDatabase {
 	}
 	
 	public function connect() {
-		return $this->mysqlidb->connect();
+		$this->mysqlidb->connect();
 	}
 	
 	public function now() {

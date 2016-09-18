@@ -27,7 +27,7 @@ if (isset($_POST['method'])) {
 					$_POST['lg-username'], $_POST['lg-password'], 
 					
 					// define a callback function with the result (type: MethodResult) as a parameter
-					function ($result) {
+					function (\LoginLib\Results\MethodResult $result) {
 						global $message, $config;
 						
 						// get the result from the MethodResult object (in this case it is a LoginResult)
@@ -62,7 +62,7 @@ if (isset($_POST['method'])) {
 				$_POST['rg-username'], $_POST['rg-email'], $_POST['rg-password'], $_POST['rg-confirm'],
 				
 				// define a callback function to parse the RegisterResult
-				function($result) {
+				function(\LoginLib\Results\MethodResult $result) {
 					global $message;
 					
 					switch ($result->getResult()) {
@@ -71,6 +71,7 @@ if (isset($_POST['method'])) {
 							break;
 						case LoginLib\Results\RegisterResult::USERNAME_GIVEN:
 							$message = "That username is already in use! Dang it!";
+							break;
 						case LoginLib\Results\RegisterResult::EMAIL_GIVEN:
 							$message = "That email address is already in use! Sorry!";
 							break;

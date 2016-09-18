@@ -6,6 +6,7 @@
 /**
  * MysqliDb Class
  *
+ * @property bool _transaction_in_progress
  * @category Database Access
  * @package MysqliDb
  * @author Jeffery Way <jeffrey@jeffrey-way.com>
@@ -273,8 +274,9 @@ class MysqliDb {
 	 * @var int
 	 */
 	public $totalPages = 0;
-	
-	/**
+    private $_transaction_in_progress;
+
+    /**
 	 * Constructor for MysqliDb
 	 *
 	 * @param string $host        	
@@ -367,9 +369,9 @@ class MysqliDb {
 	 */
 	public static function getInstance() {
 		return self::$_instance;
-	}
-	
-	/**
+	}/** @noinspection PhpInconsistentReturnPointsInspection */
+
+    /**
 	 * Reset states after an execution
 	 *
 	 * @return MysqliDb Returns the current instance.
@@ -640,8 +642,8 @@ class MysqliDb {
 	 * @param string $columns
 	 *        	Desired columns
 	 *        	
-	 * @return array Contains the returned rows from the select query.
-	 */
+	 * @return array|MysqliDb
+     */
 	public function get($tableName, $numRows = null, $columns = '*') {
 		if (empty ( $columns )) {
 			$columns = '*';
@@ -708,7 +710,8 @@ class MysqliDb {
 	 * @return mixed Contains the value of a returned column / array of values
 	 */
 	public function getValue($tableName, $column, $limit = 1) {
-		$res = $this->ArrayBuilder ()->get ( $tableName, $limit, "{$column} AS retval" );
+        /** @noinspection PhpMethodOrClassCallIsNotCaseSensitiveInspection */
+        $res = $this->ArrayBuilder ()->get ( $tableName, $limit, "{$column} AS retval" );
 		
 		if (! $res) {
 			return null;
@@ -763,8 +766,8 @@ class MysqliDb {
 	 * @param string $tableName
 	 *        	The name of the database table to work with.
 	 *        	
-	 * @return array Contains the returned rows from the select query.
-	 */
+	 * @return array|bool
+     */
 	public function has($tableName) {
 		$this->getOne ( $tableName, '1' );
 		return $this->count >= 1;
@@ -781,11 +784,12 @@ class MysqliDb {
 	 * @param int $numRows
 	 *        	Limit on the number of rows that can be updated.
 	 *        	
-	 * @return bool
-	 */
+	 * @return bool|void
+     */
 	public function update($tableName, $tableData, $numRows = null) {
 		if ($this->isSubQuery) {
-			return;
+            /** @noinspection PhpInconsistentReturnPointsInspection */
+            return;
 		}
 		
 		$this->_query = "UPDATE " . self::$prefix . $tableName;
@@ -810,11 +814,12 @@ class MysqliDb {
 	 *        	Array to define SQL limit in format Array ($count, $offset)
 	 *        	or only $count
 	 *        	
-	 * @return bool Indicates success. 0 or 1.
-	 */
+	 * @return bool|void
+     */
 	public function delete($tableName, $numRows = null) {
 		if ($this->isSubQuery) {
-			return;
+            /** @noinspection PhpInconsistentReturnPointsInspection */
+            return;
 		}
 		
 		$table = self::$prefix . $tableName;
@@ -1001,22 +1006,21 @@ class MysqliDb {
 		
 		return $this;
 	}
-	
-	/**
-	 * This method allows you to specify multiple (method chaining optional) ORDER BY statements for SQL queries.
-	 *
-	 * @uses $MySqliDb->orderBy('id', 'desc')->orderBy('name', 'desc');
-	 *      
-	 * @param string $orderByField
-	 *        	The name of the database field.
-	 * @param string $orderByDirection
-	 *        	Order direction.
-	 * @param array $customFields
-	 *        	Fieldset for ORDER BY FIELD() ordering
-	 *        	
-	 * @throws Exception
-	 * @return MysqliDb
-	 */
+
+    /**
+     * This method allows you to specify multiple (method chaining optional) ORDER BY statements for SQL queries.
+     *
+     * @uses $MySqliDb->orderBy('id', 'desc')->orderBy('name', 'desc');
+     *
+     * @param string $orderByField
+     *            The name of the database field.
+     * @param string $orderbyDirection
+     * @param array $customFields
+     *            Fieldset for ORDER BY FIELD() ordering
+     * @return MysqliDb
+     * @throws Exception
+     * @internal param string $orderByDirection Order direction.*            Order direction.
+     */
 	public function orderBy($orderByField, $orderbyDirection = "DESC", $customFields = null) {
 		$allowedDirection = Array (
 				"ASC",
@@ -1188,11 +1192,12 @@ class MysqliDb {
 	 * @param string $operation
 	 *        	Type of operation (INSERT, REPLACE)
 	 *        	
-	 * @return bool Boolean indicating whether the insert query was completed succesfully.
-	 */
+	 * @return bool|void
+     */
 	private function _buildInsert($tableName, $insertData, $operation) {
 		if ($this->isSubQuery) {
-			return;
+            /** @noinspection PhpInconsistentReturnPointsInspection */
+            return;
 		}
 		
 		$this->_query = $operation . " " . implode ( ' ', $this->_queryOptions ) . " INTO " . self::$prefix . $tableName;
@@ -1230,8 +1235,8 @@ class MysqliDb {
 	 * @param array $tableData
 	 *        	Should contain an array of data for updating the database.
 	 *        	
-	 * @return mysqli_stmt Returns the $stmt object.
-	 */
+	 * @return mysqli_stmt|void
+     */
 	protected function _buildQuery($numRows = null, $tableData = null) {
 		$this->_buildJoin ();
 		$this->_buildInsertQuery ( $tableData );
@@ -1252,7 +1257,8 @@ class MysqliDb {
 		$this->_lastQuery = $this->replacePlaceHolders ( $this->_query, $this->_bindParams );
 		
 		if ($this->isSubQuery) {
-			return;
+            /** @noinspection PhpInconsistentReturnPointsInspection */
+            return;
 		}
 		
 		// Prepare query
@@ -1635,13 +1641,13 @@ class MysqliDb {
 			$this->_query .= ' LIMIT ' . ( int ) $numRows;
 		}
 	}
-	
-	/**
-	 * Method attempts to prepare the SQL query
-	 * and throws an error if there was a problem.
-	 *
-	 * @return mysqli_stmt
-	 */
+
+    /**
+     * Method attempts to prepare the SQL query
+     * and throws an error if there was a problem.
+     * @return mysqli_stmt
+     * @throws Exception
+     */
 	protected function _prepareQuery() {
 		if (! $stmt = $this->mysqli ()->prepare ( $this->_query )) {
 			$msg = $this->mysqli ()->error . " query: " . $this->_query;
@@ -1776,20 +1782,20 @@ class MysqliDb {
 	}
 	
 	/* Helper functions */
-	
-	/**
-	 * Method returns generated interval function as a string
-	 *
-	 * @param string $diff
-	 *        	interval in the formats:
-	 *        	"1", "-1d" or "- 1 day" -- For interval - 1 day
-	 *        	Supported intervals [s]econd, [m]inute, [h]hour, [d]day, [M]onth, [Y]ear
-	 *        	Default null;
-	 * @param string $func
-	 *        	Initial date
-	 *        	
-	 * @return string
-	 */
+
+    /**
+     * Method returns generated interval function as a string
+     *
+     * @param string $diff
+     *            interval in the formats:
+     *            "1", "-1d" or "- 1 day" -- For interval - 1 day
+     *            Supported intervals [s]econd, [m]inute, [h]hour, [d]day, [M]onth, [Y]ear
+     *            Default null;
+     * @param string $func
+     *            Initial date
+     * @return string
+     * @throws Exception
+     */
 	public function interval($diff, $func = "NOW()") {
 		$types = Array (
 				"s" => "second",
@@ -1863,15 +1869,15 @@ class MysqliDb {
 				"[I]" => "+" . $num 
 		);
 	}
-	
-	/**
-	 * Method generates decrimental function call
-	 *
-	 * @param int $num
-	 *        	increment by int or float. 1 by default
-	 *        	
-	 * @return array
-	 */
+
+    /**
+     * Method generates decrimental function call
+     *
+     * @param int $num
+     *            increment by int or float. 1 by default
+     * @return array
+     * @throws Exception
+     */
 	public function dec($num = 1) {
 		if (! is_numeric ( $num )) {
 			throw new Exception ( 'Argument supplied to dec must be a number' );

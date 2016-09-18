@@ -8,7 +8,9 @@ require($root."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
 require($root."test".DIRECTORY_SEPARATOR."config.php");
 
 try {
-	$db = new DatabaseAdapter($databaseConfig);
+    if (isset($databaseConfig)) {
+        $db = new DatabaseAdapter($databaseConfig);
+    }
 	$db->connect();
 } catch (Exception $e) {
 	trigger_error("Could not connect to database: " . $e->getMessage(), E_USER_ERROR);
@@ -16,7 +18,9 @@ try {
 }
 
 try {
-	$loginlib = new LoginLib\LoginLib($config, $db);
+    if (isset($config)) {
+        $loginlib = new LoginLib\LoginLib($config, $db);
+    }
 } catch(LoginLib\ConfigurationException $e) {
 	trigger_error("Caught ConfigurationException: ".$e->getMessage());
 	return 1;

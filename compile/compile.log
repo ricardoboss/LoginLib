@@ -1,9 +1,0 @@
-Compiling...
-Compiling finished! (Took: 0.24091100692749ms)
-
-Running LoginLib v1.0.1
-
-
-Warning: require(E:\XAMPP\htdocs\project\LoginLib\repo): failed to open stream: Permission denied in E:\XAMPP\htdocs\project\LoginLib\repo\compile\compile.php on line 80
-
-Fatal error: require(): Failed opening required 'E:\XAMPP\htdocs\project\LoginLib\repo' (include_path='E:\XAMPP\php\PEAR') in E:\XAMPP\htdocs\project\LoginLib\repo\compile\compile.php on line 80

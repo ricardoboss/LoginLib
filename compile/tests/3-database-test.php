@@ -2,7 +2,7 @@
 require('load.php');
 
 try {
-	logEntry("Connect: " . print_r($db->connect()));
+	$db->connect();
 	logEntry("Ping: " . print_r($db->ping()));
 	
 	logEntry("Running test queries:");

@@ -37,6 +37,8 @@ class User {
 		$this->email = $account_table_config['col_email'];
 		$this->updated_at = strtotime($account_table_config['col_updated_at']);
 		$this->registered_at = strtotime($account_table_config['col_registered_at']);
+
+        return $this;
 	}
 	
 	/**

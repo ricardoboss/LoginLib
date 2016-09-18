@@ -10,12 +10,12 @@ class Compiler {
 		$this->root = $root;
 		$this->outputfile = $this->root.'/dist/LoginLib.php';
 		$this->sourcefiles = array(
-				'Config.php',
-				'Exceptions.php',
-				'IDatabase.php',
-				'LoginLib.php',
-				'Results.php',
-				'User.php'
+            'LoginLib.php',
+            'Config.php',
+			'IDatabase.php',
+            'Exceptions.php',
+			'Results.php',
+			'User.php'
 		);
 	}
 
@@ -59,7 +59,7 @@ $c->compile();
 require($c->outputfile);
 
 if (!class_exists("LoginLib\LoginLib")) {
-	die(trigger_error("Class LoginLib\LoginLib not found!", E_USER_ERROR));
+	die(trigger_error("Class LoginLib\\LoginLib not found!", E_USER_ERROR));
 }
 
 // echo current LoginLib version, if build succeed
@@ -84,7 +84,11 @@ foreach ($queries as $id => $query) {
 	$queries[$id] = trim(str_replace(array("\r\n  ", "\r\n"), array(" ", ""), $query));
 }
 
-$db = new DatabaseAdapter($databaseConfig);
+if (isset($databaseConfig)) {
+    $db = new DatabaseAdapter($databaseConfig);
+} else {
+    trigger_error("Database config not found!", E_USER_ERROR);
+}
 
 try {
 	$db->connect();
