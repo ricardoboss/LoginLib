@@ -65,7 +65,7 @@ try {
     die(trigger_error("Complied file is not php valid: " . $e->getMessage(), E_USER_ERROR));
 }
 
-if (!class_exists("LoginLib\\LoginLib")) {
+if (!class_exists("LoginLib\LoginLib")) {
 	die(trigger_error("Class LoginLib\\LoginLib not found!", E_USER_ERROR));
 }
 

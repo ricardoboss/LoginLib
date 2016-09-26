@@ -3,9 +3,9 @@ $root = dirname(dirname(__DIR__)).DIRECTORY_SEPARATOR;
 
 require($root."dist".DIRECTORY_SEPARATOR."LoginLib.php");
 
-require($root."test".DIRECTORY_SEPARATOR."MysqliDb.php");
-require($root."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
-require($root."test".DIRECTORY_SEPARATOR."config.php");
+require("MysqliDb.php");
+require("DatabaseAdapter.php");
+require("config.php");
 
 try {
     if (isset($databaseConfig)) {
@@ -21,7 +21,7 @@ try {
     if (isset($config)) {
         $loginlib = new LoginLib\LoginLib($config, $db);
     }
-} catch(LoginLib\ConfigurationException $e) {
+} catch(LoginLib\Exceptions\ConfigurationException $e) {
 	trigger_error("Caught ConfigurationException: ".$e->getMessage());
 	return 1;
 }

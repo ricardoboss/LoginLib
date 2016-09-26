@@ -2,7 +2,6 @@
 /**
  * The file where the MysqliDb class is defined
  */
-
 /**
  * MysqliDb Class
  *
@@ -369,7 +368,9 @@ class MysqliDb {
 	 */
 	public static function getInstance() {
 		return self::$_instance;
-	}/** @noinspection PhpInconsistentReturnPointsInspection */
+	}
+
+    /** @noinspection PhpInconsistentReturnPointsInspection */
 
     /**
 	 * Reset states after an execution
@@ -823,7 +824,7 @@ class MysqliDb {
 		}
 		
 		$table = self::$prefix . $tableName;
-		
+
 		if (count ( $this->_join )) {
 			$this->_query = "DELETE " . preg_replace ( '/.* (.*)/', '$1', $table ) . " FROM " . $table;
 		} else {
