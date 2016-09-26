@@ -13,8 +13,11 @@ class Compiler {
             'LoginLib.php',
             'Config.php',
 			'IDatabase.php',
-            'Exceptions.php',
-			'Results.php',
+            'Exceptions'.DIRECTORY_SEPARATOR.'ConfigurationException.php',
+            'Exceptions'.DIRECTORY_SEPARATOR.'DatabaseException.php',
+			'Results'.DIRECTORY_SEPARATOR.'MethodResult.php',
+			'Results'.DIRECTORY_SEPARATOR.'LoginResult.php',
+			'Results'.DIRECTORY_SEPARATOR.'RegisterResult.php',
 			'User.php'
 		);
 	}
@@ -56,9 +59,13 @@ $c = new Compiler(dirname(__DIR__));
 $c->compile();
 
 // Test if no php errors are thrown
-require($c->outputfile);
+try {
+    require($c->outputfile);
+} catch (Exception $e) {
+    die(trigger_error("Complied file is not php valid: " . $e->getMessage(), E_USER_ERROR));
+}
 
-if (!class_exists("LoginLib\LoginLib")) {
+if (!class_exists("LoginLib\\LoginLib")) {
 	die(trigger_error("Class LoginLib\\LoginLib not found!", E_USER_ERROR));
 }
 
