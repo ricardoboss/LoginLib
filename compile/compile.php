@@ -28,7 +28,7 @@ class Compiler {
 		file_put_contents($this->outputfile, "<?php\r\n");
 
 		// add file comment
-		$this->append("/**\r\n * This file contains all classes for LoginLib.\r\n * \r\n * Dont't forget the dependency on MysqliDb!\r\n */\r\n");
+		$this->append("/**\r\n * This file contains all classes for LoginLib.\r\n */\r\n");
 
 		// add namespace
 		$this->append("namespace LoginLib;");

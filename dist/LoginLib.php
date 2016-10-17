@@ -1,8 +1,6 @@
 <?php
 /**
  * This file contains all classes for LoginLib.
- * 
- * Dont't forget the dependency on MysqliDb!
  */
 namespace LoginLib;
 
@@ -12,11 +10,11 @@ namespace LoginLib;
  * Use this class to authenticate your users on your website. Design a corresponding
  * login/registration page on your website and this class will do the logic behind it.
  *
- * @author Ricardo (MCMainiac) Boss <ricardo.boss@web.de>
+ * @author Ricardo Boss <ricardo.boss@web.de>, aka MCMainiac
  * @copyright &copy; 2016 Ricardo Boss
- * @license https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
+ * @License https://creativecommons.org/licenses/by-sa/4.0/ Creative Commons BY SA 4.0
  * @link https://github.com/MCMainiac/LoginLib
- * @version 1.0.1
+ * @version 1.1.0
  */
 class LoginLib {
 	/** @var Config Used to store the configuration array of LoginLib */
@@ -26,7 +24,7 @@ class LoginLib {
 	private $db;
 	
 	/** @var string The current LoginLib version */
-	const version = "1.0.1";
+	const version = "1.1.0";
 	
 	/**
 	 * The constructor of LoginLib.
