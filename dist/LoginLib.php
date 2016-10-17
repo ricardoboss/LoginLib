@@ -679,191 +679,192 @@ interface IDatabase {
 }
 
 /**
- * Exception class for the case that a class was not found
- */
-class DatabaseException extends \Exception {
-	/**
-	 * The constrcutor of DatabaseException
-	 *
-	 * @param string $message The message of the exception
-	 * @param int $code The code of the exception
-	 * @param \Exception $previous The previous exception
-	 *
-	 * @return DatabaseException
-	 */
-	public function __construct($message = "", $code = 0, $previous = null) {
-		parent::__construct ($message, $code, $previous);
-
-        return $this;
-	}
-}
-
-/**
  * Exception that gets thrown if the user misconfigured their config
  */
 class ConfigurationException extends \Exception {
-	/** @var string the misconfigured property */
-	private $prop;
+    /** @var string the misconfigured property */
+    private $prop;
 
-	/**
-	 * The constrcutor of ConfigurationExceptions
-	 *
-	 * @param string $prop The misconfigured property; format: [key] => [prop]
-	 * @param string $message The message of the exception
-	 * @param int $code The code of the exception
-	 * @param \Exception $previous The previous exception
-	 *
-	 * @return ConfigurationException
-	 */
-	public function __construct($prop, $message = "", $code = 0, $previous = null) {
-		parent::__construct ($message, $code, $previous);
-		
-		$this->prop = $prop;
+    /**
+     * The constrcutor of ConfigurationExceptions
+     *
+     * @param string $prop The misconfigured property; format: [key] => [prop]
+     * @param string $message The message of the exception
+     * @param int $code The code of the exception
+     * @param \Exception $previous The previous exception
+     *
+     * @return ConfigurationException
+     */
+    public function __construct($prop, $message = "", $code = 0, $previous = null) {
+        parent::__construct ($message, $code, $previous);
+
+        $this->prop = $prop;
 
         return $this;
-	}
-	
-	/**
-	 * A method to return the misconfigured property
-	 *
-	 * @return string The misconfigured config property
-	 */
-	public function getProp() {
-		return $this->prop;
-	}
+    }
+
+    /**
+     * A method to return the misconfigured property
+     *
+     * @return string The misconfigured config property
+     */
+    public function getProp() {
+        return $this->prop;
+    }
+}
+
+/**
+ * Exception class for the case that a class was not found
+ */
+class DatabaseException extends \Exception {
+    /**
+     * The constrcutor of DatabaseException
+     *
+     * @param string $message The message of the exception
+     * @param int $code The code of the exception
+     * @param \Exception $previous The previous exception
+     *
+     * @return DatabaseException
+     */
+    public function __construct($message = "", $code = 0, $previous = null) {
+        parent::__construct ($message, $code, $previous);
+
+        return $this;
+    }
 }
 
 /**
  * An abstract class that is used to provide results of methods
  */
 abstract class MethodResult {
-	const UNDEFINED = - 1;
-	
-	/** @var int Contains the method result */
-	protected $result = MethodResult::UNDEFINED;
-	
-	/**
-	 * A constructor for LoginResults
-	 *
-	 * @param int $result The result of one of the methods
-	 *
-	 * @return MethodResult
-	 */
-	public function __construct($result) {
-		$this->result = $result;
+    const UNDEFINED = - 1;
+
+    /** @var int Contains the method result */
+    protected $result = MethodResult::UNDEFINED;
+
+    /**
+     * A constructor for LoginResults
+     *
+     * @param int $result The result of one of the methods
+     *
+     * @return MethodResult
+     */
+    public function __construct($result) {
+        $this->result = $result;
 
         return $this;
-	}
-	
-	/**
-	 * Returns the result of this LoginResult
-	 *
-	 * @return int
-	 */
-	public function getResult() {
-		return $this->result;
-	}
-	
-	/**
-	 * Returns a simple result in form of a boolean value
-	 *
-	 * @return bool
-	 */
-	public abstract function getSimpleResult();
-	
-	/**
-	 * Overwrite the toString() method to return the string version of the result
-	 *
-	 * @return string
-	 */
-	public abstract function __toString();
+    }
+
+    /**
+     * Returns the result of this LoginResult
+     *
+     * @return int
+     */
+    public function getResult() {
+        return $this->result;
+    }
+
+    /**
+     * Returns a simple result in form of a boolean value
+     *
+     * @return bool
+     */
+    public abstract function getSimpleResult();
+
+    /**
+     * Overwrite the toString() method to return the string version of the result
+     *
+     * @return string
+     */
+    public abstract function __toString();
 }
 
 /**
  * This class is for results of the login method
  */
 class LoginResult extends MethodResult {
-	const USERNAME_NOT_FOUND = 0;
-	const PASSWORD_WRONG = 1;
-	const SUCCESS = 2;
-	
-	/**
-	 * Returns a simple result in form of a boolean value
-	 *
-	 * @return bool
-	 */
-	public function getSimpleResult() {
-		switch ($this->result) {
-			case LoginResult::SUCCESS:
-				return true;
-			
-			default:
-				return false;
-		}
-	}
-	
-	/**
-	 * Overwrite the toString() method to return the string version of the result
-	 *
-	 * @return string
-	 */
-	public function __toString() {
-		switch ($this->result) {
-			case LoginResult::USERNAME_NOT_FOUND:
-				return "LoginResult::USERNAME_NOT_FOUND";
-			case LoginResult::PASSWORD_WRONG:
-				return "LoginResult::PASSWORD_WRONG";
-			case LoginResult::SUCCESS:
-				return "LoginResult::SUCCESS";
-			default:
-				return "LoginResult::UNDEFINED";
-		}
-	}
+    const USERNAME_NOT_FOUND = 0;
+    const PASSWORD_WRONG = 1;
+    const SUCCESS = 2;
+
+    /**
+     * Returns a simple result in form of a boolean value
+     *
+     * @return bool
+     */
+    public function getSimpleResult() {
+        switch ($this->result) {
+            case LoginResult::SUCCESS:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Overwrite the toString() method to return the string version of the result
+     *
+     * @return string
+     */
+    public function __toString() {
+        switch ($this->result) {
+            case LoginResult::USERNAME_NOT_FOUND:
+                return "LoginResult::USERNAME_NOT_FOUND";
+            case LoginResult::PASSWORD_WRONG:
+                return "LoginResult::PASSWORD_WRONG";
+            case LoginResult::SUCCESS:
+                return "LoginResult::SUCCESS";
+            default:
+                return "LoginResult::UNDEFINED";
+        }
+    }
 }
+
 
 /**
  * This class is for results of the register method
  */
 class RegisterResult extends MethodResult {
-	const USERNAME_GIVEN = 0;
-	const EMAIL_GIVEN = 1;
-	const PASSWORD_MISMATCH = 2;
-	const SUCCESS = 3;
-	
-	/**
-	 * Returns a simple result in form of a boolean value
-	 *
-	 * @return bool
-	 */
-	public function getSimpleResult() {
-		switch ($this->result) {
-			case RegisterResult::SUCCESS:
-				return true;
-			
-			default:
-				return false;
-		}
-	}
-	
-	/**
-	 * Overwrite the toString() method to return the string version of the result
-	 *
-	 * @return string
-	 */
-	public function __toString() {
-		switch ($this->result) {
-			case RegisterResult::USERNAME_GIVEN:
-				return "RegisterResult::USERNAME_GIVEN";
-			case RegisterResult::EMAIL_GIVEN:
-				return "RegisterResult::EMAIL_GIVEN";
-			case RegisterResult::PASSWORD_MISMATCH:
-				return "RegisterResult::PASSWORD_MISMATCH";
-			case RegisterResult::SUCCESS:
-				return "RegisterResult::SUCCESS";
-			default:
-				return "RegisterResult::UNDEFINED";
-		}
-	}
+    const USERNAME_GIVEN = 0;
+    const EMAIL_GIVEN = 1;
+    const PASSWORD_MISMATCH = 2;
+    const SUCCESS = 3;
+
+    /**
+     * Returns a simple result in form of a boolean value
+     *
+     * @return bool
+     */
+    public function getSimpleResult() {
+        switch ($this->result) {
+            case RegisterResult::SUCCESS:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Overwrite the toString() method to return the string version of the result
+     *
+     * @return string
+     */
+    public function __toString() {
+        switch ($this->result) {
+            case RegisterResult::USERNAME_GIVEN:
+                return "RegisterResult::USERNAME_GIVEN";
+            case RegisterResult::EMAIL_GIVEN:
+                return "RegisterResult::EMAIL_GIVEN";
+            case RegisterResult::PASSWORD_MISMATCH:
+                return "RegisterResult::PASSWORD_MISMATCH";
+            case RegisterResult::SUCCESS:
+                return "RegisterResult::SUCCESS";
+            default:
+                return "RegisterResult::UNDEFINED";
+        }
+    }
 }
 
 

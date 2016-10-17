@@ -22,7 +22,7 @@ class Compiler {
 		);
 	}
 
-	public function compile() {
+    public function compile() {
 		$starttime = microtime(true);
 
 		file_put_contents($this->outputfile, "<?php\r\n");
@@ -34,21 +34,30 @@ class Compiler {
 		$this->append("namespace LoginLib;");
 
 		// loop through the source files and add them to the output file
-		foreach ($this->sourcefiles as $file) {
-			if (substr($file, 0, 1) !== ".")
-				$this->append(file_get_contents($this->root.'/src/'.$file));
-		}
+        foreach ($this->sourcefiles as $file)
+            try {
+                $this->appendFile($this->root . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $file);
+            } catch (Exception $e) {
+                die(trigger_error("Cannot append file: " . $this->root . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $file . "\r\n".$e->getMessage()));
+            }
 
 		echo "Compiling finished! (Took: ".(microtime(true) - $starttime)."ms)\n\n";
 	}
 
-	private function append($file) {
+    private function append($file) {
 		// filter the file description and the php tag + namespaces away...
 		$file = preg_replace("/\\<\\?php.*(use [a-z\\\]*;|namespace [a-z\\\]*;)/is", "", $file);
 
 		// just append the file to the final one
 		file_put_contents($this->outputfile, $file, FILE_APPEND | LOCK_EX);
 	}
+
+	private function appendFile($file) {
+	    if (!file_exists($file))
+	        throw new Exception("File not found: " . $file);
+        else
+            $this->append(file_get_contents($file));
+    }
 }
 
 /*****************************************************************************/
@@ -78,11 +87,9 @@ echo "Running LoginLib v".LoginLib\LoginLib::version()."\n\n";
 
 echo "Creating tables in database...\n";
 
-// HOTFIX: get the database adapter class and the config from the old test directory
-// TODO: move classes and config to another dir
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."MysqliDb.php");
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
-require($c->root.DIRECTORY_SEPARATOR."test".DIRECTORY_SEPARATOR."config.php");
+require("tests".DIRECTORY_SEPARATOR."MysqliDb.php");
+require("tests".DIRECTORY_SEPARATOR."DatabaseAdapter.php");
+require("tests".DIRECTORY_SEPARATOR."config.php");
 
 $queriesraw = file_get_contents(__DIR__.DIRECTORY_SEPARATOR."queries".DIRECTORY_SEPARATOR."create.sql");
 $queries = explode(";", $queriesraw);
