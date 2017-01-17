@@ -36,4 +36,4 @@ For both tables there is this sql script in the `/compile/queries` directory: [c
 
 ## Methods <small>[top](#loginlib)</small>
 
-Definitions of the methods can be found in the [API Documentation](https://mcmainiac.github.io/LoginLib/classes/LoginLib.LoginLib.html).
+Definitions of the methods can be found in the [API Documentation](https://mcmainiac.github.io/LoginLib/).
